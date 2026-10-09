@@ -226,7 +226,11 @@ texte**, jamais la couleur seule.
 ```
 
 - Props : `tone` (`coral·amber·danger·warning·success·neutral·accent·outline`, défaut
-  `neutral`) · `pad` (`md·dense`) · `icon`.
+  `neutral`) · `pad` (`md·dense`) · `icon` · `corner`.
+- **`corner`** : la languette de coin — le badge se colle au coin haut droit de son conteneur
+  (« Recommandé » sur une carte de choix), rayon épousant le coin. Le conteneur porte
+  `position: relative`.
+  `<Badge tone="accent" pad="dense" corner>Recommandé</Badge>`
 - Le rayon pill est légal ici — jamais sur un bouton, un champ ou une barre d'onglets.
 
 ## Card
@@ -288,12 +292,16 @@ en div : c'est exactement ce que ce composant remplace.
 <Pastille size="dialogue" tone="brand-solid"><Icon name="plus" /></Pastille>
 ```
 
-- Props : `size` (`carte` 2.25 · `dialogue` 2.625 · `panneau` 3.25 · `heros` 4 · `ecran`
-  5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` ·
+- Props : `size` (`puce` 1.75 · `carte` 2.25 · `dialogue` 2.625 · `panneau` 3.25 · `heros` 4 ·
+  `ecran` 5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` ·
   `brand-solid` + les 6 paires sémantiques + `inverse`) · `outlined` (contour 1px
   currentColor à 22 %).
-- L'icône ne se dimensionne pas au site d'appel : le créneau s'en charge — `dialogue` et
-  `panneau` rendent 1.5rem, `carte` le repli 1.25rem. Seules `heros` et `ecran` attendent
+- **`size="puce"`** : le plus petit contexte — un numéro d'étape (`shape="round"`, le chiffre en
+  body-sm gras), la coche d'un avantage, l'état d'une ligne. Jamais un rem au site d'appel pour
+  réduire `carte`.
+  `<Pastille size="puce" shape="round" tone="coral">2</Pastille>`
+- L'icône ne se dimensionne pas au site d'appel : le créneau s'en charge — `puce` rend
+  0.9375rem, `dialogue` et `panneau` rendent 1.5rem, `carte` le repli 1.25rem. Seules `heros` et `ecran` attendent
   encore une taille explicite.
 - **`tone="brand-solid"` porte le dégradé PLEIN**, avec son glyphe en
   `--primary-foreground` : la tuile de marque affirmée, là où `brand` est la tuile douce.
@@ -378,10 +386,19 @@ champ (c'est `FormField error`).
 ```tsx
 <Banner tone="warning" title="Ce tuto date de mars">La CLI a changé depuis — la méthode reste bonne.</Banner>
 <Banner tone="info" title="Nouvelle série en ligne" action={<Button variant="secondary" size="sm">Voir</Button>} />
+<Banner inset tone="amber">TikTok n'accepte qu'un moment de la vidéo comme miniature.</Banner>
+<Banner inset tone="neutral" icon={<Icon name="user" />}>Les sous-titres suivent la transcription.</Banner>
 ```
 
-- Props : `tone` (`danger·warning·success·info`, défaut `info`) · `title` · `children`
-  (corps) · `action` (contrôle à droite).
+- Props : `tone` (`danger·warning·success·info·amber·neutral`, défaut `info`) · `title` ·
+  `children` (corps) · `action` (contrôle à droite) · `inset` · `icon`.
+- **`inset`** : l'encart d'information posé DANS une carte, entre deux blocs — rayon md, plus
+  serré, texte en body-sm ; les tons colorés quittent leur filet, le `neutral` se creuse comme
+  un champ (`--secondary` sur la page, `--background` dans une carte ou une modale).
+- **`amber`** : une contrainte à connaître, sans danger (« TikTok n'accepte qu'un moment »).
+  `warning` reste ce qui risque d'échouer. **`neutral`** : une précision.
+- **`icon`** remplace le glyphe du ton quand un autre dit mieux le sujet. Le bandeau garde
+  TOUJOURS une icône : couleur + icône + texte.
 
 ## EmptyState
 
@@ -403,7 +420,9 @@ limite : c'est `StateCard`, une carte pleine, pas un emplacement vide.
 
 - Props : `icon` (glyphe nu — la Pastille par défaut l'enveloppe) · `tile` (la tuile
   complète, quand `panneau brand outlined` ne convient pas ; `icon` est alors
-  ignoré) · `title` (requis) · `description` · `action`.
+  ignoré) · `title` (requis) · `description` · `action` · `plain`.
+- **`plain`** : sans cadre pointillé ni fond — l'état vide remplit déjà une section bordée
+  (« Textes pas encore écrits » dans une carte).
 
 ## StateCard
 
@@ -606,6 +625,38 @@ un `<input type="hidden">` porte la date en ISO (`YYYY-MM-DD`) pour la soumissio
   pas diverger.
 - États rendus : vide, rempli, ouvert, invalide, désactivé, focus-visible.
 
+## Dropzone
+
+La zone de dépôt d'un fichier : un cadre pointillé, une tuile, un titre, une aide, des contraintes
+(`children`) et un bouton qui ouvre le sélecteur. Un fichier glissé au-dessus éclaire la zone
+(filet `--primary` + plaque `--accent`) et peut changer le titre (`dragTitle`).
+
+**Ne pas l'utiliser** pour un champ de formulaire ordinaire ni pour afficher un envoi en cours :
+l'envoi, c'est `.ds-upload` (voir « Classes sans composant »), qui REMPLACE la zone.
+
+```tsx
+<Dropzone
+  title="Dépose ta vidéo ici" dragTitle="Lâche pour envoyer" hint="Depuis ton ordinateur ou ton téléphone."
+  tile={<Pastille size="dialogue" shape="round" tone="coral"><Icon name="upload" /></Pastille>}
+  actionLabel="Choisir ma vidéo" accept="video/mp4,video/quicktime" onFiles={files => envoyer(files[0])}>
+  <div className="flex flex-wrap justify-center gap-space-2">
+    <Badge tone="amber" pad="dense">MP4 ou MOV</Badge><Badge tone="amber" pad="dense">3 min maximum</Badge>
+  </div>
+</Dropzone>
+<Dropzone invalid title="Dépose ta vidéo ici" actionLabel="Choisir une autre vidéo" onFiles={…} />
+```
+
+- Props : `title` (requis) · `dragTitle` · `hint` · `tile` · `actionLabel` (requis) · `accept` ·
+  `multiple` · `disabled` · `invalid` · `onFiles(File[])` (requis) · `children` (les contraintes).
+- **Le composant ne valide rien** : il rend les fichiers tels quels. Format, durée, poids : l'app
+  contrôle, pose `invalid` et dit POURQUOI à côté (`Banner tone="danger"`), en gardant la
+  contrainte fautive visible (`Badge tone="danger"`).
+- L'`<input type="file">` natif reste dans le flux d'accessibilité ; le bouton l'ouvre. Focus
+  clavier sur le bouton, l'anneau suit le bouton.
+- La surface se déduit comme un champ : `--secondary` sur la page, `--background` dans une
+  carte ou une modale.
+- États rendus : repos, survol, fichier tenu au-dessus, focus-visible, invalide, désactivé.
+
 ## FormField
 
 Enveloppe libellé + contrôle + aide/erreur. Une erreur **remplace** le texte d'aide et
@@ -623,7 +674,9 @@ l'anatomie.
 </FormField>
 ```
 
-- Props : `label` · `htmlFor` · `help` · `error` · `required` (astérisque `--primary`).
+- Props : `label` · `htmlFor` · `help` · `error` · `required` (astérisque `--primary`) · `action`.
+- **`action`** : un contrôle à droite du libellé, sur la même rangée (`.ds-field__head`) —
+  « Copier », un lien. `<FormField label="Description" htmlFor="d" action={<Button variant="ghost" size="sm" icon={<Icon name="copy" />}>Copier</Button>}>…</FormField>`
 
 ## Input
 
@@ -731,7 +784,7 @@ vertical uniquement. Même règle de `surface` que l'Input. `forwardRef` sur le
 ## Icon
 
 LE système d'icônes : Lucide, exclusivement. Jamais un emoji, jamais un SVG dessiné à la
-main. 49 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
+main. 56 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
 c'est voulu.
 
 **Ne pas** chercher d'icône de plateforme sociale ici (YouTube, Instagram…) : ce sont des
@@ -754,7 +807,7 @@ enregistrée `inherits: false`, une règle de conteneur est inerte, et c'est vou
 ```
 
 **Ce que le catalogue ne couvre pas se passe en `glyph`.** Lucide compte ~1500 tracés ;
-le catalogue en cure 49 glyphes. Pour le reste, l'app importe le tracé et le socle lui applique
+le catalogue en cure 56 glyphes. Pour le reste, l'app importe le tracé et le socle lui applique
 ses propres règles — même grille, même épaisseur. Plus besoin de publier une version du
 design system pour une icône.
 
@@ -890,7 +943,10 @@ Tabs filtre un contenu en place — ou, en `mode="choice"`, choisit une valeur.
 ```
 
 - Props : `items` (`{value, label, disabled?}[]`) · `value` / `onChange` (contrôlé) · `onCard` ·
-  `mode` (`tabs·choice`) · `fullWidth` · `disabled` · `readOnly` (mode `choice`).
+  `mode` (`tabs·choice`) · `fullWidth` · `disabled` · `readOnly` (mode `choice`) · `size`
+  (`md·sm`).
+- **`size="sm"`** : la barre compacte, sur le rail sm, texte en body-sm — le filtre posé dans
+  une carte d'écran (« Tous · Brouillon · Programmé · Publié »).
 - **`mode="choice"`** — choisir UNE valeur parmi trois ou quatre (un niveau, un degré), avec
   le rendu de la barre d'onglets. Sémantique d'un groupe de radios : `radiogroup` / `radio` +
   `aria-checked`, un seul arrêt de tabulation (la valeur choisie), `←` `→` `↑` `↓` déplacent
@@ -963,8 +1019,10 @@ d'actions (c'est `.ds-dropdown`, voir « Classes sans composant »).
 
 # Classes sans composant
 
-Trois motifs du socle n'ont **pas** de composant React — la tuile cochable (et sa forme
-compacte), l'encart de valeur, le menu déroulant. Leurs classes sont stables et documentées
+Plusieurs motifs du socle n'ont **pas** de composant React — la tuile cochable (et ses formes
+compacte et panneau), l'encart de valeur, le menu déroulant, et les motifs des parcours (v0.4.0 :
+la barre d'étapes, le voile, le prix et les avantages, le fichier et l'envoi, le média vertical et
+la bande d'images, l'agenda, les marques de texte). Leurs classes sont stables et documentées
 ici ; une app écrit le balisage elle-même, en React comme en Preact (écrans MCP) ou en HTML
 (site vitrine). `check-catalogue.mjs` n'exige pas de section `##` pour eux, puisqu'ils ne sont
 pas exportés, mais il vérifie que chaque classe `.ds-*` citée dans cette partie existe dans
@@ -1040,6 +1098,33 @@ choix multiple reste à l'app** (désactiver les pastilles restantes, dire pourq
   EMPÊCHER le changement reste à l'app).
 - États : repos, survol, coché, focus-visible (anneau sur la tuile), désactivé, lecture seule.
 
+**La tuile panneau — `.ds-tile--panel`.** Un choix RICHE, en colonne : une option de miniature (avec
+sa bande d'images), un créneau proposé parmi trois, une façon de commencer. La case est masquée
+visuellement, l'`<input>` reste focusable et annoncé ; la tuile choisie remonte au niveau de la
+carte — fond `--card`, filet `--primary`, ombre douce — sans plaque `--accent` (le contenu y serait
+illisible). Le titre passe en face display. `.ds-tile__row` aligne une rangée (titre, badges), et y
+pousse à droite `.ds-tile__check` (glyphe de fin, rendu seulement coché) ou `.ds-tile__end`.
+
+```html
+<div role="radiogroup" aria-label="La miniature" class="grid gap-space-3">
+  <label class="ds-tile ds-tile--panel">
+    <span class="ds-choice"><input type="radio" name="miniature" value="moment" checked />
+      <span class="ds-choice__box ds-choice__box--radio" aria-hidden="true"><span class="ds-choice__dot"></span></span></span>
+    <span class="ds-tile__row"><span class="ds-tile__title">Un moment de la vidéo</span><span class="ds-tile__end">…</span></span>
+    <span class="ds-tile__desc">Le seul choix accepté par TikTok.</span>
+  </label>
+</div>
+```
+
+**Un panneau qui contient ses propres contrôles** (une bande d'images `.ds-frames`, un bouton) n'est
+plus un `<label>` — un label dans un label est du HTML invalide : c'est un `<div class="ds-tile
+ds-tile--panel">`, et la case vit dans un `<label class="ds-tile__row">` avec le titre. L'état du
+panneau ne lit alors que SA case (`.ds-choice`) : une image cochée dans la bande ne le fait pas
+passer pour choisi. Choisir une image choisit aussi le panneau : c'est à l'app de le faire.
+
+- Classes : `.ds-tile--panel` · `.ds-tile__row` · `.ds-tile__end` (+ celles de la tuile).
+- États : repos, survol, choisie, focus-visible (anneau sur la tuile), désactivée, lecture seule.
+
 **L'encart de valeur — `.ds-inset`.** Une valeur posée DANS une carte : une bio, une réponse, une
 citation relevée. Une ligne de texte sur une surface creusée, rayon md, action facultative à
 droite. Ce n'est pas une `Card` (on n'imbrique pas une carte dans une carte), ni un `EmptyState`
@@ -1062,6 +1147,17 @@ un menu.
   états : survol, focus-visible, désactivé).
 - L'encart ne se clique pas en entier : l'action est l'élément interactif. Un titre ou une
   provenance au-dessus (« Détecté par… », « À compléter ») est une composition de l'app.
+- **`.ds-inset--stack`** (v0.4.0) : un texte en plusieurs blocs — un hook, un script en blocs
+  nommés, une transcription, un message à copier. `.ds-inset__head` porte les badges et pousse
+  `.ds-inset__action` à droite (« Copier »), puis vient la matière.
+
+```html
+<div class="ds-inset ds-inset--stack">
+  <div class="ds-inset__head"><span class="ds-badge ds-badge--dense ds-badge--coral">Hook</span>
+    <button class="ds-btn ds-btn--ghost ds-btn--sm ds-inset__action">Copier</button></div>
+  <p class="ds-inset__value">Tes vidéos ne sont pas trop longues. Elles sont trop lentes à démarrer.</p>
+</div>
+```
 
 **Le menu déroulant — `.ds-dropdown`.** Panneau sur `--popover`, rayon lg, `--shadow-lg`,
 items éclairés sur `--surface-alt`, rail d'item à 44 px. `role="menu"` sur le panneau,
@@ -1088,3 +1184,154 @@ ligne. Les deux se mélangent dans un même menu.
 - Sans `--floating`, le panneau est rendu dans le flux (spécimen).
 - Le comportement (ouverture, fermeture au clic extérieur et à Échap, navigation au clavier)
   est à la charge de l'app.
+
+---
+
+**Les parcours (v0.4.0).** Ce que partagent les outils à plusieurs étapes, dans le hub comme dans un
+écran de Claude. AUCUN vocabulaire d'outil : libellés, statuts et leurs tons, réseaux et leurs logos
+vivent dans la couche qui les affiche.
+
+**La barre d'étapes — `.ds-steps`.** Une `<ol>` ; chaque `.ds-step` porte un repère `.ds-step__mark`
+(un numéro, ou une coche quand l'étape est faite) et son libellé, reliés par un trait. Faite :
+`.is-done` (repère success + coche) ; en cours : `aria-current="step"` (repère en dégradé plein,
+libellé en gras) ; à venir : par défaut (repère corail doux, libellé en sourdine). La rangée passe à
+la ligne d'elle-même à 390 px. Estompée sous un voile : la poser dans `.ds-veil__content`.
+
+```html
+<ol class="ds-steps" aria-label="Les étapes">
+  <li class="ds-step is-done"><span class="ds-step__mark"><!-- <Icon name="check" strokeWidth={3} /> --></span>Vidéo</li>
+  <li class="ds-step" aria-current="step"><span class="ds-step__mark">2</span>Transcription</li>
+  <li class="ds-step"><span class="ds-step__mark">3</span>Textes</li>
+</ol>
+```
+
+- Classes : `.ds-steps` · `.ds-step` · `.ds-step__mark` · `.is-done` · `.is-current` (ou `aria-current="step"`).
+
+**Le voile d'un outil non activé — `.ds-veil`.** Le contenu RESTE VISIBLE, estompé et inerte, et un
+panneau (la carte d'offre) se pose dessus. `.ds-veil` RECOUVRE — une page du hub : un fondu vers la
+surface, le panneau centré en haut, le contenu montré sur `--veil-h`. `.ds-veil--below` EMPILE — un
+écran de Claude, à hauteur automatique : le contenu estompé, le panneau dessous. L'app pose `inert`
+et `aria-hidden="true"` sur `.ds-veil__content` : rien dedans ne se focalise ni ne s'annonce.
+
+```html
+<div class="ds-veil">
+  <div class="ds-veil__content" inert aria-hidden="true">…les sections de la fiche…</div>
+  <div class="ds-veil__panel"><div class="ds-card">…la carte d'offre…</div></div>
+</div>
+```
+
+- Classes : `.ds-veil` · `.ds-veil--below` · `.ds-veil__content` · `.ds-veil__panel`.
+
+**Le prix et les avantages — `.ds-price`, `.ds-perks`.** `.ds-price` : le montant en face display
+800 (`__amount`), la période à côté (`__period`) sur `__line`, une note dessous (`__note`, « Sans
+engagement »). Le montant ne porte aucune couleur : `.accent` sur un `<span>` dedans quand la
+maquette le veut. `--sm` dans un écran de Claude, `--end` aligné à droite. **Le montant vient
+toujours du serveur.** `.ds-perks` : une liste d'avantages en plaques (`.ds-perk`), chacun une
+`Pastille size="puce"` (coche success, ou icône d'un ton choisi) puis le libellé ; deux colonnes dans
+une carte de 680, une seule à 390. Rien ne se coche : ce n'est pas une tuile.
+
+```html
+<div class="ds-price ds-price--end">
+  <span class="ds-price__line"><span class="ds-price__amount"><span class="accent">12 €</span></span><span class="ds-price__period">/ mois</span></span>
+  <span class="ds-price__note">Sans engagement</span>
+</div>
+<ul class="ds-perks">
+  <li class="ds-perk"><span class="ds-pastille ds-pastille--puce ds-pastille--success"><!-- check --></span>Transcription et sous-titres</li>
+</ul>
+```
+
+- Classes : `.ds-price` · `--sm` · `--end` · `__line` · `__amount` · `__period` · `__note` ·
+  `.ds-perks` · `.ds-perk`.
+
+**La zone de dépôt en balisage — `.ds-dropzone`.** Le composant `Dropzone` en React ; dans un écran
+de Claude, le même balisage : `.ds-dropzone` (+ `.is-dragover`, `.is-invalid`, `.is-disabled`),
+`__main`, `__title`, `__hint`, et l'`<input type="file">` en `.ds-dropzone__input` (masqué à l'œil,
+présent pour le clavier et le lecteur d'écran). Le glisser-déposer est à la charge de l'app.
+
+- Classes : `.ds-dropzone` · `__main` · `__title` · `__hint` · `__input` · `.is-dragover` ·
+  `.is-invalid` · `.is-disabled`.
+
+**Le fichier et l'envoi — `.ds-file`, `.ds-upload`.** `.ds-file` : une rangée — une tuile
+(`Pastille`), le nom en ellipse et sa méta (`__main`, `__name`, `__meta`), les actions à droite
+(`__actions`, qui passent dessous quand la place manque) : un fichier joint, une vidéo déposée, des
+sous-titres. `.ds-upload` : un envoi — le fichier, une `Progress`, un pied (`__foot` : une rassurance,
+une action). En pause (`.is-paused`) ou interrompu (`.is-interrupted`), la barre s'estompe ;
+interrompu, le cadre prend le filet d'avertissement et l'action devient « Reprendre ».
+
+```html
+<div class="ds-upload is-interrupted">
+  <div class="ds-file"><span class="ds-pastille ds-pastille--dialogue ds-pastille--warning">…</span>
+    <span class="ds-file__main"><span class="ds-file__name">Envoi interrompu à 64 %</span><span class="ds-file__meta">La connexion a coupé. Rien n'est perdu.</span></span></div>
+  <div class="ds-progress" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"><div class="ds-progress__bar" style="width:64%"></div></div>
+  <div class="ds-upload__foot"><span>312 Mo sur 486 Mo</span><button class="ds-btn ds-btn--secondary ds-btn--sm">Reprendre l'envoi</button></div>
+</div>
+```
+
+- Classes : `.ds-file` · `__main` · `__name` · `__meta` · `__actions` · `.ds-upload` · `__foot` ·
+  `.is-paused` · `.is-interrupted`.
+
+**Le média vertical et la bande d'images — `.ds-media`, `.ds-frames`.** `.ds-media` : un cadre 9:16
+(une vidéo courte, sa vignette) — sa LARGEUR est celle du parent, posée par l'appelant ; fond
+`--tone-dark`, l'`<img>` ou la `<video>` en cover, le glyphe de lecture au centre (`__play`), la
+durée en bas à gauche (`__badge`). `.ds-media--unavailable` : le média n'existe plus (cadre pointillé
+sur `--muted`, une tuile, un texte court). `.ds-frames` : choisir UN moment parmi quelques images —
+chaque `.ds-frame` est un `<label>` qui porte un radio natif ; choisi : contour `--primary` décalé.
+
+```html
+<div style="width:7.5rem"><div class="ds-media"><img src="…" alt="" /><span class="ds-media__play">…</span><span class="ds-media__badge">00:45</span></div></div>
+<div class="ds-frames" role="radiogroup" aria-label="Le moment de la miniature">
+  <label class="ds-frame"><input type="radio" name="moment" value="2" checked aria-label="00:02" /><img src="…" alt="" /></label>
+</div>
+```
+
+- Classes : `.ds-media` · `__play` · `__badge` · `--unavailable` · `.ds-frames` · `.ds-frame`.
+
+**L'agenda — `.ds-agenda` (le mois), `.ds-week` (la semaine).** `.ds-agenda` : sept colonnes, en-têtes
+`__wd`, cases `__cell` (un `<button>` ou un `<a>` se survole et prend le focus) avec leur numéro
+`__num` et leurs marques `__event` (icône + heure + `__event-label` en ellipse), dans les tons des
+pastilles : `--amber`, `--success`, `--danger`, neutre par défaut. Hors du mois : `.is-outside` ;
+aujourd'hui : `.is-today` (numéro sur le dégradé) ; jour retenu : `.is-selected`. `--compact` dans un
+écran de Claude ; une seule rangée de sept cases fait une bande de semaine. `.ds-week` : un jour par
+rangée (`__day`), la colonne du jour (`__date` : `__num`, `__wd`, `__meta`), puis ses éléments
+(`__items`, deux par ligne tant que la place le permet) ou `__empty`. Un élément (`__item`) est une
+plaque cliquable dont l'app écrit le contenu. Aujourd'hui : `.is-today`. `--compact` dans Claude.
+**Le calcul des dates reste à l'app** : le `Calendar` du socle choisit une date, il n'affiche pas
+d'événements.
+
+```html
+<div class="ds-agenda ds-agenda--compact">
+  <div class="ds-agenda__head"><span class="ds-agenda__wd">Lun</span>…</div>
+  <div class="ds-agenda__grid">
+    <button class="ds-agenda__cell is-today"><span class="ds-agenda__num">9</span>
+      <span class="ds-agenda__event ds-agenda__event--amber">…<span class="ds-agenda__event-label">18:00</span></span></button>
+  </div>
+</div>
+<ol class="ds-week">
+  <li class="ds-week__day is-today"><div class="ds-week__date"><span class="ds-week__num">9</span><span class="ds-week__wd">Ven</span></div>
+    <div class="ds-week__items"><a class="ds-week__item" href="…">…</a></div></li>
+</ol>
+```
+
+- Classes : `.ds-agenda` · `--compact` · `__head` · `__wd` · `__grid` · `__cell` · `__num` ·
+  `__event` · `__event--amber` · `__event--success` · `__event--danger` · `__event-label` ·
+  `.is-outside` · `.is-today` · `.is-selected` · `.ds-week` · `--compact` · `__day` · `__date` ·
+  `__num` · `__wd` · `__meta` · `__items` · `__item` · `__empty`.
+
+**Les marques de texte — `.ds-mark`, `.ds-snippet`, `.ds-cues`, `.ds-dl`, `.ds-diff`.**
+`<mark class="ds-mark">` surligne un mot à reprendre (un repère à compléter, un mot douteux d'une
+transcription) ; `--success` : le mot corrigé. `.ds-snippet` cite un texte tel qu'il sera affiché
+(le texte à l'écran en `--mono`, une phrase d'appel à l'action). `.ds-cues` : un texte horodaté,
+une `.ds-cue` par réplique (`__time` en chasse fixe, `__text`). `<dl class="ds-dl">` : des paires
+libellé · valeur dont les libellés s'alignent (« À l'écran », « Contraste »). `.ds-diff` : l'avant
+et l'après d'une modification, deux badges reliés par `.ds-diff__arrow`.
+
+```html
+<p>En janvier je faisais <mark class="ds-mark">[à compléter]</mark> vues.</p>
+<span class="ds-snippet ds-snippet--mono">« Pas trop longues »</span>
+<ol class="ds-cues"><li class="ds-cue"><span class="ds-cue__time">00:04</span><span class="ds-cue__text">… sur <mark class="ds-mark ds-mark--success">Yunary</mark>.</span></li></ol>
+<dl class="ds-dl"><div><dt>À l'écran</dt><dd>…</dd></div></dl>
+<span class="ds-diff"><span class="ds-badge ds-badge--dense ds-badge--neutral">18:00</span><span class="ds-diff__arrow">…</span><span class="ds-badge ds-badge--dense ds-badge--accent">20:00</span></span>
+```
+
+- Classes : `.ds-mark` · `--success` · `.ds-snippet` · `--mono` · `.ds-cues` · `.ds-cue` · `__time`
+  · `__text` · `.ds-dl` · `.ds-diff` · `__arrow`.

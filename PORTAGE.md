@@ -3,7 +3,7 @@
 Ce dépôt est un **squelette de design system React**. Il apporte trois choses, et
 seulement trois :
 
-1. **L'inventaire** — 36 composants d'interface, leur nom, leur emplacement, leur API.
+1. **L'inventaire** — 37 composants d'interface, leur nom, leur emplacement, leur API.
 2. **La vitrine** — 9 pages qui les montrent tous, prête à ouvrir.
 3. **Le comportement** — focus, clavier, ARIA, cibles tactiles. La partie qu'on ne voit
    pas sur une maquette et qu'on re-casse à chaque régénération.
@@ -17,7 +17,7 @@ Tout le reste — couleurs, typographie, formes, ombres, traitements — **est �
 | | Pourquoi |
 |---|---|
 | La **structure des fichiers** | `src/components/<famille>/<Nom>.tsx`. Le point d'entrée et la vitrine importent par ces chemins. |
-| La **liste des 36 composants** | C'est l'inventaire. On n'en retire pas, on n'en ajoute pas au portage. |
+| La **liste des 37 composants** | C'est l'inventaire. On n'en retire pas, on n'en ajoute pas au portage. |
 | La **structure de la vitrine** | 9 pages — une par famille, plus Fondations. On remplace ce qu'elles montrent, pas leur découpage. |
 | Le **comportement et l'accessibilité** | Piège de focus, touche Échap, verrou de défilement, restitution du focus, `focus-visible`, rôles ARIA, cibles tactiles 44 px. Invisible sur une maquette, indispensable dans une app. |
 
@@ -43,7 +43,7 @@ Deux endroits :
 
 ---
 
-## L'inventaire — 36 composants
+## L'inventaire — 37 composants
 
 Chemin : `src/components/<famille>/<Nom>.tsx` · classes CSS : `src/styles/patterns.css`
 
@@ -53,22 +53,24 @@ Chemin : `src/components/<famille>/<Nom>.tsx` · classes CSS : `src/styles/patte
 | `brand` | Avatar · Halo · Logo |
 | `data-display` | Badge · Card · Pastille · Separator · Table · Tooltip |
 | `feedback` | Banner · EmptyState · Progress · Skeleton · SkeletonCard · Spinner · StateCard · Toast |
-| `forms` | Calendar · Checkbox · DatePicker · FormField · Input · Radio · Select · Switch · Textarea |
+| `forms` | Calendar · Checkbox · DatePicker · Dropzone · FormField · Input · Radio · Select · Switch · Textarea |
 | `icons` | Icon |
 | `navigation` | AppShell · Footer · Navbar · Pagination · Sidebar · Tabs |
 | `overlays` | Modal *(+ `useModalSurface`, le hook partagé)* |
 
-**Classes sans composant** — la tuile cochable (`.ds-tile`) et le menu déroulant
-(`.ds-dropdown`) : des classes de `patterns.css`, sans composant React. Voir la fin de
-`docs/PROMPTS.md`.
+**Classes sans composant** — la tuile cochable (`.ds-tile`), l'encart de valeur (`.ds-inset`), le
+menu déroulant (`.ds-dropdown`) et les motifs des parcours (`.ds-steps`, `.ds-veil`, `.ds-price`,
+`.ds-perks`, `.ds-file`, `.ds-upload`, `.ds-media`, `.ds-frames`, `.ds-agenda`, `.ds-week`, `.ds-mark`,
+`.ds-snippet`, `.ds-cues`, `.ds-dl`, `.ds-diff`) : des classes de `patterns.css`, sans composant
+React. Voir la fin de `docs/PROMPTS.md`.
 
-## La vitrine — 9 pages
+## La vitrine — 10 pages
 
-`demo/src/pages/` · une page par famille — 8 —, plus une transverse :
+`demo/src/pages/` · une page par famille — 8 —, plus deux transverses :
 
 `Foundations` (couleurs, typo, espacements, rayons, dimensions) · `Brand` (logo, avatar,
 halo) · `Actions` · `Forms` · `DataDisplay` · `Feedback` · `Navigation` · `Overlays` ·
-`Icons`
+`Icons` · `Parcours` (les motifs des parcours, v0.4.0)
 
 ```bash
 npm install && npm --prefix demo install
@@ -168,4 +170,4 @@ C'est volontaire : une régression casse visiblement au lieu de dériver en sile
 `GETTING-STARTED.md` — la même chose en checklist minutée, pour un humain.
 `docs/DESIGN.md` — la charte à remplir avant de toucher au CSS.
 `docs/accessibilite.md` — ce qui est garanti, et ce qui ne l'est pas.
-`README.md` — l'API des 36 composants.
+`README.md` — l'API des 37 composants.

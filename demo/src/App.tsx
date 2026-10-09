@@ -18,6 +18,7 @@ import { FeedbackPage } from './pages/Feedback';
 import { OverlaysPage } from './pages/Overlays';
 import { NavigationPage } from './pages/Navigation';
 import { BrandPage } from './pages/Brand';
+import { ParcoursPage } from './pages/Parcours';
 
 const PAGES = [
   { value: 'brand', label: 'Marque', render: () => <BrandPage /> },
@@ -29,6 +30,7 @@ const PAGES = [
   { value: 'feedback', label: 'Feedback', render: () => <FeedbackPage /> },
   { value: 'overlays', label: 'Overlays', render: () => <OverlaysPage /> },
   { value: 'navigation', label: 'Navigation', render: () => <NavigationPage /> },
+  { value: 'parcours', label: 'Parcours', render: () => <ParcoursPage /> },
 ];
 
 const THEMES = [

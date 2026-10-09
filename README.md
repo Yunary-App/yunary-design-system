@@ -1,7 +1,7 @@
 # @yunary/ds
 
 **Le design system de Yunary.** Deux couches qui ne se mélangent pas : un **socle**
-générique — structure, comportements, échelles, rail de contrôles, motion, 36 composants
+générique — structure, comportements, échelles, rail de contrôles, motion, 37 composants
 React + TypeScript, **zéro couleur** — et la **marque Yunary**, qui porte les couleurs, les
 polices, les dégradés et la lueur.
 
@@ -30,7 +30,7 @@ import '@yunary/ds/brand-yunary.css';  // la marque Yunary
 
 **La marque Yunary**, `src/styles/brand-yunary.css` : encre et crème, dégradé ambre →
 orange → corail, Onest en titrage et DM Sans en texte. Elle porte les 55 jetons du contrat
-et déclare ses 24 écarts d'accessibilité assumés, chacun avec sa raison. Le socle, lui, ne porte **aucune couleur** — c'est ce qui permet de la faire évoluer
+et déclare ses 26 écarts d'accessibilité assumés, chacun avec sa raison. Le socle, lui, ne porte **aucune couleur** — c'est ce qui permet de la faire évoluer
 sans toucher aux composants.
 
 > **Ce paquet est bâti sur un gabarit**, dont [`PORTAGE.md`](PORTAGE.md) et
@@ -58,7 +58,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/yunary-design-system#v0.3.0
+npm i github:Yamiro02/yunary-design-system#v0.4.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -243,7 +243,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > lève aucune erreur : il rend 4 px, hors barème.
 
 > **Le paquet n'est pas scanné par Tailwind.** v4 ne lit pas `node_modules`. Sans effet
-> aujourd'hui : les 36 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
+> aujourd'hui : les 37 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
 > Tailwind. C'est une précaution pour l'avenir — le jour où un composant du DS écrira une classe
 > Tailwind, l'app devra pointer le paquet :
 > ```css
@@ -259,13 +259,13 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 
 | Famille | Composants |
 |---|---|
-| `icons` | `Icon` — 49 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
+| `icons` | `Icon` — 56 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
 | `actions` | `Button` · `IconButton` — 5 variantes, `danger-soft` compris (6 pour `IconButton`, `accent` compris), 3 tailles, jamais un pill |
-| `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` · `Calendar` · `DatePicker` |
-| `data-display` | `Card` (+ en-tête à slots) · `Pastille` · `Badge` (2 rembourrages) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
-| `feedback` | `Toast` · `Banner` · `EmptyState` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
+| `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` (action à droite du libellé) · `Calendar` · `DatePicker` · `Dropzone` (dépôt d'un fichier) |
+| `data-display` | `Card` (+ en-tête à slots) · `Pastille` (de la puce à l'écran) · `Badge` (2 rembourrages, languette de coin) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
+| `feedback` | `Toast` · `Banner` (+ encart dans une carte) · `EmptyState` · `StateCard` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
 | `overlays` | `Modal` (3 phases + feuille basse sous 64 rem) |
-| `navigation` | `Navbar` · `Footer` · `Tabs` (onglets ou choix d'une valeur) · `Pagination` · `AppShell` · `Sidebar` |
+| `navigation` | `Navbar` · `Footer` · `Tabs` (onglets ou choix d'une valeur, barre compacte) · `Pagination` · `AppShell` · `Sidebar` |
 | `brand` | `Logo` · `Halo` · `Avatar` |
 
 Tous sont exportés en nommé depuis la racine, avec leurs types :
@@ -276,10 +276,15 @@ import { Button, type ButtonProps } from '@yunary/ds';
 
 Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
-> **Classes sans composant.** La tuile cochable (`.ds-tile`, avec ses formes compacte et
-> pastille), l'encart de valeur (`.ds-inset`) et le menu déroulant (`.ds-dropdown`) n'ont pas
-> de composant React : leurs classes sont stables, l'app écrit le balisage (React, Preact ou
-> HTML). Voir la fin de [`docs/PROMPTS.md`](docs/PROMPTS.md).
+> **Classes sans composant.** La tuile cochable (`.ds-tile`, avec ses formes compacte, pastille
+> et panneau), l'encart de valeur (`.ds-inset`, simple ou en pile), le menu déroulant
+> (`.ds-dropdown`) et les motifs des parcours — la barre d'étapes (`.ds-steps`), le voile d'un outil
+> non activé (`.ds-veil`), le prix et les avantages (`.ds-price`, `.ds-perks`), le fichier et
+> l'envoi (`.ds-file`, `.ds-upload`), le média 9:16 et la bande d'images (`.ds-media`,
+> `.ds-frames`), l'agenda (`.ds-agenda`, `.ds-week`), les marques de texte (`.ds-mark`,
+> `.ds-snippet`, `.ds-cues`, `.ds-dl`, `.ds-diff`) — n'ont pas de composant React : leurs classes
+> sont stables, l'app écrit le balisage (React, Preact ou HTML). Voir la fin de
+> [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
 > **Hors périmètre** — les composants métier (blocs de code, cartes d'étape, pills de
 > métrique…) vivent dans l'app qui en a besoin. Les classes `.ds-metric*` sont dans

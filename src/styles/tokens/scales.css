@@ -65,6 +65,10 @@
   --pastille-panneau:3.25rem;   /* 52 */
   --pastille-heros:4rem;        /* 64 */
   --pastille-ecran:5rem;        /* 80 */
+  /* v0.4.0 — la PUCE : un numéro d'étape, la coche d'un avantage, l'état d'une ligne. Le
+     contexte le plus petit, sous la carte : les maquettes la dessinaient à 28 px en
+     redimensionnant `carte` au site d'appel. */
+  --pastille-puce:1.75rem;      /* 28 */
 
   /* Bottom-sheet grip — ADDED v0.3. Height is --space-1. */
   --grip-w:2.25rem;      /* 36 */
@@ -119,6 +123,14 @@
   --cal-nav:2rem;                 /* 32 — .ds-cal__nav, carré */
   --page-min:2.5rem;              /* 40 — .ds-page, le carré minimum d'un bouton de pagination */
   --progress-h:0.5rem;            /* 8 — l'épaisseur du rail de .ds-progress */
+  /* v0.4.0 — les parcours (étapes, dépôt, voile, agenda). */
+  --step-mark:1.375rem;           /* 22 — le repère rond d'une étape de .ds-steps */
+  --dropzone-h:13.75rem;          /* 220 — la hauteur minimum de .ds-dropzone */
+  --veil-h:55rem;                 /* 880 — la hauteur montrée du contenu sous .ds-veil */
+  --agenda-cell-h:7rem;           /* 112 — la case d'un jour de .ds-agenda */
+  --agenda-cell-h-compact:3rem;   /* 48 — la même, dans un écran de Claude (--compact) */
+  --week-day-w:8.25rem;           /* 132 — la colonne du jour de .ds-week */
+  --week-day-w-compact:4rem;      /* 64 — la même, dans un écran de Claude (--compact) */
   /* LES DEUX ARRONDIS PROPRES À UN COMPOSANT. 0.875rem ne figure pas dans l'échelle
      --radius-* : la barre d'onglets et la pagination ont leur rayon à elles, et c'est
      voulu — les changer ne doit pas toucher les cartes. */

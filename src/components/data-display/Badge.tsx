@@ -13,6 +13,11 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
    */
   pad?: 'md' | 'dense';
   icon?: ReactNode;
+  /**
+   * La languette de coin (v0.4.0) : le badge se colle au coin haut droit de son conteneur, qui porte
+   * `position: relative` (« Recommandé » sur une carte de choix).
+   */
+  corner?: boolean;
   children?: ReactNode;
 }
 
@@ -29,13 +34,14 @@ const badge = cva('ds-badge', {
       outline: 'ds-badge--outline',
     },
     pad: { md: '', dense: 'ds-badge--dense' },
+    corner: { true: 'ds-badge--corner', false: '' },
   },
   defaultVariants: { tone: 'neutral', pad: 'md' },
 });
 
-export function Badge({ tone = 'neutral', pad = 'md', icon, className = '', children, ...rest }: BadgeProps): JSX.Element {
+export function Badge({ tone = 'neutral', pad = 'md', corner = false, icon, className = '', children, ...rest }: BadgeProps): JSX.Element {
   return (
-    <span className={[badge({ tone, pad }), className].filter(Boolean).join(' ')} {...rest}>
+    <span className={[badge({ tone, pad, corner }), className].filter(Boolean).join(' ')} {...rest}>
       {icon}{children}
     </span>
   );

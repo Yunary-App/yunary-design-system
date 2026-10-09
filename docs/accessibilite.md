@@ -10,7 +10,7 @@
 > translucides — pilules, plaques de marque — sont **composités sur leur surface porteuse**
 > avant mesure : c'est la couleur que l'œil reçoit, pas celle qui est écrite.
 >
-> **70 paires × 2 thèmes. 46 conformes, 24 écarts assumés.** Un écart assumé n'est pas un
+> **78 paires × 2 thèmes. 52 conformes, 26 écarts assumés.** Un écart assumé n'est pas un
 > oubli : c'est une décision écrite, déclarée dans `src/styles/brand-yunary.css` par un bloc
 > `@a11y-assume:` avec sa raison. Le build tombe si une **vingt-cinquième** apparaît.
 
@@ -90,6 +90,12 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 | `.ds-input[readonly] — texte sur --background` | 15 / 400 | 4,5 | 4,91 | 7,51 |
 | `.ds-input[readonly] — texte sur --secondary` | 15 / 400 | 4,5 | 5,17 | 6,47 |
 | `.ds-inset--dashed — texte sur --background` | 14 / 400 | 4,5 | 4,91 | 7,51 |
+| `.ds-banner--amber — texte sur --card` | 14 / 400 | 4,5 | 4,99 | 7,13 |
+| `.ds-week__wd — jour sur --muted` | 12 / 700 | 4,5 | 9,37 | 9,85 |
+| `.ds-week__day.is-today — jour et numéro` | 12 / 700 | 4,5 | 4,54 | 5,04 |
+| `.ds-agenda__cell.is-outside — numéro sur --muted` | 13 / 600 | 4,5 | 4,65 | 6,91 |
+| `.ds-media__badge — durée sur la vidéo` | 11 / 600 | 4,5 | 14,94 | 14,94 |
+| `.ds-perk — libellé sur --background` | 13 / 600 | 4,5 | 9,88 | 10,72 |
 | `.ds-badge--coral sur --card` | 12 / 700 | 4,5 | 4,90 | 5,73 |
 | `.ds-badge--coral sur --background` | 12 / 700 | 4,5 | 4,69 | 6,62 |
 | `.ds-badge--amber sur --card` | 12 / 700 | 4,5 | 4,99 | 7,13 |
@@ -115,7 +121,7 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 
 ## 3. Les écarts assumés
 
-24 paires, en six familles. Chacune est déclarée dans `src/styles/brand-yunary.css` par un
+26 paires, en six familles. Chacune est déclarée dans `src/styles/brand-yunary.css` par un
 bloc `@a11y-assume:`. Le script porte la mécanique, **la marque porte ses renoncements** : une
 autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dérogation.
 
@@ -132,6 +138,8 @@ autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dér
 | `.ds-pastille--brand — icône` | icône | 3 | 2,85 ✗ | 3,58 |
 | `.ds-pastille--brand-solid — glyphe sur --brand-from` | icône | 3 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-pastille--brand-solid — glyphe sur --brand-via` | icône | 3 | 2,68 ✗ | 2,68 ✗ |
+| `.ds-step en cours — chiffre sur --brand-from (pire arrêt)` | 13 / 700 | 4,5 | 2,04 ✗ | 2,04 ✗ |
+| `.ds-agenda__cell.is-today — numéro sur --brand-from (pire arrêt)` | 13 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-btn--primary — label sur --primary à plat` | 15 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.ds-btn--primary — label sur --brand-from (pire arrêt)` | 15 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-btn--primary — label sur --brand-via` | 15 / 600 | 4,5 | 2,68 ✗ | 2,68 ✗ |
@@ -146,12 +154,14 @@ autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dér
 | `.ds-card — bordure --border vs page` | contour 1px | 3 | 1,17 ✗ | 1,44 ✗ |
 | `.ds-sep — filet --border sur --card` | filet 1px | 3 | 1,22 ✗ | 1,24 ✗ |
 
-### 3.1 · La signature CTA — le label blanc sur le dégradé chaud · 8 paires
+### 3.1 · La signature CTA — le label blanc sur le dégradé chaud · 10 paires
 
 **L'écart.** Le CTA primaire porte `--brand-gradient`, ambre → orange → corail. Le label blanc
 mesure **2,04** sur l'arrêt jaune, **2,68** sur l'orange, **3,80** sur le corail, **3,48** sur
-l'aplat `--primary`. La pastille pleine et le jour sélectionné du calendrier portent le même
-dégradé, le bouton danger le même corail.
+l'aplat `--primary`. La pastille pleine, le jour sélectionné du calendrier, le repère de l'étape en cours et le
+numéro du jour d'aujourd'hui dans l'agenda (v0.4.0) portent le même dégradé, le bouton danger
+le même corail. Le chiffre d'une étape ou d'un jour est redondant : la place, le libellé en
+gras et `aria-current` disent l'état.
 
 **Pourquoi il est assumé.** C'est la signature de la marque, et l'alternative a été mesurée :
 un label encre tombait à **4,36 sur `--brand-to`** — le problème se déplaçait, il ne

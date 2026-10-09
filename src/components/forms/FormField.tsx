@@ -12,20 +12,23 @@ export interface FormFieldProps {
   help?: ReactNode;
   error?: ReactNode;
   required?: boolean;
+  /** Une action à droite du libellé (v0.4.0) — « Copier », un lien. Le libellé et elle partagent une rangée. */
+  action?: ReactNode;
   className?: string;
   children?: ReactNode;
 }
 
 export function FormField({
-  label, htmlFor, help, error, required = false, className = '', children,
+  label, htmlFor, help, error, required = false, action, className = '', children,
 }: FormFieldProps): JSX.Element {
+  const labelNode = label ? (
+    <label className="ds-label" htmlFor={htmlFor}>
+      {label}{required ? <span className="ds-label__required"> *</span> : null}
+    </label>
+  ) : null;
   return (
     <div className={cn('ds-field', className)}>
-      {label ? (
-        <label className="ds-label" htmlFor={htmlFor}>
-          {label}{required ? <span className="ds-label__required"> *</span> : null}
-        </label>
-      ) : null}
+      {action ? <div className="ds-field__head">{labelNode}{action}</div> : labelNode}
       {children}
       {error ? (
         <span className="ds-error"><Icon name="circle-alert" size="0.875rem" strokeWidth={2.5} />{error}</span>

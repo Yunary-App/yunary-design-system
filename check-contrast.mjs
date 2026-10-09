@@ -198,6 +198,15 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Texte', '.ds-input[readonly] — texte sur --background', g('--text-muted'), g(B), 4.5, '15 / 400');
   add('Texte', '.ds-input[readonly] — texte sur --secondary', g('--text-muted'), g('--secondary'), 4.5, '15 / 400');
   add('Texte', '.ds-inset--dashed — texte sur --background', g('--text-muted'), g(B), 4.5, '14 / 400');
+  /* v0.4.0 — les parcours : l'encart ambre, les repères d'étape, l'agenda, le média, les avantages. */
+  add('Marque-contenu', '.ds-banner--amber — texte sur --card', g('--pill-amber-fg'), on('--pill-amber-bg', C), 4.5, '14 / 400');
+  add('Marque-aplat', '.ds-step en cours — chiffre sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 4.5, '13 / 700');
+  add('Marque-aplat', '.ds-agenda__cell.is-today — numéro sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 4.5, '13 / 600');
+  add('Texte', '.ds-week__wd — jour sur --muted', g('--text-secondary'), g('--muted'), 4.5, '12 / 700');
+  add('Marque-contenu', '.ds-week__day.is-today — jour et numéro', g('--primary-readable'), over(g('--primary'), .12, g('--accent')), 4.5, '12 / 700');
+  add('Texte', '.ds-agenda__cell.is-outside — numéro sur --muted', g('--text-muted'), g('--muted'), 4.5, '13 / 600');
+  add('Texte', '.ds-media__badge — durée sur la vidéo', g('--tone-light'), on('--overlay-play-bg', '--tone-dark'), 4.5, '11 / 600');
+  add('Texte', '.ds-perk — libellé sur --background', g('--text-secondary'), g(B), 4.5, '13 / 600');
 
   for (const n of ['coral', 'amber', 'danger', 'warning', 'success', 'neutral']) {
     add('Pill', `.ds-badge--${n} sur --card`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, C), 4.5, '12 / 700');

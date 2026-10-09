@@ -14,6 +14,47 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.4.0 — les parcours : étapes, voile, offre, dépôt, média, agenda
+
+Les manques des maquettes Yunary Script et Yunary Programmation (dans Claude et dans le hub), de
+Paramètres, Compte, Mes outils et de l'onboarding (09/10/2026), pour que le hub et les écrans de
+Claude n'aient plus qu'à assembler. Règle suivie : réutiliser, sinon une variante, créer en
+dernier. Un seul composant React nouveau ; tout le reste est en classes, utilisables en Preact.
+Aucune rupture : tout est additif, les rendus existants ne bougent pas.
+
+- **Variantes de l'existant.**
+  - `Pastille size="puce"` (1,75 rem, jeton `--pastille-puce`) : un numéro d'étape, la coche d'un
+    avantage. Les maquettes réduisaient `carte` au site d'appel.
+  - `Badge corner` (`.ds-badge--corner`) : la languette « Recommandé » collée au coin d'une carte.
+  - `Banner` : tons `amber` et `neutral`, `inset` (`.ds-banner--inset`, l'encart d'information
+    dans une carte, sans filet sur les tons colorés), `icon` pour remplacer le glyphe du ton.
+  - `FormField action` (`.ds-field__head`) : « Copier » à droite du libellé.
+  - `Tabs size="sm"` (`.ds-tabs--sm`) : le filtre compact dans une carte, qui défile à 390 px.
+  - `EmptyState plain` (`.ds-empty--plain`) : l'état vide sans cadre, dans une section bordée.
+  - `.ds-tile--panel` (+ `.ds-tile__row`, `.ds-tile__end`) : un choix riche en colonne
+    (miniature, créneau, façon de commencer). Choisi : `--card` + filet `--primary`, sans plaque.
+  - `.ds-inset--stack` (+ `.ds-inset__head`) : l'encart en plusieurs blocs, en-tête et « Copier ».
+  - Sept glyphes : `upload`, `download`, `pause`, `video-off`, `list`, `pencil`, `log-out`
+    (56 glyphes).
+- **Création : `Dropzone`** (+ `.ds-dropzone*`) : la zone de dépôt d'un fichier (repos, survol,
+  fichier tenu au-dessus, focus, invalide, désactivée). Aucun composant ne couvrait le
+  glisser-déposer. Le composant ne valide rien : l'app contrôle et dit pourquoi.
+- **Créations en classes : les motifs des parcours.**
+  - `.ds-steps` : la barre d'étapes (faite, en cours, à venir).
+  - `.ds-veil` / `--below` : le voile d'un outil non activé (recouvre ou empile).
+  - `.ds-price` et `.ds-perks` : le prix et les avantages d'une offre.
+  - `.ds-file` et `.ds-upload` : le fichier et son envoi (en cours, en pause, interrompu).
+  - `.ds-media` (9:16, `--unavailable`) et `.ds-frames` : le média vertical et le choix d'un moment.
+  - `.ds-agenda` (le mois, `--compact`) et `.ds-week` (la semaine, `--compact`) : le `Calendar`
+    choisit une date, il n'affiche pas d'événements.
+  - `.ds-mark`, `.ds-snippet`, `.ds-cues`, `.ds-dl`, `.ds-diff` : les marques de texte.
+- **Jetons** (`scales.css`) : `--pastille-puce`, `--step-mark`, `--dropzone-h`, `--veil-h`,
+  `--agenda-cell-h(-compact)`, `--week-day-w(-compact)`.
+- **Contraste** : 8 paires de plus, 78 au total. Deux écarts assumés de plus (26) : le chiffre
+  blanc sur le dégradé de l'étape en cours et du jour d'aujourd'hui, la même décision que le
+  label du CTA.
+- **Vitrine** : une page « Parcours » montre chaque motif et ses états, clair, sombre et 390 px.
+
 ## 0.3.0 — listes de choix, choix d'une valeur, champ verrouillé, encart de valeur
 
 Les manques des pages Profil créateur, Paramètres et de la carte d'outil du hub (maquettes

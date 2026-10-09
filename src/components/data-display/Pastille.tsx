@@ -7,8 +7,11 @@ import { cva } from 'class-variance-authority';
  * Sizes are named BY CONTEXT, never by measure, so a call site never hard-codes a rem.
  */
 export interface PastilleProps extends HTMLAttributes<HTMLSpanElement> {
-  /** carte 2.25 · dialogue 2.625 · panneau 3.25 · héros 4 · écran 5rem — radius steps with the size. */
-  size?: 'carte' | 'dialogue' | 'panneau' | 'heros' | 'ecran';
+  /**
+   * puce 1.75 · carte 2.25 · dialogue 2.625 · panneau 3.25 · héros 4 · écran 5rem — radius steps with the size.
+   * `puce` (v0.4.0) : un numéro d'étape, la coche d'un avantage — son chiffre est en body-sm gras.
+   */
+  size?: 'puce' | 'carte' | 'dialogue' | 'panneau' | 'heros' | 'ecran';
   /** square = softened square (radius follows size) · round = --radius-pill. */
   shape?: 'square' | 'round';
   /**
@@ -30,6 +33,7 @@ export interface PastilleProps extends HTMLAttributes<HTMLSpanElement> {
 const pastille = cva('ds-pastille', {
   variants: {
     size: {
+      puce: 'ds-pastille--puce',
       carte: 'ds-pastille--carte',
       dialogue: 'ds-pastille--dialogue',
       panneau: 'ds-pastille--panneau',

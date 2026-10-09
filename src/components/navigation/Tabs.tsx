@@ -33,11 +33,13 @@ export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChang
    * clavier (`aria-readonly`). Les flèches déplacent encore le focus.
    */
   readOnly?: boolean;
+  /** `sm` (v0.4.0) : la barre compacte, sur le rail sm — un filtre posé dans une carte d'écran. */
+  size?: 'md' | 'sm';
 }
 
 export function Tabs({
   items = [], value, onChange, onCard = false, mode = 'tabs', fullWidth = false,
-  disabled = false, readOnly = false, className = '', ...rest
+  disabled = false, readOnly = false, size = 'md', className = '', ...rest
 }: TabsProps): JSX.Element {
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const choice = mode === 'choice';
@@ -66,7 +68,7 @@ export function Tabs({
 
   return (
     <div
-      className={cn('ds-tabs', onCard && 'ds-tabs--on-card', fullWidth && 'ds-tabs--block', className)}
+      className={cn('ds-tabs', onCard && 'ds-tabs--on-card', fullWidth && 'ds-tabs--block', size === 'sm' && 'ds-tabs--sm', className)}
       role={choice ? 'radiogroup' : 'tablist'}
       aria-disabled={disabled || undefined}
       aria-readonly={choice && readOnly ? true : undefined}

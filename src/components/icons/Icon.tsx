@@ -3,9 +3,9 @@ import {
   ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Calendar, Check, ChevronDown,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,
   CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder,
-  Info, LayoutDashboard, LoaderCircle, Lock, Mail, Menu, MessageSquare, Minus,
-  PanelLeft, Play, Plus, Quote, Rocket, Search, Settings, SlidersHorizontal,
-  Terminal, Trash2, TrendingUp, TriangleAlert, User, Video, X, Zap,
+  Download, Info, LayoutDashboard, List, LoaderCircle, Lock, LogOut, Mail, Menu, MessageSquare, Minus,
+  PanelLeft, Pause, Pencil, Play, Plus, Quote, Rocket, Search, Settings, SlidersHorizontal,
+  Terminal, Trash2, TrendingUp, TriangleAlert, Upload, User, Video, VideoOff, X, Zap,
   type LucideIcon,
 } from 'lucide-react';
 import { Github } from './brand-glyphs';
@@ -31,7 +31,8 @@ export type IconName =
   | 'github' | 'folder' | 'trending-up' | 'user' | 'book-open'
   | 'message-square' | 'quote' | 'rocket' | 'file-text'
   | 'chevrons-left' | 'chevrons-right' | 'ellipsis' | 'panel-left'
-  | 'sliders-horizontal' | 'layout-dashboard' | 'house' | 'video' | 'dumbbell' | 'settings' | 'lock';
+  | 'sliders-horizontal' | 'layout-dashboard' | 'house' | 'video' | 'dumbbell' | 'settings' | 'lock'
+  | 'upload' | 'download' | 'pause' | 'video-off' | 'list' | 'pencil' | 'log-out';
 
 /** Ce que tout rendu d'icône partage, quelle que soit la provenance du tracé. */
 export interface IconBaseProps {
@@ -137,6 +138,15 @@ const ICONS: Record<IconName, LucideIcon> = {
   'settings': Settings,
   /* Le cadenas d'un champ verrouillé (`Input iconEnd`) — une valeur qui se lit sans se changer. */
   'lock': Lock,
+  /* v0.4.0 — le dépôt et l'envoi d'un fichier, la vidéo absente, la vue en liste, modifier, se déconnecter :
+     attestés dans le hub ET dans les écrans de Claude (maquettes Script et Programmation). */
+  'upload': Upload,
+  'download': Download,
+  'pause': Pause,
+  'video-off': VideoOff,
+  'list': List,
+  'pencil': Pencil,
+  'log-out': LogOut,
 };
 
 export function Icon({

@@ -96,7 +96,7 @@ sont assumées par écrit dans le fichier de marque.
 deux mots d'un même titre, mélangé à une autre couleur d'accent. Une nouvelle app qui a
 besoin d'un 8ᵉ site d'accent l'ajoute ICI, par PR — pas dans son code.
 
-**Vérification :** `TOKENS=src/styles/brand-yunary.css node check-contrast.mjs` — 24 écarts
+**Vérification :** `TOKENS=src/styles/brand-yunary.css node check-contrast.mjs` — 26 écarts
 assumés par écrit dans le fichier (signature CTA, ring dégradé, contours doux, élément
 sélectionné en corail), le reste conforme.
 
@@ -222,5 +222,6 @@ plateformes sociales vivent dans le projet qui les fabrique.
 | 2026-08-31 | Marque exportée sous `./brand-yunary.css` dans package.json | sous-chemin stable de chaque surface |
 | 2026-09-11 | Élément sélectionné en corail (`--primary` sur `--accent`), écart de contraste assumé | décision de marque Julien |
 | 2026-09-11 | Titre de page à 36 px, `Card gap` sur l'échelle `--space-*` sans palier 20 | décisions Julien |
+| 2026-10-09 | 0.4.0 : motifs des parcours en classes, `Dropzone` seul composant nouveau ; la colonne du jour de la semaine sur `--muted`, l'`--accent` gardé au jour d'aujourd'hui | maquettes Script et Programmation ; la liste fermée des sites de l'accent (§ 3) |
 | 2026-09-29 | 0.3.0 : pastille de choix en pilule, emoji de contenu autorisé en tête de tuile | les listes de choix du profil créateur (maquette HubProfil) |
 | 2026-09-29 | 0.2.0 : retrait de l'extension de visuels d'export et des composants React sans consommateur | le paquet ne porte que ce que les surfaces emploient |

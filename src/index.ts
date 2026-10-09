@@ -42,6 +42,8 @@ export { Switch } from './components/forms/Switch';
 export type { SwitchProps } from './components/forms/Switch';
 export { FormField } from './components/forms/FormField';
 export type { FormFieldProps } from './components/forms/FormField';
+export { Dropzone } from './components/forms/Dropzone';
+export type { DropzoneProps } from './components/forms/Dropzone';
 
 /* data-display */
 export { Card } from './components/data-display/Card';

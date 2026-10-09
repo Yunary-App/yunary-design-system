@@ -63,6 +63,14 @@
    avec --primary-readable et reste la forme par défaut. */
 /* @a11y-assume: .ds-pastille--brand-solid — glyphe sur --brand-via
    Arrêt orange (2,68). Même atténuation que ci-dessus. */
+/* @a11y-assume: .ds-step en cours — chiffre sur --brand-from (pire arrêt)
+   v0.4.0 — le repère de l'étape en cours porte le dégradé plein, comme le CTA (2,04 sur l'arrêt
+   jaune, qui n'occupe que le bord gauche d'un rond de 22 px). Le chiffre est REDONDANT : la place
+   dans la barre, le libellé en gras à côté et `aria-current="step"` disent l'étape. Décision de
+   signature, comme le label du bouton primaire (maquettes Programmation et Script, 09/10/2026). */
+/* @a11y-assume: .ds-agenda__cell.is-today — numéro sur --brand-from (pire arrêt)
+   v0.4.0 — le numéro du jour d'aujourd'hui sur le dégradé plein (2,04 sur l'arrêt jaune). Le
+   numéro est redondant (sa place dans la grille) ; même décision que l'étape en cours. */
 /* @a11y-assume: .ds-btn--danger — label sur --destructive
    3,80 dans les deux thèmes. Corail sémantique #e84c3d (= --brand-to) sous label blanc —
    aligné sur le DS Julien Fernandes : le rouge foncé qui tiendrait 4,5 sortirait de la
