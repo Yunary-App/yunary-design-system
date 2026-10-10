@@ -59,18 +59,20 @@ Chemin : `src/components/<famille>/<Nom>.tsx` · classes CSS : `src/styles/patte
 | `overlays` | Modal *(+ `useModalSurface`, le hook partagé)* |
 
 **Classes sans composant** — la tuile cochable (`.ds-tile`), l'encart de valeur (`.ds-inset`), le
-menu déroulant (`.ds-dropdown`) et les motifs des parcours (`.ds-steps`, `.ds-veil`, `.ds-price`,
-`.ds-perks`, `.ds-file`, `.ds-upload`, `.ds-media`, `.ds-frames`, `.ds-agenda`, `.ds-week`, `.ds-mark`,
-`.ds-snippet`, `.ds-cues`, `.ds-dl`, `.ds-diff`) : des classes de `patterns.css`, sans composant
-React. Voir la fin de `docs/PROMPTS.md`.
+panneau d'écran (`.ds-panel`), le menu déroulant (`.ds-dropdown`) et les motifs des parcours
+(`.ds-steps`, `.ds-veil`, `.ds-price`, `.ds-perks`, `.ds-meter`, `.ds-offer`, `.ds-file`,
+`.ds-upload`, `.ds-media`, `.ds-frames`, `.ds-agenda`, `.ds-week`, `.ds-mark`, `.ds-snippet`,
+`.ds-cues`, `.ds-dl`, `.ds-diff`) : des classes de `patterns.css`, sans composant React. Voir la fin
+de `docs/PROMPTS.md`.
 
-## La vitrine — 10 pages
+## La vitrine — 11 pages
 
-`demo/src/pages/` · une page par famille — 8 —, plus deux transverses :
+`demo/src/pages/` · une page par famille — 8 —, plus trois transverses :
 
 `Foundations` (couleurs, typo, espacements, rayons, dimensions) · `Brand` (logo, avatar,
 halo) · `Actions` · `Forms` · `DataDisplay` · `Feedback` · `Navigation` · `Overlays` ·
-`Icons` · `Parcours` (les motifs des parcours, v0.4.0)
+`Icons` · `Parcours` (les motifs des parcours, v0.4.0) · `Outils` (les cartes d'outil, les
+compteurs, les étapes, la coque d'un écran de Claude, v0.5.0)
 
 ```bash
 npm install && npm --prefix demo install

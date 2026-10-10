@@ -117,7 +117,9 @@ const RETIRES = {
              'src/components/overlays/ActionSheet.tsx', 'src/components/overlays/Dropdown.tsx'],
   /* motifs cherchés dans le CSS du paquet, commentaires retirés */
   css: [/--tone-deep\b/, /--gradient-thumbnail\b/, /--shadow-accent-hot\b/, /\.accent-hot\b/, /\bbg-thumbnail\b/,
-        /--container-tile\b/, /--aspect-video-portrait\b/, /\.ds-actionsheet/, /--actionsheet-/, /\.ds-scrim--sheet\b/],
+        /--container-tile\b/, /--aspect-video-portrait\b/, /\.ds-actionsheet/, /--actionsheet-/, /\.ds-scrim--sheet\b/,
+        /* 0.5.0 — la languette de coin de 0.4.0, retirée : « Recommandé » est revenu en fin de rangée. */
+        /\.ds-badge--corner\b/],
 };
 for (const c of RETIRES.composants) {
   if (new RegExp(`\\b${c}\\b`).test(index)) erreurs.push(

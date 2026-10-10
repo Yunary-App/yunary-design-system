@@ -14,8 +14,13 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
   action?: ReactNode;
   /** L'encart d'information dans une carte (v0.4.0). */
   inset?: boolean;
-  /** Remplace l'icône du ton (v0.4.0) — un glyphe qui dit mieux le sujet. Le bandeau garde toujours une icône. */
+  /**
+   * Remplace l'icône du ton (v0.4.0) — un glyphe qui dit mieux le sujet, ou (v0.5.0) une `<Pastille
+   * size="carte">` qui tient la place de l'icône. Le bandeau garde toujours une icône.
+   */
   icon?: ReactNode;
+  /** `center` (défaut) : l'icône centrée sur la hauteur · `start` (v0.5.0) : alignée sur la première ligne. L'encart (`inset`) est toujours `start`. */
+  align?: 'center' | 'start';
   children?: ReactNode;
 }
 
@@ -35,15 +40,16 @@ const banner = cva('ds-banner', {
       neutral: '',
     },
     inset: { true: 'ds-banner--inset', false: '' },
+    align: { center: '', start: 'ds-banner--start' },
   },
-  defaultVariants: { tone: 'info', inset: false },
+  defaultVariants: { tone: 'info', inset: false, align: 'center' },
 });
 
 export function Banner({
-  tone = 'info', title, children, action, inset = false, icon, className = '', ...rest
+  tone = 'info', title, children, action, inset = false, icon, align = 'center', className = '', ...rest
 }: BannerProps): JSX.Element {
   return (
-    <div className={[banner({ tone, inset }), className].filter(Boolean).join(' ')} role="note" {...rest}>
+    <div className={[banner({ tone, inset, align }), className].filter(Boolean).join(' ')} role="note" {...rest}>
       {icon
         ? <span className="ds-banner__icon" aria-hidden="true">{icon}</span>
         : <Icon name={BANNER_ICONS[tone]} size={inset ? '1rem' : '1.125rem'} strokeWidth={2} className="ds-banner__icon" />}

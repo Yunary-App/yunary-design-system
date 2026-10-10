@@ -58,7 +58,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/yunary-design-system#v0.4.0
+npm i github:Yamiro02/yunary-design-system#v0.5.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -260,10 +260,10 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 | Famille | Composants |
 |---|---|
 | `icons` | `Icon` — 56 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
-| `actions` | `Button` · `IconButton` — 5 variantes, `danger-soft` compris (6 pour `IconButton`, `accent` compris), 3 tailles, jamais un pill |
-| `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` · `FormField` (action à droite du libellé) · `Calendar` · `DatePicker` · `Dropzone` (dépôt d'un fichier) |
-| `data-display` | `Card` (+ en-tête à slots) · `Pastille` (de la puce à l'écran) · `Badge` (2 rembourrages, languette de coin) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
-| `feedback` | `Toast` · `Banner` (+ encart dans une carte) · `EmptyState` · `StateCard` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
+| `actions` | `Button` · `IconButton` — 5 variantes, `danger-soft` compris (6 pour `IconButton`, `accent` compris), 4 tailles pour `Button` (`xs` = « Copier »), jamais un pill |
+| `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` (verrouillé, libellé avant la piste) · `FormField` (action à droite du libellé) · `Calendar` · `DatePicker` · `Dropzone` (dépôt d'un fichier) |
+| `data-display` | `Card` (+ en-tête à slots, badge collé au titre, pied, palier `xl`, plaque, coque d'écran de Claude) · `Pastille` (de la coche à l'écran) · `Badge` (2 rembourrages, ton dégradé, tête, croix de retrait) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
+| `feedback` | `Toast` · `Banner` (+ encart dans une carte, pastille à la place de l'icône) · `EmptyState` · `StateCard` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
 | `overlays` | `Modal` (3 phases + feuille basse sous 64 rem) |
 | `navigation` | `Navbar` · `Footer` · `Tabs` (onglets ou choix d'une valeur, barre compacte) · `Pagination` · `AppShell` · `Sidebar` |
 | `brand` | `Logo` · `Halo` · `Avatar` |
@@ -276,14 +276,15 @@ import { Button, type ButtonProps } from '@yunary/ds';
 
 Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
-> **Classes sans composant.** La tuile cochable (`.ds-tile`, avec ses formes compacte, pastille
-> et panneau), l'encart de valeur (`.ds-inset`, simple ou en pile), le menu déroulant
-> (`.ds-dropdown`) et les motifs des parcours — la barre d'étapes (`.ds-steps`), le voile d'un outil
-> non activé (`.ds-veil`), le prix et les avantages (`.ds-price`, `.ds-perks`), le fichier et
-> l'envoi (`.ds-file`, `.ds-upload`), le média 9:16 et la bande d'images (`.ds-media`,
-> `.ds-frames`), l'agenda (`.ds-agenda`, `.ds-week`), les marques de texte (`.ds-mark`,
-> `.ds-snippet`, `.ds-cues`, `.ds-dl`, `.ds-diff`) — n'ont pas de composant React : leurs classes
-> sont stables, l'app écrit le balisage (React, Preact ou HTML). Voir la fin de
+> **Classes sans composant.** La tuile cochable (`.ds-tile`, avec ses formes compacte, pastille,
+> panneau et choix), l'encart de valeur (`.ds-inset`, simple ou en pile), le panneau d'écran
+> (`.ds-panel`), le menu déroulant (`.ds-dropdown`) et les motifs des parcours — la barre d'étapes
+> (`.ds-steps`, segmentée ou verticale), le voile d'un outil non activé (`.ds-veil`), le prix, les
+> avantages et le compteur à jauge (`.ds-price`, `.ds-perks`, `.ds-meter`), la carte d'outil
+> (`.ds-offer`), le fichier et l'envoi (`.ds-file`, `.ds-upload`), le média 9:16 et la bande
+> d'images (`.ds-media`, `.ds-frames`), l'agenda (`.ds-agenda`, `.ds-week`), les marques de texte
+> (`.ds-mark`, `.ds-snippet`, `.ds-cues`, `.ds-dl`, `.ds-diff`) — n'ont pas de composant React :
+> leurs classes sont stables, l'app écrit le balisage (React, Preact ou HTML). Voir la fin de
 > [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
 > **Hors périmètre** — les composants métier (blocs de code, cartes d'étape, pills de

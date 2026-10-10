@@ -71,6 +71,14 @@
 /* @a11y-assume: .ds-agenda__cell.is-today — numéro sur --brand-from (pire arrêt)
    v0.4.0 — le numéro du jour d'aujourd'hui sur le dégradé plein (2,04 sur l'arrêt jaune). Le
    numéro est redondant (sa place dans la grille) ; même décision que l'étape en cours. */
+/* @a11y-assume: .ds-badge--brand — texte sur --brand-from (pire arrêt)
+   v0.5.0 — le badge en dégradé plein (« À connecter », « 12 € / mois ») : texte blanc 12/700 sur
+   l'arrêt jaune (2,04). Même décision de signature que le CTA ; le libellé est court et redondant
+   avec son contexte (le compte à connecter, le prix écrit à côté). Maquettes du 10/10/2026. */
+/* @a11y-assume: .ds-price--accent — montant sur --brand-from (pire arrêt)
+   v0.5.0 — le montant d'une offre en dégradé clippé (« 12 € »), en face display 800 à 36 px : du
+   gros texte, lu 1,83 sur l'arrêt clair comme `.accent`. Décision de marque du 10/10/2026, le même
+   écart que le mot de titre ; la période et la note restent en encre. */
 /* @a11y-assume: .ds-btn--danger — label sur --destructive
    3,80 dans les deux thèmes. Corail sémantique #e84c3d (= --brand-to) sous label blanc —
    aligné sur le DS Julien Fernandes : le rouge foncé qui tiendrait 4,5 sortirait de la
@@ -275,9 +283,9 @@
    Aligné sur le kit maître Julien Fernandes : l'échelle de rayons du SOCLE est gardée
    telle quelle (boutons/champs 12, chips 10, tabs/pagination 14 — la rigueur du ton
    chaud ; l'ancien « soft & generous » Yunary et son pill de tabs sont abandonnés).
-   Trois redéclarations seulement :
-   · le padding de carte du kit maître — 24 se lisait serré, surtout avec un en-tête
-     à pastille ;
+   Deux redéclarations seulement (v0.5.0 : le padding de carte REVIENT au socle — 24 / 28, et les
+   cartes d'outil et d'offre prennent le palier xl 28 / 32 de scales.css ; la contradiction entre
+   la charte et le jeton est réglée, décision Julien du 10/10/2026) :
    · la largeur de barre latérale FLUIDE du kit maître — plancher 240 (≤ 1280),
      256 à 1600, 272 à 1920, plafond 288 (≥ 2240). Pente positive : la barre grandit
      avec l'écran ; sous 64rem elle est un tiroir et le jeton ne s'applique plus ;
@@ -285,8 +293,6 @@
      titre trop gros. Réglé ICI et non dans typography.css : le 40 est le défaut du gabarit,
      le 36 est un choix de Yunary. */
 :root{
-  --card-pad:1.75rem;    /* 28 — carte standard */
-  --card-pad-lg:2rem;    /* 32 — grande carte / panneau */
   --sidebar-w:clamp(15rem,11rem + 5vw,18rem); /* 240 -> 288 */
   --text-heading-xl:2.25rem; /* 36 — titre de page ; socle : 40 */
 }

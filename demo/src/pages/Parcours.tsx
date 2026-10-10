@@ -26,7 +26,7 @@ function Etapes({ courante }: { courante: number }) {
 function Perk({ children, tone = 'success', icon = 'check' }: { children: ReactNode; tone?: 'success' | 'amber' | 'brand'; icon?: 'check' | 'zap' | 'file-text' | 'message-square' }) {
   return (
     <li className="ds-perk">
-      <Pastille size="puce" tone={tone}><Icon name={icon} strokeWidth={icon === 'check' ? 3 : 2} /></Pastille>
+      <Pastille size="coche" tone={tone}><Icon name={icon} /></Pastille>
       {children}
     </li>
   );
@@ -40,8 +40,8 @@ function Offre() {
           <span className="font-display text-subheading font-bold">Active l'outil</span>
           <span className="text-body-sm text-text-muted">Ce que l'outil fait pour toi, en une phrase.</span>
         </div>
-        <div className="ds-price ds-price--end">
-          <span className="ds-price__line"><span className="ds-price__amount"><span className="accent">12 €</span></span><span className="ds-price__period">/ mois</span></span>
+        <div className="ds-price ds-price--end ds-price--accent">
+          <span className="ds-price__line"><span className="ds-price__amount">12 €</span><span className="ds-price__period">/ mois</span></span>
           <span className="ds-price__note">Sans engagement</span>
         </div>
       </div>
@@ -183,11 +183,11 @@ export function ParcoursPage() {
         </Block>
       </Section>
 
-      <Section title="Prix et avantages" note=".ds-price (montant, période, note ; le montant vient du serveur) et .ds-perks (une Pastille puce + un libellé). Deux colonnes dans une carte de 680, une à 390.">
+      <Section title="Prix et avantages" note=".ds-price (montant, période, note ; le montant vient du serveur ; --accent le met en dégradé) et .ds-perks (une Pastille coche + un libellé), deux colonnes fixes, même à 390.">
         <Grid cols={2}>
           <Block label="Colonne prix">
-            <div className="ds-price">
-              <span className="ds-price__line"><span className="ds-price__amount"><span className="accent">9 €</span></span><span className="ds-price__period">/ mois</span></span>
+            <div className="ds-price ds-price--accent">
+              <span className="ds-price__line"><span className="ds-price__amount">9 €</span><span className="ds-price__period">/ mois</span></span>
               <span className="ds-price__note">50 analyses par mois</span>
             </div>
           </Block>
@@ -318,13 +318,12 @@ export function ParcoursPage() {
             </label>
           </div>
         </Block>
-        <Block label="Un choix parmi trois, avec languette de coin">
+        <Block label="Un choix parmi trois, le premier recommandé (.is-recommended), le deuxième choisi">
           <div role="radiogroup" aria-label="Le créneau" className="grid gap-space-3" style={{ maxWidth: '42rem', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,10rem),1fr))' }}>
-            {[['Mardi 13', '18:00', true], ['Jeudi 15', '12:30', false], ['Samedi 17', '10:00', false]].map(([j, h, reco]) => (
-              <label key={j as string} className="ds-tile ds-tile--panel">
-                <span className="ds-choice"><input type="radio" name="creneau" defaultChecked={!!reco} /><span className="ds-choice__box ds-choice__box--radio" aria-hidden="true"><span className="ds-choice__dot" /></span></span>
-                {reco ? <span className="ds-badge ds-badge--dense ds-badge--accent ds-badge--corner">Le plus proche</span> : null}
-                <span className="ds-tile__title">{j}</span>
+            {[['Mardi 13', '18:00', 'reco'], ['Jeudi 15', '12:30', 'choisi'], ['Samedi 17', '10:00', '']].map(([j, h, etat]) => (
+              <label key={j} className={etat === 'reco' ? 'ds-tile ds-tile--panel is-recommended' : 'ds-tile ds-tile--panel'}>
+                <span className="ds-choice"><input type="radio" name="creneau" defaultChecked={etat === 'choisi'} /><span className="ds-choice__box ds-choice__box--radio" aria-hidden="true"><span className="ds-choice__dot" /></span></span>
+                <span className="ds-tile__row"><span className="ds-tile__title">{j}</span>{etat === 'reco' ? <Badge tone="accent" pad="dense">Le plus proche</Badge> : null}</span>
                 <span className="font-mono text-body">{h}</span>
               </label>
             ))}
@@ -349,7 +348,7 @@ export function ParcoursPage() {
         </Block>
       </Section>
 
-      <Section title="Encarts et marques de texte" note="Banner inset (amber, neutral, icon), .ds-inset--stack (en-tête + Copier), FormField action, Tabs size sm, EmptyState plain, Badge corner, et les marques .ds-mark, .ds-snippet, .ds-cues, .ds-dl, .ds-diff.">
+      <Section title="Encarts et marques de texte" note="Banner inset (amber, neutral, icon), .ds-inset--stack (en-tête + Copier), FormField action, Tabs size sm, EmptyState plain, et les marques .ds-mark, .ds-snippet, .ds-cues, .ds-dl, .ds-diff.">
         <Grid cols={2}>
           <Block label="Encarts d'information dans une carte">
             <Card gap={3}>
@@ -366,7 +365,7 @@ export function ParcoursPage() {
               <div className="ds-inset ds-inset--stack">
                 <div className="ds-inset__head">
                   <Badge tone="coral" pad="dense">Hook</Badge><Badge tone="amber" pad="dense">Contre-pied</Badge>
-                  <Button variant="ghost" size="sm" className="ds-inset__action" icon={<Icon name="copy" />}>Copier</Button>
+                  <Button variant="ghost" size="xs" className="ds-inset__action" icon={<Icon name="copy" />}>Copier</Button>
                 </div>
                 <p className="ds-inset__value font-display text-heading-sm font-bold">Tes vidéos ne sont pas trop longues. Elles sont trop lentes à démarrer.</p>
                 <dl className="ds-dl">
@@ -378,7 +377,7 @@ export function ParcoursPage() {
           </Block>
           <Block label="Champ à action, répliques horodatées">
             <Card gap={4}>
-              <FormField label="Description" htmlFor="desc" help="Pensé pour la recherche." action={<Button variant="ghost" size="sm" icon={<Icon name="copy" />}>Copier</Button>}>
+              <FormField label="Description" htmlFor="desc" help="Pensé pour la recherche." action={<Button variant="ghost" size="xs" icon={<Icon name="copy" />}>Copier</Button>}>
                 <Textarea id="desc" rows={3} defaultValue="Trois erreurs qui tuent ta rétention, et comment les corriger." />
               </FormField>
               <ol className="ds-cues">
@@ -389,9 +388,8 @@ export function ParcoursPage() {
               <p className="text-body-sm">En janvier je faisais <mark className="ds-mark">[à compléter]</mark> vues.</p>
             </Card>
           </Block>
-          <Block label="Avant / après, état vide nu, languette">
-            <Card gap={4} className="relative">
-              <Badge tone="accent" pad="dense" corner>Recommandé</Badge>
+          <Block label="Avant / après, état vide nu, puces">
+            <Card gap={4}>
               <div className="ds-inset">
                 <span className="ds-inset__value font-semibold">Heure de publication</span>
                 <span className="ds-diff">

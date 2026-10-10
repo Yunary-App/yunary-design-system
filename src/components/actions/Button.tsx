@@ -15,8 +15,12 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * destructrice unique et définitive d'une vue.
    */
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'danger-soft';
-  /** Shared control rail: every size has min-height 3rem (2.75rem under 64rem); sm tightens padding + type; lg (3.25rem) is the hero CTA. */
-  size?: 'sm' | 'md' | 'lg';
+  /**
+   * Shared control rail: every size has min-height 3rem (2.75rem under 64rem); sm tightens padding + type; lg (3.25rem) is the hero CTA.
+   * `xs` (v0.5.0) : 28 px (`--control-xs`), caption, icône 0.875rem — « Copier » dans l'en-tête d'un champ,
+   * une action de méta. Jamais un CTA ni un bouton de pied : ceux-là restent sur le rail.
+   */
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   /**
    * The surface the button sits on — the escape hatch to the surface deduction of
    * patterns.css, and the exact twin of Input's `surface`. `auto` (default) lets the
@@ -52,7 +56,7 @@ const button = cva('ds-btn', {
       danger: 'ds-btn--danger',
       'danger-soft': 'ds-btn--danger-soft',
     },
-    size: { sm: 'ds-btn--sm', md: 'ds-btn--md', lg: 'ds-btn--lg' },
+    size: { xs: 'ds-btn--xs', sm: 'ds-btn--sm', md: 'ds-btn--md', lg: 'ds-btn--lg' },
     surface: { auto: '', page: 'ds-btn--on-page', card: 'ds-btn--on-card' },
     fullWidth: { true: 'ds-btn--block', false: '' },
     loading: { true: 'is-loading', false: '' },

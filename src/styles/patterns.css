@@ -75,10 +75,18 @@
 .ds-icon-btn--sm svg{width:var(--ds-icon-size,1rem);height:var(--ds-icon-size,1rem)}
 .ds-icon-btn--md svg{width:var(--ds-icon-size,1.125rem);height:var(--ds-icon-size,1.125rem)}
 .ds-select__chev,.ds-datepicker__trigger svg{width:var(--ds-icon-size,1rem);height:var(--ds-icon-size,1rem)}
+/* v0.5.0 — le badge hors dense dimensionnait ses icônes au site d'appel (12 à 16 px selon la
+   maquette) : un créneau à 0.875rem, la valeur que PROMPTS recommandait déjà. Le xs du bouton et la
+   coche tiennent le leur. */
+.ds-badge svg{width:var(--ds-icon-size,0.875rem);height:var(--ds-icon-size,0.875rem)}
 .ds-badge--dense svg{width:var(--ds-icon-size,0.75rem);height:var(--ds-icon-size,0.75rem)}
+.ds-btn--xs :is(svg,.ds-spinner){width:var(--ds-icon-size,0.875rem);height:var(--ds-icon-size,0.875rem)}
 .ds-pastille--dialogue svg{width:var(--ds-icon-size,1.5rem);height:var(--ds-icon-size,1.5rem)}
 .ds-pastille--panneau svg{width:var(--ds-icon-size,1.5rem);height:var(--ds-icon-size,1.5rem)}
 .ds-pastille--puce svg{width:var(--ds-icon-size,0.9375rem);height:var(--ds-icon-size,0.9375rem)}
+/* La coche d'un avantage : glyphe 0.875rem, trait 3 — la maquette la dessine ainsi (10/10/2026). */
+.ds-pastille--coche svg{width:var(--ds-icon-size,0.875rem);height:var(--ds-icon-size,0.875rem);stroke-width:3}
+.ds-switch__lock svg{width:var(--ds-icon-size,1rem);height:var(--ds-icon-size,1rem)}
 
 /* ---------- actions: Button ---------- */
 .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;min-height:var(--control-md);padding:0.8125rem 1.375rem;font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);line-height:1;border:none;border-radius:calc(var(--control-md) / 3);cursor:pointer;text-decoration:none;white-space:nowrap;box-sizing:border-box;outline:none;transition:transform var(--duration-fast) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard),background var(--duration-base) var(--ease-standard),border-color var(--duration-base) var(--ease-standard),filter var(--duration-base) var(--ease-standard)}
@@ -90,6 +98,11 @@
    pastilles, tooltips et menus restent sur l'échelle --radius-*. */
 .ds-btn--sm{border-radius:calc(var(--control-sm) / 3)}
 .ds-btn--lg{border-radius:calc(var(--control-lg) / 3)}
+/* LE CRAN XS — v0.5.0 : « Copier » dans l'en-tête d'un champ, une action de méta posée à côté d'un
+   libellé. 28 px (--control-xs), caption, icône 0.875rem. Le seul contrôle sous le rail de 44 : il
+   reste au-dessus du minimum d'accessibilité de 24 px (WCAG 2.5.8), et ce n'est jamais un CTA ni
+   un bouton de pied — ces deux-là restent sur le rail. */
+.ds-btn--xs{gap:0.375rem;min-height:var(--control-xs);padding:0.25rem 0.625rem;font-size:var(--text-caption);border-radius:calc(var(--control-xs) / 3)}
 .ds-btn--block{width:100%}
 .ds-btn--primary{background:var(--brand-gradient);color:var(--primary-foreground);box-shadow:var(--shadow-glow)}
 .ds-btn--primary:hover:not(:disabled),.ds-btn--primary.is-hover{box-shadow:var(--shadow-glow-lg);transform:translateY(-1px)}
@@ -271,6 +284,16 @@
 .ds-switch input:checked+.ds-switch__track .ds-switch__knob,.ds-switch.is-checked .ds-switch__knob{transform:translateX(calc(var(--switch-w) - var(--switch-knob) - var(--switch-inset) * 2))}
 .ds-switch input:focus-visible+.ds-switch__track,.ds-switch.is-focus .ds-switch__track{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-switch.is-disabled{opacity:.5;cursor:not-allowed}
+/* L'INTERRUPTEUR VERROUILLÉ — v0.5.0 (« Toujours actif » : un outil compris dans l'offre). Ce n'est
+   pas `disabled` : la piste reste pleine et lisible, l'<input> reste dans l'ordre de tabulation et
+   annoncé (`aria-readonly="true"`), un cadenas de 1 rem dit pourquoi ; le survol ne l'invite plus,
+   et EMPÊCHER le changement reste au composant (Switch `locked`) ou à l'app. */
+.ds-switch.is-locked{cursor:default}
+.ds-switch.is-locked .ds-switch__track,.ds-switch.is-locked:hover .ds-switch__track{background:var(--border)}
+.ds-switch.is-locked input:checked+.ds-switch__track{background:var(--brand-gradient)}
+.ds-switch__lock{display:inline-flex;flex:none;color:var(--text-muted)}
+/* Le libellé AVANT la piste (`--label-start`) : la rangée d'un réglage où la piste ferme la ligne. */
+.ds-switch--label-start{flex-direction:row-reverse}
 /* ---------- forms: la tuile cochable (classes seules) ---------- */
 /* UNE SEULE ANATOMIE POUR TOUS LES CHOIX EN TUILE. Pas de composant React : les classes
    s'écrivent directement (le site les emploie ainsi). La tuile EST le <label> : toute sa surface coche, le clavier et le formulaire sont ceux de l'<input> natif
@@ -311,7 +334,11 @@
 .ds-tile__meta{font-size:var(--text-caption);color:var(--text-muted);white-space:nowrap}
 .ds-tile:hover,.ds-tile.is-hover{border-color:var(--input)}
 .ds-tile:hover .ds-choice__box,.ds-tile.is-hover .ds-choice__box{border-color:var(--primary)}
-.ds-tile:has(input:checked),.ds-tile.is-checked{border-color:var(--primary);background:var(--accent)}
+/* v0.5.0 — une tuile peut être un <button aria-pressed> (un choix de navigation, sans formulaire :
+   le réseau de l'onboarding, « Je n'ai pas de compte ») : `aria-pressed="true"` vaut cochée. */
+.ds-tile:has(input:checked),.ds-tile.is-checked,.ds-tile[aria-pressed="true"]{border-color:var(--primary);background:var(--accent)}
+button.ds-tile{appearance:none;width:100%;font:inherit;margin:0}
+.ds-tile[aria-pressed="true"] .ds-tile__check{display:inline-flex}
 .ds-tile:has(input:focus-visible),.ds-tile.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 /* Le contrôle interne ne porte pas son propre anneau : c'est la tuile qui le porte. */
 .ds-tile .ds-choice input:focus-visible+.ds-choice__box{box-shadow:none}
@@ -369,6 +396,29 @@ div.ds-tile--panel{cursor:default}
 div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
 .ds-tile__row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2)}
 .ds-tile__row>.ds-tile__check,.ds-tile__row>.ds-tile__end{margin-left:auto}
+/* LA TUILE DE CHOIX — v0.5.0, l'anatomie des maquettes d'onboarding et de « Nouveau contenu » :
+   une rangée [tête] · [titre, description] · [coche ou chevron], padding 16 / 18, le titre en
+   body-lg gras, la coche de fin à 1.125rem en --primary-readable. La tête (`.ds-tile__lead`) porte
+   un glyphe de 1.625rem (un logo de réseau) ou une `Pastille` (dialogue). Un <label> + input natif,
+   ou un <button aria-pressed>. `.ds-tiles` : la grille de deux colonnes qui les porte ;
+   `.ds-tile--span` : la tuile qui prend toute la rangée. */
+.ds-tile--choice{gap:0.875rem;padding:1rem 1.125rem}
+.ds-tile--choice .ds-tile__title{font-size:var(--text-body-lg);font-weight:var(--weight-bold);overflow-wrap:anywhere}
+.ds-tile--choice .ds-tile__lead svg{--ds-icon-size:1.625rem}
+.ds-tile--choice .ds-tile__lead .ds-pastille svg{--ds-icon-size:1.25rem}
+.ds-tile--choice .ds-tile__check{color:var(--primary-readable)}
+.ds-tile--choice .ds-tile__check svg{--ds-icon-size:1.125rem}
+.ds-tile--choice .ds-tile__end{display:inline-flex;flex:none;color:var(--text-muted)}
+.ds-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)}
+.ds-tile--span{grid-column:1/-1}
+/* LA TUILE QUI SE SOULÈVE — `.ds-tile--lift`, v0.5.0 : choisie, elle remonte au niveau de la carte
+   (fond --card, filet --primary, ombre douce) au lieu de prendre la plaque --accent — la recette de
+   la tuile panneau, offerte à la rangée (« Écrire un script avec Claude » choisi). */
+.ds-tile--lift:is(:has(input:checked),.is-checked,[aria-pressed="true"]){background:var(--card);box-shadow:var(--shadow-sm)}
+/* RECOMMANDÉE, SANS ÊTRE CHOISIE — `.is-recommended`, v0.5.0 : le filet --primary et l'ombre douce
+   signalent l'option que l'outil conseille (le hook 1, le créneau le plus proche) ; le fond ne
+   bouge pas, la coche n'apparaît pas. Choisie, la tuile reprend sa recette normale. */
+.ds-tile.is-recommended{border-color:var(--primary);box-shadow:var(--shadow-sm)}
 
 /* ---------- data-display: Card · Badge · Tooltip ---------- */
 /* Card — header slots. Passing no slot renders exactly as before. */
@@ -391,9 +441,86 @@ div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
 .ds-card__title--lg{font-size:var(--text-subheading);letter-spacing:var(--tracking-subheading);line-height:var(--leading-heading)}
 .ds-card__subtitle{font-size:var(--text-body-sm);color:var(--text-muted);line-height:var(--leading-snug)}
 .ds-card__action{flex:none;margin-left:auto}
+/* LE BADGE COLLÉ AU TITRE — v0.5.0 (« Yunary Analyse · Actif ») : un slot À CÔTÉ du titre, dans
+   `.ds-card__title-row`, qui passe à la ligne sous le titre quand la place manque. L'`action`, elle,
+   reste poussée à droite : ce sont deux places différentes. */
+.ds-card__title-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3)}
+.ds-card__title-row>.ds-card__title{min-width:0}
+.ds-card__badge{display:inline-flex;flex:none}
 .ds-card{background:var(--card);color:var(--card-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--card-pad);box-shadow:var(--shadow-sm);box-sizing:border-box}
 .ds-card--lg{border-radius:var(--radius-xl);padding:var(--card-pad-lg)}
+/* LE PALIER XL — v0.5.0 : la carte d'outil et la carte d'offre, 28 / 32 (jetons --card-pad-xl-*),
+   rayon lg comme la carte standard. C'est la contradiction de la charte réglée : 24 / 28 par défaut,
+   28 / 32 pour ces deux cartes-là. */
+.ds-card--xl{padding:var(--card-pad-xl-y) var(--card-pad-xl-x)}
+.ds-card--xl>.ds-sep--bleed{margin-inline:calc(-1 * var(--card-pad-xl-x))}
+/* À VENIR — `.is-upcoming`, v0.5.0 : l'outil annoncé (« Bientôt ») : la carte s'estompe et perd son
+   ombre ; ses contrôles restent lisibles, l'app les désactive. */
+.ds-card.is-upcoming{opacity:.7;box-shadow:none}
 .ds-card--flush{padding:0;overflow:hidden}
+/* LE PIED DE CARTE — `.ds-card__foot`, v0.5.0 : un filet haut, une phrase en sourdine à gauche, une
+   action à droite (qui passe dessous à 390). Le pied d'un écran de Claude (« Dis « Prends le hook
+   2 » » + « Ouvrir dans Yunary ») comme celui d'une plaque d'offre. */
+.ds-card__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-2) var(--space-3);padding-top:0.875rem;border-top:1px solid var(--border);font-size:var(--text-caption);color:var(--text-muted)}
+.ds-card__foot>.ds-btn{margin-left:auto}
+/* LA PLAQUE — `.ds-card--plaque`, v0.5.0 : la carte feature posée DANS une carte (la carte d'offre de
+   Comptes connectés, l'encart « Depuis Claude ») : sans ombre ni --card-pad, le corps dans
+   `.ds-card__body` (20 / 24), le pied dans `.ds-card__foot` (14 / 24) sur un lavis --card à 60 % et
+   le filet de marque. Toujours avec `.ds-card--feature`. */
+.ds-card--plaque{display:flex;flex-direction:column;padding:0;box-shadow:none;overflow:hidden}
+.ds-card--plaque>.ds-card__body{display:flex;flex-direction:column;gap:var(--space-4);padding:1.25rem 1.5rem}
+.ds-card--plaque>.ds-card__body>.ds-card__header{margin-bottom:0}
+.ds-card--plaque>.ds-card__foot{padding:0.875rem 1.5rem}
+.ds-card--feature>.ds-card__foot{border-top-color:color-mix(in srgb,var(--brand-from) 28%,transparent);background:color-mix(in srgb,var(--card) 60%,transparent)}
+/* LA COQUE D'UN ÉCRAN DE CLAUDE — `.ds-card--screen`, v0.5.0. Décision du 10/10/2026 : les surfaces
+   du ds sont FORCÉES dans Claude, seul le clair ou le sombre suit l'hôte (la coque applique `.dark`
+   d'après `prefers-color-scheme` ou le thème que l'hôte annonce). La carte d'écran : fond
+   --background, filet, rayon lg, padding 18 / 20 / 20, SANS ombre, une pile à --space-4 ; son en-tête
+   serre son gap à 10 et cède sa marge à la pile. Tout ce qui se pose dedans se RELÈVE en --card (un
+   champ, un encart, un panneau, un envoi, une tuile au repos) : l'inverse d'une carte, où tout se
+   creuse en --background. Les bulles de conversation autour appartiennent à Claude, jamais au ds. */
+.ds-card--screen{display:flex;flex-direction:column;gap:var(--space-4);padding:1.125rem 1.25rem 1.25rem;background:var(--background);color:var(--foreground);box-shadow:none}
+.ds-card--screen>.ds-card__header{gap:0.625rem;margin-bottom:0}
+/* La barre d'onglets garde sa largeur de contenu : la pile étirerait un `inline-flex` sur toute la carte. */
+.ds-card--screen>.ds-tabs{align-self:flex-start}
+.ds-card--screen .ds-input,.ds-card--screen .ds-inset,.ds-card--screen .ds-dropzone,.ds-card--screen .ds-upload,.ds-card--screen .ds-week__item,.ds-card--screen .ds-tabs{background:var(--card)}
+.ds-card--screen .ds-banner--inset:not(.ds-banner--info,.ds-banner--danger,.ds-banner--warning,.ds-banner--success,.ds-banner--amber){background:var(--card)}
+.ds-card--screen .ds-tabs .ds-tab[aria-selected="true"],.ds-card--screen .ds-tabs .ds-tab[aria-checked="true"],.ds-card--screen .ds-tabs .ds-tab.is-selected{background:var(--accent);color:var(--primary)}
+.ds-card--screen .ds-btn--secondary:not(.ds-btn--on-card){background:var(--secondary)}
+.ds-card--screen .ds-progress{background:var(--card)}
+.ds-card--screen .ds-veil__panel{background:linear-gradient(to bottom,color-mix(in srgb,var(--background) 45%,transparent),color-mix(in srgb,var(--background) 92%,transparent) 55%)}
+.ds-card--screen .ds-veil--below .ds-veil__panel{background:none}
+/* Dans un écran, la tuile se pose RELEVÉE (--card, filet 1 px) et la tuile choisie redescend sur le
+   fond (--background, filet --primary 1,5 px, sans ombre) : la maquette (créneaux, miniature) inverse
+   le régime de la page. La tuile recommandée garde son ombre. */
+.ds-card--screen .ds-tile{background:var(--card);border-width:1px}
+.ds-card--screen .ds-tile:is(:has(input:checked),.is-checked,[aria-pressed="true"]),.ds-card--screen .ds-tile--panel:is(:has(.ds-choice input:checked),.is-checked){background:var(--background);border-width:1.5px;border-color:var(--primary);box-shadow:none}
+.ds-card--screen .ds-tile.is-recommended{box-shadow:var(--shadow-sm)}
+/* LE PANNEAU — `.ds-panel`, v0.5.0 : le bloc RELEVÉ d'un écran de Claude (une carte d'outil dans
+   « Ce que Yunary sait faire », le bloc profil, un panneau d'état) : padding 14 / 16, rayon md,
+   --card sur --background, une pile à --space-3. L'inverse de `.ds-inset`, qui se creuse. Ses
+   actions (`__actions`) se partagent la largeur, deux par ligne à 680, une seule à 390.
+   « À activer » : `.is-locked` estompe les actions UNE fois (opacité .5, inertes) — les boutons
+   restent tels quels, l'app ne les désactive pas en plus. */
+.ds-panel{display:flex;flex-direction:column;gap:var(--space-3);padding:0.875rem 1rem;box-sizing:border-box;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--card);color:var(--foreground)}
+.ds-panel__actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:var(--space-2)}
+.ds-panel__actions>.ds-btn{justify-content:flex-start}
+.ds-panel.is-locked>.ds-panel__actions{opacity:.5;pointer-events:none;user-select:none}
+.ds-panel .ds-progress{background:var(--surface-alt)}
+/* LES CARTES D'OUTIL — `.ds-offers` (la pile, 16 entre les cartes) et `.ds-offer` (la grille d'une
+   carte d'outil : le contenu à gauche, la colonne prix + action de 15 rem à droite, empilée sous
+   64 rem). v0.5.0, maquettes Mes outils et Onboarding. Le prix, les avantages et le bouton sont
+   `.ds-price--end`, `.ds-perks` et `Button` ; le vocabulaire de l'outil reste à l'app. */
+.ds-offers{display:flex;flex-direction:column;gap:var(--space-4)}
+.ds-offer{display:grid;grid-template-columns:minmax(0,1fr) 15rem;align-items:stretch;gap:2.5rem}
+.ds-offer__main{display:flex;flex-direction:column;gap:0.875rem;min-width:0}
+.ds-offer__aside{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:var(--space-4);padding-left:var(--space-6);border-left:1px solid var(--border)}
+@media (max-width:64rem){
+.ds-offer{grid-template-columns:minmax(0,1fr);gap:var(--space-4)}
+.ds-offer__aside{align-items:stretch;padding-left:0;border-left:0;padding-top:var(--space-4);border-top:1px solid var(--border)}
+.ds-offer__aside>.ds-price{align-items:flex-start;text-align:left}
+.ds-offer__aside>.ds-price .ds-price__line{justify-content:flex-start}
+}
 /* LA PILE — OPT-IN. `.ds-card` est `display:block` : un `gap-*` posé dessus ne rend RIEN, en
    silence (0 px d'écart). La prop `gap` passe la carte en colonne flex et pose l'écart du palier. Opt-in : une carte sans
    `gap` garde son DOM et son rendu au pixel. L'en-tête cède sa marge basse au gap — sinon les
@@ -429,9 +556,22 @@ div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
 .ds-badge--neutral{background:var(--pill-neutral-bg);color:var(--pill-neutral-fg)}
 .ds-badge--accent{background:var(--accent);color:var(--primary-readable)}
 .ds-badge--outline{background:transparent;color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border)}
-/* LA LANGUETTE DE COIN — v0.4.0 : un badge collé au coin haut droit de son conteneur (« Recommandé »).
-   Le conteneur porte `position:relative` ; le rayon épouse le coin (md) et s'arrondit vers l'intérieur. */
-.ds-badge--corner{position:absolute;top:-1px;right:-1px;border-radius:0 var(--radius-md) 0 var(--radius-sm)}
+/* LE TON DE MARQUE — `.ds-badge--brand`, v0.5.0 : le badge en dégradé plein (« À connecter »,
+   « 12 € / mois », « Yunary Programmation »), texte --primary-foreground. Un site d'accent de plus,
+   écrit dans la charte (§ 3) ; l'écart de contraste est assumé dans la marque, comme le CTA. */
+.ds-badge--brand{background:var(--brand-gradient);color:var(--primary-foreground)}
+/* LE BADGE À TÊTE — `.ds-badge--lead`, v0.5.0 : une tuile de 28 px (une `Pastille size="puce"`, un
+   logo) en tête d'un libellé (« Demandé depuis Claude », une adresse e-mail) : la hauteur suit la
+   tuile, le padding gauche se resserre sur elle. */
+.ds-badge--lead{min-height:0;padding:0.375rem 0.75rem 0.375rem 0.375rem;gap:0.5rem}
+.ds-badge--lead .ds-pastille{border-radius:var(--radius-xs)}
+/* LA CROIX DE RETRAIT — `.ds-badge__remove`, v0.5.0 : le <button> qui retire une pastille de filtre
+   (« @julien.crea × ») : 20 px rond en fin de badge, en currentColor, éclairé au survol. Le badge
+   qui le porte réduit son padding droit ; le bouton porte son libellé (aria-label). */
+.ds-badge__remove{appearance:none;display:inline-flex;flex:none;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;margin:0 -0.3125rem 0 0.125rem;padding:0;border:0;border-radius:var(--radius-pill);background:transparent;color:inherit;cursor:pointer;transition:background-color var(--duration-fast) var(--ease-standard)}
+.ds-badge__remove svg{width:var(--ds-icon-size,0.75rem);height:var(--ds-icon-size,0.75rem)}
+.ds-badge__remove:hover,.ds-badge__remove.is-hover{background:color-mix(in srgb,currentColor 14%,transparent)}
+.ds-badge__remove:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
 .ds-tooltip{position:relative;display:inline-flex}
 .ds-tooltip__bubble{position:absolute;bottom:calc(100% + 0.5625rem);left:50%;transform:translateX(-50%) translateY(0.25rem);padding:0.5rem 0.75rem;border-radius:var(--radius-md);background:var(--tone-dark);color:var(--text-inverted);font-size:var(--text-caption);font-weight:var(--weight-semibold);line-height:1.3;white-space:nowrap;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity var(--duration-fast) var(--ease-standard),transform var(--duration-fast) var(--ease-standard);z-index:var(--z-popover)}
 .ds-tooltip__bubble::after{content:"";position:absolute;left:50%;bottom:-0.25rem;width:0.5rem;height:0.5rem;background:inherit;transform:translateX(-50%) rotate(45deg)}
@@ -448,6 +588,8 @@ div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
 .ds-pastille--heros{width:var(--pastille-heros);height:var(--pastille-heros);border-radius:var(--radius-xl)}
 .ds-pastille--ecran{width:var(--pastille-ecran);height:var(--pastille-ecran);border-radius:var(--radius-2xl)}
 .ds-pastille--puce{width:var(--pastille-puce);height:var(--pastille-puce);border-radius:var(--radius-sm);font-size:var(--text-body-sm);font-weight:var(--weight-bold);line-height:1;font-variant-numeric:tabular-nums}
+/* v0.5.0 — la COCHE (24 px) : la pastille d'un avantage, l'étape faite d'une liste. Rayon xs. */
+.ds-pastille--coche{width:var(--pastille-coche);height:var(--pastille-coche);border-radius:var(--radius-xs)}
 .ds-pastille--rond{border-radius:var(--radius-pill)}
 .ds-pastille--brand{background:var(--pill-coral-bg);color:var(--primary)}
 /* LE TON PLEIN DE LA MARQUE — la tuile que le socle n'avait pas. Il portait la tuile
@@ -493,6 +635,14 @@ div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
 :is(.ds-card,.ds-modal) .ds-banner--inset:not(.ds-banner--info,.ds-banner--danger,.ds-banner--warning,.ds-banner--success,.ds-banner--amber){background:var(--background)}
 .ds-banner--inset .ds-banner__text{font-size:var(--text-body-sm);color:inherit}
 .ds-banner--inset .ds-banner__icon{margin-top:0.125rem}
+/* v0.5.0 — le titre d'un encart est en body gras (« Ta vidéo dure 4 min 12 s ») ; une `Pastille`
+   peut tenir la place de l'icône (la tuile « Recharge le 23 octobre ») : elle garde son créneau et
+   ne se décale pas. `--start` aligne l'icône sur la première ligne d'un bandeau de page. */
+.ds-banner--inset .ds-banner__title{font-size:var(--text-body);font-weight:var(--weight-bold);line-height:var(--leading-snug)}
+.ds-banner__icon .ds-pastille{margin-top:-0.125rem}
+.ds-banner__icon .ds-pastille svg{width:var(--ds-icon-size,1.125rem);height:var(--ds-icon-size,1.125rem)}
+.ds-banner--inset .ds-banner__icon .ds-pastille svg{width:var(--ds-icon-size,1.125rem);height:var(--ds-icon-size,1.125rem)}
+.ds-banner--start{align-items:flex-start}
 :is(svg.ds-banner__icon,.ds-banner__icon svg){flex:none}
 span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-banner--inset :is(svg.ds-banner__icon,.ds-banner__icon svg){width:var(--ds-icon-size,1rem);height:var(--ds-icon-size,1rem)}
@@ -863,6 +1013,48 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-step.is-done .ds-step__mark{background:var(--pill-success-bg);color:var(--pill-success-fg)}
 .ds-step[aria-current="step"],.ds-step.is-current{color:var(--foreground);font-weight:var(--weight-bold)}
 .ds-step[aria-current="step"] .ds-step__mark,.ds-step.is-current .ds-step__mark{background:var(--brand-gradient);color:var(--primary-foreground)}
+/* LA BARRE SEGMENTÉE — `.ds-steps--bar`, v0.5.0 : l'avancement d'un parcours sans libellé par étape
+   (le shell de l'onboarding) : un segment pill par étape (`__seg`, 8 px ; 6 sous 64 rem) dans
+   `__track`, les étapes faites peintes d'UN SEUL dégradé continu — chaque segment montre sa tranche
+   du dégradé, calée par sa place et par le nombre d'étapes (2 à 6, lus par :has()) —, puis le
+   compteur (`__counter`, « Étape 2 / 4 », et sa suite en sourdine, `__counter-sub`). Le `__track`
+   porte role="progressbar" et ses valeurs. */
+.ds-steps--bar{flex-wrap:nowrap;gap:var(--space-3)}
+.ds-steps__track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:var(--space-3);flex:1;min-width:0}
+/* @tokenref-assume: --steps-n — le nombre d'étapes, posé par les règles :has() ci-dessous */
+/* @tokenref-assume: --steps-i — le rang du segment, posé par les règles :nth-child ci-dessous */
+.ds-steps__seg{--steps-n:4;--steps-i:0;height:var(--steps-seg-h);border-radius:var(--radius-pill);background:var(--muted)}
+.ds-steps__seg.is-done{background-image:var(--brand-gradient);background-size:calc(var(--steps-n) * 100%) 100%;background-position-x:calc(var(--steps-i) * 100% / max(1, var(--steps-n) - 1))}
+.ds-steps__seg:nth-child(2){--steps-i:1}
+.ds-steps__seg:nth-child(3){--steps-i:2}
+.ds-steps__seg:nth-child(4){--steps-i:3}
+.ds-steps__seg:nth-child(5){--steps-i:4}
+.ds-steps__seg:nth-child(6){--steps-i:5}
+.ds-steps__track:has(>:nth-child(2):last-child)>.ds-steps__seg{--steps-n:2}
+.ds-steps__track:has(>:nth-child(3):last-child)>.ds-steps__seg{--steps-n:3}
+.ds-steps__track:has(>:nth-child(5):last-child)>.ds-steps__seg{--steps-n:5}
+.ds-steps__track:has(>:nth-child(6):last-child)>.ds-steps__seg{--steps-n:6}
+.ds-steps__counter{flex:none;margin:0;font-family:var(--font-display);font-size:var(--text-body-lg);font-weight:var(--heading-weight);line-height:var(--leading-snug);white-space:nowrap}
+.ds-steps__counter-sub{font-family:var(--font-body);font-weight:var(--weight-regular);color:var(--text-muted)}
+@media (max-width:64rem){
+.ds-steps--bar{gap:var(--space-2)}
+.ds-steps__track{gap:var(--space-2)}
+.ds-steps__seg{height:var(--steps-seg-h-compact)}
+.ds-steps__counter{font-size:var(--text-body-sm)}
+}
+/* LA LISTE VERTICALE — `.ds-steps--vertical`, v0.5.0 : l'avancement d'un traitement, une étape par
+   ligne (« Compte trouvé », « Vidéos récupérées »…) : faite = le repère success et sa coche ; en
+   cours = un `.ds-spinner` dans le repère ; à venir = un petit rond creux ; une méta en chasse fixe à
+   droite (`__meta`, « 14 sur 20 »). Sans trait entre les étapes. */
+.ds-steps--vertical{flex-direction:column;align-items:stretch;gap:var(--space-2)}
+.ds-steps--vertical .ds-step{display:flex;gap:0.625rem;font-weight:var(--weight-regular)}
+.ds-steps--vertical .ds-step::before{display:none}
+.ds-steps--vertical .ds-step:not(.is-done):not(.is-current):not([aria-current="step"]) .ds-step__mark{background:transparent;color:transparent;box-shadow:none}
+.ds-steps--vertical .ds-step:not(.is-done):not(.is-current):not([aria-current="step"]) .ds-step__mark::before{content:"";width:0.625rem;height:0.625rem;border-radius:var(--radius-pill);border:1.5px solid var(--border);box-sizing:border-box}
+.ds-steps--vertical .ds-step:is(.is-current,[aria-current="step"]){font-weight:var(--weight-semibold)}
+.ds-steps--vertical .ds-step:is(.is-current,[aria-current="step"]) .ds-step__mark{background:transparent;color:var(--primary)}
+.ds-step__mark .ds-spinner{width:var(--ds-icon-size,1.125rem);height:var(--ds-icon-size,1.125rem)}
+.ds-step__meta{margin-left:auto;font-family:var(--font-mono);font-size:var(--text-caption);font-weight:var(--weight-regular);color:var(--text-muted);font-variant-numeric:tabular-nums}
 
 /* ---------- le voile d'un outil non activé ---------- */
 /* Le contenu RESTE VISIBLE, estompé et inerte (`__content` : l'app pose `inert` et
@@ -872,7 +1064,7 @@ span.ds-banner__icon{display:inline-flex;flex:none}
    automatique : le contenu estompé, puis le panneau dessous). */
 .ds-veil{position:relative;display:grid;border-radius:var(--radius-lg);overflow:hidden}
 .ds-veil__content{grid-area:1/1;max-height:var(--veil-h);overflow:hidden;opacity:.4;pointer-events:none;user-select:none}
-.ds-veil__panel{grid-area:1/1;position:relative;z-index:1;display:flex;justify-content:center;align-items:flex-start;padding:var(--space-7) var(--space-6);background:linear-gradient(to bottom,color-mix(in srgb,var(--background) 45%,transparent),color-mix(in srgb,var(--background) 92%,transparent) 55%)}
+.ds-veil__panel{grid-area:1/1;position:relative;z-index:1;display:flex;justify-content:center;align-items:flex-start;padding:4rem var(--space-6);background:linear-gradient(to bottom,color-mix(in srgb,var(--background) 45%,transparent),color-mix(in srgb,var(--background) 92%,transparent) 55%)}
 :is(.ds-card,.ds-modal) .ds-veil__panel{background:linear-gradient(to bottom,color-mix(in srgb,var(--card) 45%,transparent),color-mix(in srgb,var(--card) 92%,transparent) 55%)}
 .ds-veil__panel>*{width:100%}
 .ds-veil--below{display:flex;flex-direction:column;gap:var(--space-4);border-radius:0;overflow:visible}
@@ -894,12 +1086,31 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-price--sm .ds-price__period{font-size:var(--text-body-sm)}
 .ds-price--end{align-items:flex-end;text-align:right}
 .ds-price--end .ds-price__line{justify-content:flex-end}
-/* LES AVANTAGES — une liste de puces posées sur une plaque : une `Pastille size="puce"` (coche
-   success, ou icône d'un ton au choix), puis le libellé. Rien ne se coche : ce n'est pas une tuile.
-   La grille remplit des colonnes de 15 rem — deux dans une carte de 680, une seule à 390. */
-.ds-perks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,15rem),1fr));gap:var(--space-2);margin:0;padding:0;list-style:none}
-.ds-perk{display:flex;align-items:center;gap:0.625rem;min-width:0;padding:0.5rem 0.75rem 0.5rem 0.5rem;box-sizing:border-box;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--secondary);color:var(--text-secondary);font-size:var(--text-caption);font-weight:var(--weight-semibold);line-height:var(--leading-snug)}
-:is(.ds-card,.ds-modal) .ds-perk{background:var(--background)}
+/* v0.5.0 — `--accent` : le montant en dégradé clippé (« 12 € »), un site d'accent de la charte ;
+   l'écart de contraste est assumé dans la marque. `--row` : le montant à gauche, la période et la
+   note empilées à sa droite (`__aside`) — la plaque « Offert avec un outil payant ». */
+.ds-price--accent .ds-price__amount{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+.ds-price--row{flex-direction:row;align-items:center;gap:var(--space-3)}
+.ds-price__aside{display:flex;flex-direction:column;gap:0.125rem;min-width:0}
+/* LES AVANTAGES — v0.5.0 : une liste nue, deux colonnes FIXES (gap 10 / 24 ; 10 / 20 dans un écran de
+   Claude), qui le restent à 390 — la maquette du 10/10/2026. Chaque `.ds-perk` : une `Pastille
+   size="coche"` (coche success, ou l'icône d'un ton choisi) puis le libellé en body-sm à l'encre.
+   Plus de plaque : la plaque de 0.4.0 a été retirée. Rien ne se coche : ce n'est pas une tuile. */
+.ds-perks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0.625rem 1.5rem;margin:0;padding:0;list-style:none}
+.ds-perk{display:flex;align-items:center;gap:0.625rem;min-width:0;color:var(--foreground);font-size:var(--text-body-sm);font-weight:var(--weight-regular);line-height:var(--leading-normal)}
+.ds-perks--compact,.ds-card--screen .ds-perks{column-gap:1.25rem}
+/* LE COMPTEUR À JAUGE — `.ds-meter`, v0.5.0 : un libellé (« 41 / 50 analyses »), la `Progress`, une
+   note en sourdine (« Ce mois · se renouvelle le 26 octobre »). La tête peut porter une VALEUR en
+   face display (« 50 » + « sur 50 utilisées » : `__value` + `__of`). `.ds-meters` : la paire en deux
+   colonnes (gap 24 ; 16 dans un écran de Claude). Les nombres viennent du serveur. */
+.ds-meter{display:flex;flex-direction:column;gap:var(--space-2);min-width:0}
+.ds-meter__head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:var(--space-1) var(--space-3)}
+.ds-meter__label{font-size:var(--text-body-sm);font-weight:var(--weight-semibold);color:var(--foreground)}
+.ds-meter__value{font-family:var(--font-display);font-size:var(--text-subheading);font-weight:var(--heading-weight);line-height:1;letter-spacing:var(--tracking-subheading);font-variant-numeric:tabular-nums}
+.ds-meter__of{font-size:var(--text-body-sm);color:var(--text-muted)}
+.ds-meter__note{font-size:var(--text-caption);color:var(--text-muted)}
+.ds-meters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}
+.ds-card--screen .ds-meters{gap:var(--space-4)}
 
 /* ---------- le dépôt d'un fichier ---------- */
 /* LA ZONE DE DÉPÔT — un cadre pointillé, une colonne centrée : une tuile, un titre, une aide, des

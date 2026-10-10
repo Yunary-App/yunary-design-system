@@ -43,6 +43,9 @@
   --control-sm:var(--control-md);
   --control-md:3rem;     /* 48 · 44 mobile */
   --control-lg:3.25rem;  /* 52 — hero CTA only */
+  /* v0.5.0 — le cran XS : « Copier » dans l'en-tête d'un champ, une action de méta à côté d'un
+     libellé. 28 px, au-dessus du minimum d'accessibilité de 24 (WCAG 2.5.8). Jamais un CTA. */
+  --control-xs:1.75rem;  /* 28 */
   /* Bouton-icône — TROIS TAILLES RÉELLES. Les trois valaient var(--control-md) : un
      IconButton size="sm|md|lg" rendait trois carrés identiques, et une prop qui ment est
      pire qu'une prop absente. Le rail unique reste la règle pour Button, Input et Select —
@@ -69,6 +72,9 @@
      contexte le plus petit, sous la carte : les maquettes la dessinaient à 28 px en
      redimensionnant `carte` au site d'appel. */
   --pastille-puce:1.75rem;      /* 28 */
+  /* v0.5.0 — la COCHE : la pastille d'un avantage, l'état d'une étape faite dans une liste
+     verticale. 24 px, dessinés à deux reprises au moins en réduisant `carte` au site d'appel. */
+  --pastille-coche:1.5rem;      /* 24 */
 
   /* Bottom-sheet grip — ADDED v0.3. Height is --space-1. */
   --grip-w:2.25rem;      /* 36 */
@@ -76,6 +82,10 @@
   /* Card padding */
   --card-pad:1.5rem;     /* 24 — standard card */
   --card-pad-lg:1.75rem; /* 28 — large card / panel */
+  /* v0.5.0 — le palier XL : la carte d'outil et la carte d'offre (maquettes Mes outils, Onboarding,
+     Script Web). Deux mesures, verticale et horizontale : 28 / 32. */
+  --card-pad-xl-y:1.75rem; /* 28 */
+  --card-pad-xl-x:2rem;    /* 32 */
 
   /* ---------- DIMENSIONS DE COMPOSANTS — DES DÉFAUTS, PAS DES INVARIANTS ----------
      Vingt mesures qui étaient des littéraux dans patterns.css, et qui portent de
@@ -125,6 +135,8 @@
   --progress-h:0.5rem;            /* 8 — l'épaisseur du rail de .ds-progress */
   /* v0.4.0 — les parcours (étapes, dépôt, voile, agenda). */
   --step-mark:1.375rem;           /* 22 — le repère rond d'une étape de .ds-steps */
+  --steps-seg-h:0.5rem;           /* 8 — un segment de .ds-steps--bar (v0.5.0) */
+  --steps-seg-h-compact:0.375rem; /* 6 — le même sous 64rem */
   --dropzone-h:13.75rem;          /* 220 — la hauteur minimum de .ds-dropzone */
   --veil-h:55rem;                 /* 880 — la hauteur montrée du contenu sous .ds-veil */
   --agenda-cell-h:7rem;           /* 112 — la case d'un jour de .ds-agenda */

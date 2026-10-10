@@ -73,8 +73,10 @@ couleur, `bg-*`, `w-*`…) — le dégradé meurt en silence. **Sans risque** : 
 
 ## Button
 
-L'action du système. `primary` porte le dégradé de marque et la lueur : c'est LE CTA de la
-vue — un seul par écran. Tout le reste est `secondary`, `ghost`, `danger` ou `danger-soft`.
+L'action du système. `primary` porte le dégradé de marque et la lueur : le CTA de la vue — un
+seul quand une action domine, plusieurs quand la vue propose des choix équivalents (cinq hooks,
+deux outils à activer ; DESIGN § 3, 10/10/2026). Tout le reste est `secondary`, `ghost`, `danger`
+ou `danger-soft`.
 
 **Ne pas l'utiliser** pour une action icône seule (c'est `IconButton`), ni pour un lien de
 navigation dans du texte (un `<a>` suffit).
@@ -88,11 +90,16 @@ navigation dans du texte (un `<a>` suffit).
 <Button loading>Génération…</Button>
 <Button as="a" href="/inscription">S'inscrire</Button>
 <Button variant="secondary" surface="card">Dans un conteneur qui n'est pas une Card</Button>
+<Button variant="ghost" size="xs" icon={<Icon name="copy" />}>Copier</Button>
 ```
 
-- Props : `variant` (`primary·secondary·ghost·danger·danger-soft`) · `size` (`sm·md·lg`) · `surface`
+- Props : `variant` (`primary·secondary·ghost·danger·danger-soft`) · `size` (`xs·sm·md·lg`) · `surface`
   (`auto·page·card`) · `icon` / `iconRight` · `loading` (spinner + désactivé) · `fullWidth`
   · `as` / `href`.
+- **`size="xs"`** (v0.5.0) : 28 px (`--control-xs`), caption, icône 0.875rem — « Copier » dans
+  l'en-tête d'un champ (`FormField action`), une action de méta à côté d'un libellé. Le seul contrôle
+  sous le rail de 44 : au-dessus du minimum d'accessibilité de 24 px. Jamais un CTA ni un bouton de
+  pied de carte — ceux-là restent sur le rail.
 - **`surface` déclare à la main la surface qui porte le bouton**, jumelle de celle
   d'`Input`. Le squelette ne DÉDUIT rien : `secondary` porte `--secondary` partout, et
   `auto` (défaut) est donc l'état normal. `card` force `--background`, pour un conteneur
@@ -106,9 +113,10 @@ navigation dans du texte (un `<a>` suffit).
   vers le rouge. `danger` reste l'action destructrice UNIQUE et définitive d'une vue
   (supprimer le compte).
 - Rayon toujours `--radius-md`. **Jamais un pill** — le pill est réservé aux badges.
-- Rail partagé : min-height 3rem (2.75rem sous 64rem). `lg` (3.25rem) = CTA de héros.
+- Rail partagé : min-height 3rem (2.75rem sous 64rem). `lg` (3.25rem) = CTA de héros ; `xs` (1.75rem)
+  = l'action de méta.
 - **Les icônes ne se dimensionnent pas au site d'appel** : le créneau du bouton s'en
-  charge (sm 1rem · md 1.125rem, via `--ds-icon-size` — voir la section Icon). Le spinner
+  charge (xs 0.875rem · sm 1rem · md 1.125rem, via `--ds-icon-size` — voir la section Icon). Le spinner
   de `loading` prend la même taille que l'icône qu'il remplace.
 - États rendus : repos, hover (lueur + translateY), pressé, focus-visible, désactivé,
   loading.
@@ -213,35 +221,47 @@ graisse suivent `--heading-transform` / `--heading-weight`, comme tout le titrag
 
 ## Badge
 
-Pill de statut ou de catégorie. Les tons sémantiques portent toujours **couleur + icône +
-texte**, jamais la couleur seule.
+Pill de statut ou de catégorie. Le TEXTE porte le sens, la couleur l'appuie ; **l'icône est
+facultative** (10/10/2026 : la maquette dessine ses statuts sans icône — « Publié », « Échec »,
+« Actif » — et elle fait foi). Quand elle est là, le créneau du badge la dimensionne.
 
-**Ne pas l'utiliser** comme bouton ni comme métrique : un badge ne se clique pas.
+**Ne pas l'utiliser** comme bouton ni comme métrique : un badge ne se clique pas (sauf sa croix
+de retrait, qui est un vrai `<button>`).
 
 ```tsx
-<Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge>
-<Badge tone="danger" icon={<Icon name="circle-alert" size="0.875rem" strokeWidth={2.5} />}>Échec</Badge>
+<Badge tone="success" pad="dense">Publié</Badge>
+<Badge tone="danger" pad="dense">Échec</Badge>
+<Badge tone="success" icon={<Icon name="circle-check" strokeWidth={2.5} />}>En ligne</Badge>
 <Badge tone="outline">Brouillon</Badge>
-<Badge tone="neutral" pad="dense">v0.1.0</Badge>
+<Badge tone="brand" pad="dense">À connecter</Badge>
+<Badge tone="outline" lead={<Pastille size="puce" tone="neutral"><Icon name="message-square" /></Pastille>}>Demandé depuis Claude</Badge>
+<Badge tone="accent" icon={<Icon name="user" />} onRemove={() => retirer()} removeLabel="Retirer le filtre @julien.crea">@julien.crea</Badge>
 ```
 
-- Props : `tone` (`coral·amber·danger·warning·success·neutral·accent·outline`, défaut
-  `neutral`) · `pad` (`md·dense`) · `icon` · `corner`.
-- **`corner`** : la languette de coin — le badge se colle au coin haut droit de son conteneur
-  (« Recommandé » sur une carte de choix), rayon épousant le coin. Le conteneur porte
-  `position: relative`.
-  `<Badge tone="accent" pad="dense" corner>Recommandé</Badge>`
+- Props : `tone` (`coral·amber·danger·warning·success·neutral·accent·outline·brand`, défaut
+  `neutral`) · `pad` (`md·dense`) · `icon` · `lead` · `onRemove` / `removeLabel`.
+- **Les icônes ne se dimensionnent pas au site d'appel** (v0.5.0) : 0.875rem en `md`, 0.75rem en
+  `dense`, par le créneau du badge.
+- **`tone="brand"`** (v0.5.0) : le dégradé plein, texte blanc — « À connecter », « 12 € / mois »,
+  « Yunary Programmation ». Un site d'accent de la charte (§ 3) ; l'écart de contraste est assumé
+  dans la marque, comme le label du CTA.
+- **`lead`** (v0.5.0) : une tuile de 28 px en tête du libellé (`Pastille size="puce"`, un logo) ;
+  le badge prend sa hauteur (« Demandé depuis Claude », une adresse e-mail).
+- **`onRemove`** (v0.5.0) : la croix de retrait d'une pastille de filtre (`.ds-badge__remove`, un
+  `<button>` rond de 20 px, nommé par `removeLabel`, défaut « Retirer »).
+- La languette de coin (`corner`, 0.4.0) est retirée : « Recommandé » se pose en fin de rangée.
 - Le rayon pill est légal ici — jamais sur un bouton, un champ ou une barre d'onglets.
 
 ## Card
 
 LA surface du système — tout ce qui n'est pas une section de page se pose sur une Card.
 Fond `--card`, bordure 1px, ombre teintée. Jamais du blanc pur. L'en-tête à slots
-(`eyebrow` / `icon` / `title` / `subtitle` / `action`) ne rend AUCUN nœud si aucun slot
+(`eyebrow` / `icon` / `title` / `badge` / `subtitle` / `action`) ne rend AUCUN nœud si aucun slot
 n'est passé.
 
-**Ne pas** imbriquer une Card dans une Card, ni poser une grille de cartes avec un gap
-sous 1.5rem.
+**Ne pas** imbriquer une Card dans une Card (la plaque, `variant="plaque"`, est faite pour ça), ni
+poser une grille de cartes avec un gap sous 1.5rem (la pile de cartes d'outil, `.ds-offers`, est
+à 16 : c'est l'exception écrite).
 
 ```tsx
 <Card>Contenu</Card>
@@ -257,11 +277,39 @@ sous 1.5rem.
   <Separator bleed />
   <p>Second bloc — le filet va de bord à bord</p>
 </Card>
+<Card size="xl" title="Yunary Analyse" titleSize="lg" badge={<Badge tone="success" pad="dense">Actif</Badge>}>
+  <div className="ds-offer">…</div>
+</Card>
+<Card variant="plaque" eyebrow="Disponible avec Yunary Programmation" title="Yunary Programmation"
+  foot={<><span>Sans engagement · résiliable à tout moment</span><Button size="sm">Activer</Button></>}>
+  <ul className="ds-perks">…</ul>
+</Card>
+<Card variant="screen" icon={<Logo variant="monogram" height="1.375rem" />} title="Yunary Script"
+  action={<span className="ds-help">Étape 2 sur 4</span>} foot={<><span>Dis « Prends le hook 2 »</span><Button variant="secondary" size="sm">Ouvrir dans Yunary</Button></>}>
+  …l'écran de Claude…
+</Card>
 ```
 
-- Props : `variant` (`default·interactive·feature`) · `size` (`md·lg`) · `flush` (sans
-  padding, media plein bord) · `gap` (`3·4·5·6`) · slots d'en-tête `eyebrow` / `icon` /
-  `title` / `subtitle` / `action` · `titleSize` (`sm·lg`) · `headerGap` (`normal·airy`) · `as`.
+- Props : `variant` (`default·interactive·feature·plaque·screen`) · `size` (`md·lg·xl`) · `flush`
+  (sans padding, media plein bord) · `upcoming` · `gap` (`3·4·5·6`) · slots d'en-tête `eyebrow` /
+  `icon` / `title` / `badge` / `subtitle` / `action` · `foot` · `titleSize` (`sm·lg`) · `headerGap`
+  (`normal·airy`) · `as`.
+- **`size="xl"`** (v0.5.0) : 28 / 32 (`--card-pad-xl-y/-x`), rayon lg — la carte d'outil et la carte
+  d'offre. `md` reste 24, `lg` 28 : la contradiction de la charte est réglée.
+- **`badge`** (v0.5.0) : un badge COLLÉ au titre (« Actif »), dans `.ds-card__title-row`, qui passe
+  sous le titre quand la place manque. `action` reste poussée à droite : deux places différentes.
+- **`upcoming`** (v0.5.0, `.is-upcoming`) : l'outil annoncé — la carte s'estompe (.7) et perd son
+  ombre ; l'app désactive ses contrôles.
+- **`foot`** (v0.5.0, `.ds-card__foot`) : un filet haut, une phrase en sourdine à gauche, une action
+  à droite qui passe dessous à 390. Le pied d'un écran de Claude comme celui d'une plaque.
+- **`variant="plaque"`** (v0.5.0) : la carte feature posée DANS une carte (la carte d'offre de
+  Comptes connectés, l'encart « Depuis Claude ») : sans ombre ni padding, l'en-tête et le contenu
+  dans `.ds-card__body` (20 / 24), le pied sur un lavis `--card` à 60 % sous le filet de marque.
+- **`variant="screen"`** (v0.5.0) : la coque d'un écran de Claude. Décision du 10/10/2026 : les
+  surfaces du ds y sont forcées, seul le clair ou le sombre suit l'hôte. Fond `--background`, filet,
+  rayon lg, padding 18 / 20 / 20, sans ombre, une pile à `--space-4` ; l'en-tête serre son gap à 10.
+  Tout ce qui s'y pose se RELÈVE en `--card` (champ, encart, panneau `.ds-panel`, envoi, tuile au
+  repos, barre d'onglets) : l'inverse d'une carte. Les bulles de conversation autour sont à Claude.
 - **`gap` — la pile, opt-in.** `.ds-card` est `display:block` : un `gap-space-*` posé en
   `className` ne rend RIEN (0 px, en silence). `gap={4}` passe
   la carte en colonne flex avec `--space-4` entre ses enfants ; l'en-tête cède sa marge basse
@@ -292,17 +340,19 @@ en div : c'est exactement ce que ce composant remplace.
 <Pastille size="dialogue" tone="brand-solid"><Icon name="plus" /></Pastille>
 ```
 
-- Props : `size` (`puce` 1.75 · `carte` 2.25 · `dialogue` 2.625 · `panneau` 3.25 · `heros` 4 ·
-  `ecran` 5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` ·
+- Props : `size` (`coche` 1.5 · `puce` 1.75 · `carte` 2.25 · `dialogue` 2.625 · `panneau` 3.25 ·
+  `heros` 4 · `ecran` 5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` ·
   `brand-solid` + les 6 paires sémantiques + `inverse`) · `outlined` (contour 1px
   currentColor à 22 %).
-- **`size="puce"`** : le plus petit contexte — un numéro d'étape (`shape="round"`, le chiffre en
-  body-sm gras), la coche d'un avantage, l'état d'une ligne. Jamais un rem au site d'appel pour
-  réduire `carte`.
+- **`size="puce"`** : un numéro d'étape (`shape="round"`, le chiffre en body-sm gras), l'état d'une
+  ligne, la tête d'un badge. Jamais un rem au site d'appel pour réduire `carte`.
   `<Pastille size="puce" shape="round" tone="coral">2</Pastille>`
-- L'icône ne se dimensionne pas au site d'appel : le créneau s'en charge — `puce` rend
-  0.9375rem, `dialogue` et `panneau` rendent 1.5rem, `carte` le repli 1.25rem. Seules `heros` et `ecran` attendent
-  encore une taille explicite.
+- **`size="coche"`** (v0.5.0) : le plus petit contexte, 24 px — la coche d'un avantage (`.ds-perk`),
+  l'étape faite d'une liste. Son glyphe rend 0.875rem avec un trait de 3.
+  `<Pastille size="coche" tone="success"><Icon name="check" /></Pastille>`
+- L'icône ne se dimensionne pas au site d'appel : le créneau s'en charge — `coche` rend 0.875rem,
+  `puce` 0.9375rem, `dialogue` et `panneau` 1.5rem, `carte` le repli 1.25rem. Seules `heros` et
+  `ecran` attendent encore une taille explicite.
 - **`tone="brand-solid"` porte le dégradé PLEIN**, avec son glyphe en
   `--primary-foreground` : la tuile de marque affirmée, là où `brand` est la tuile douce.
   `size="dialogue"` en fait le jumeau exact d'un `IconButton` `md` — même 2,625 rem, même
@@ -388,17 +438,25 @@ champ (c'est `FormField error`).
 <Banner tone="info" title="Nouvelle série en ligne" action={<Button variant="secondary" size="sm">Voir</Button>} />
 <Banner inset tone="amber">TikTok n'accepte qu'un moment de la vidéo comme miniature.</Banner>
 <Banner inset tone="neutral" icon={<Icon name="user" />}>Les sous-titres suivent la transcription.</Banner>
+<Banner inset tone="danger" title="Ta vidéo dure 4 min 12 s">Coupe-la sous 3 minutes, puis dépose-la de nouveau.</Banner>
+<Banner inset tone="neutral" icon={<Pastille size="carte" tone="amber"><Icon name="calendar" /></Pastille>} title="Recharge le 23 octobre">Il te reste 12 jours.</Banner>
+<Banner tone="warning" align="start" title="Ce compte est privé">On ne peut lire que les comptes publics. Passe-le en public le temps de l'audit.</Banner>
 ```
 
 - Props : `tone` (`danger·warning·success·info·amber·neutral`, défaut `info`) · `title` ·
-  `children` (corps) · `action` (contrôle à droite) · `inset` · `icon`.
+  `children` (corps) · `action` (contrôle à droite) · `inset` · `icon` · `align` (`center·start`).
 - **`inset`** : l'encart d'information posé DANS une carte, entre deux blocs — rayon md, plus
   serré, texte en body-sm ; les tons colorés quittent leur filet, le `neutral` se creuse comme
-  un champ (`--secondary` sur la page, `--background` dans une carte ou une modale).
-- **`amber`** : une contrainte à connaître, sans danger (« TikTok n'accepte qu'un moment »).
-  `warning` reste ce qui risque d'échouer. **`neutral`** : une précision.
-- **`icon`** remplace le glyphe du ton quand un autre dit mieux le sujet. Le bandeau garde
-  TOUJOURS une icône : couleur + icône + texte.
+  un champ (`--secondary` sur la page, `--background` dans une carte ou une modale, `--card` dans
+  un écran de Claude). Son `title` est en body gras (v0.5.0).
+- **Les tons doux de l'information** : `info` (la crème rosée `--accent`) pour une précision de
+  marque, `amber` pour une contrainte à connaître sans danger (« TikTok n'accepte qu'un moment »),
+  `neutral` pour une précision. `warning` (l'orange) reste ce qui risque d'échouer.
+- **`icon`** remplace le glyphe du ton quand un autre dit mieux le sujet — un glyphe, ou (v0.5.0)
+  une `Pastille size="carte"` qui tient la place de l'icône (la tuile « Recharge le 23 octobre »).
+  Le bandeau garde TOUJOURS une icône.
+- **`align="start"`** (v0.5.0) : l'icône alignée sur la première ligne d'un bandeau de page dont le
+  texte fait plusieurs lignes. L'encart (`inset`) est toujours aligné en haut.
 
 ## EmptyState
 
@@ -756,12 +814,19 @@ sur l'`<input>` natif.
 ```tsx
 <Switch label="Thème sombre" defaultChecked />
 <Switch label="Notifications" disabled />
+<Switch label="Toujours actif" labelPosition="start" locked defaultChecked aria-label="Yunary Script, toujours actif" />
 ```
 
-- Props : `label` + attributs natifs (`checked`, `onChange`, `disabled`…). Rendu
-  `role="switch"`.
+- Props : `label` · `locked` · `labelPosition` (`end·start`) + attributs natifs (`checked`,
+  `onChange`, `disabled`…). Rendu `role="switch"`.
+- **`locked`** (v0.5.0) : l'interrupteur VERROUILLÉ — un outil compris dans l'offre, « Toujours
+  actif ». Ce n'est pas `disabled` : la piste reste pleine et lisible, un cadenas de 1 rem dit
+  pourquoi, l'`<input>` reste dans l'ordre de tabulation et annoncé (`aria-readonly="true"`), et le
+  composant empêche le changement.
+- **`labelPosition="start"`** (v0.5.0) : le libellé avant la piste — la rangée d'un réglage où la
+  piste ferme la ligne.
 - États rendus : off, on, hover (piste teintée vers `--primary`), focus-visible,
-  désactivé.
+  désactivé, verrouillé.
 
 ## Textarea
 
@@ -1020,9 +1085,10 @@ d'actions (c'est `.ds-dropdown`, voir « Classes sans composant »).
 # Classes sans composant
 
 Plusieurs motifs du socle n'ont **pas** de composant React — la tuile cochable (et ses formes
-compacte et panneau), l'encart de valeur, le menu déroulant, et les motifs des parcours (v0.4.0 :
-la barre d'étapes, le voile, le prix et les avantages, le fichier et l'envoi, le média vertical et
-la bande d'images, l'agenda, les marques de texte). Leurs classes sont stables et documentées
+compacte, panneau et choix), l'encart de valeur, le panneau, le menu déroulant, et les motifs des
+parcours (v0.4.0 : la barre d'étapes, le voile, le prix et les avantages, le fichier et l'envoi, le
+média vertical et la bande d'images, l'agenda, les marques de texte ; v0.5.0 : la barre segmentée et
+la liste verticale d'étapes, le compteur à jauge, la carte d'outil). Leurs classes sont stables et documentées
 ici ; une app écrit le balisage elle-même, en React comme en Preact (écrans MCP) ou en HTML
 (site vitrine). `check-catalogue.mjs` n'exige pas de section `##` pour eux, puisqu'ils ne sont
 pas exportés, mais il vérifie que chaque classe `.ds-*` citée dans cette partie existe dans
@@ -1125,6 +1191,48 @@ passer pour choisi. Choisir une image choisit aussi le panneau : c'est à l'app 
 - Classes : `.ds-tile--panel` · `.ds-tile__row` · `.ds-tile__end` (+ celles de la tuile).
 - États : repos, survol, choisie, focus-visible (anneau sur la tuile), désactivée, lecture seule.
 
+**La tuile de choix — `.ds-tile--choice`** (v0.5.0). L'anatomie des maquettes d'onboarding (« Ton
+réseau », « Je n'ai pas de compte ») et de « Nouveau contenu » : une rangée [tête] · [titre,
+description] · [coche ou chevron], padding 16 / 18, le titre en body-lg gras, la coche de fin
+(`.ds-tile__check`, 1.125rem) en `--primary-readable`. La tête `.ds-tile__lead` porte un glyphe de
+1.625rem (le logo d'un réseau) ou une `Pastille size="dialogue"`. Deux formes : un `<label>` avec son
+`<input>` natif (un formulaire), ou un **`<button aria-pressed>`** (un choix de navigation, sans
+formulaire) — `aria-pressed="true"` vaut cochée. `.ds-tiles` : la grille de deux colonnes qui les
+porte ; `.ds-tile--span` : la tuile qui prend toute la rangée.
+
+```html
+<div class="ds-tiles" role="group" aria-label="Ton réseau">
+  <button type="button" class="ds-tile ds-tile--choice" aria-pressed="true">
+    <span class="ds-tile__lead" aria-hidden="true"><!-- le logo Instagram --></span>
+    <span class="ds-tile__main"><span class="ds-tile__title">Instagram</span></span>
+    <span class="ds-tile__check" aria-hidden="true"><!-- <Icon name="check" /> --></span>
+  </button>
+  <button type="button" class="ds-tile ds-tile--choice" aria-pressed="false">…TikTok…</button>
+  <button type="button" class="ds-tile ds-tile--choice ds-tile--span" aria-pressed="false">
+    <span class="ds-tile__main"><span class="ds-tile__title">Je n'ai pas de compte / je ne veux pas d'audit</span></span>
+  </button>
+</div>
+<a class="ds-tile ds-tile--choice ds-tile--lift" href="/contenus/nouveau/script">
+  <span class="ds-tile__lead"><span class="ds-pastille ds-pastille--dialogue ds-pastille--brand ds-pastille--outlined">…</span></span>
+  <span class="ds-tile__main"><span class="ds-tile__title">Écrire un script avec Claude</span><span class="ds-tile__desc">Hooks, structure, script.</span></span>
+  <span class="ds-tile__end" aria-hidden="true"><!-- <Icon name="chevron-right" /> --></span>
+</a>
+```
+
+- Classes : `.ds-tile--choice` · `.ds-tiles` · `.ds-tile--span` (+ `__lead`, `__main`, `__title`,
+  `__desc`, `__check`, `__end`).
+- **`.ds-tile--lift`** (v0.5.0) : choisie, la tuile remonte au niveau de la carte (fond `--card`,
+  filet `--primary`, ombre douce) au lieu de la plaque `--accent` — la recette de la tuile panneau,
+  offerte à toute tuile.
+- **`.is-recommended`** (v0.5.0) : recommandée sans être choisie — le filet `--primary` et l'ombre
+  douce signalent l'option que l'outil conseille (le hook 1, le créneau le plus proche) ; le fond ne
+  bouge pas, la coche n'apparaît pas. Un site d'accent de la charte (§ 3).
+- **Dans un écran de Claude** (`Card variant="screen"`), toute tuile se pose relevée (`--card`,
+  filet 1 px) et la tuile choisie redescend sur `--background` avec un filet `--primary` de 1,5 px,
+  sans ombre : la règle est portée par `.ds-card--screen`, rien à écrire au site d'appel.
+- États : repos, survol, choisie (`:has(input:checked)`, `.is-checked` ou `aria-pressed="true"`),
+  recommandée, focus-visible, désactivée.
+
 **L'encart de valeur — `.ds-inset`.** Une valeur posée DANS une carte : une bio, une réponse, une
 citation relevée. Une ligne de texte sur une surface creusée, rayon md, action facultative à
 droite. Ce n'est pas une `Card` (on n'imbrique pas une carte dans une carte), ni un `EmptyState`
@@ -1145,6 +1253,28 @@ un menu.
   compléter » : filet pointillé, texte en sourdine) · `--bare` (sans filet : une matière en
   lecture seule) · `__value` · `__action` (un lien ou un `Button` `sm`, qui porte ses propres
   états : survol, focus-visible, désactivé).
+
+**Le panneau — `.ds-panel`** (v0.5.0). Le bloc RELEVÉ d'un écran de Claude — l'inverse de l'encart,
+qui se creuse : padding 14 / 16, rayon md, `--card` sur `--background`, une pile à `--space-3`. La
+carte d'un outil dans « Ce que Yunary sait faire », le bloc profil de « Mon compte », un panneau
+d'état. Ses actions (`__actions`) se partagent la largeur : deux par ligne à 680, une seule à 390.
+« À activer » : `.is-locked` estompe les actions UNE fois (opacité .5, inertes) — les boutons
+restent tels quels, l'app ne les désactive pas en plus. La `Progress` posée dedans garde son rail
+`--surface-alt`.
+
+```html
+<div class="ds-panel is-locked">
+  <div class="ds-card__header"><!-- Logo monogram --><h3 class="ds-card__title">Yunary Programmation</h3><span class="ds-card__action ds-help">12 € / mois</span></div>
+  <p class="text-body-sm">Programme chacune de tes vidéos depuis Claude, en un seul message.</p>
+  <div class="ds-panel__actions" aria-hidden="true">
+    <button class="ds-btn ds-btn--secondary ds-btn--sm ds-btn--on-card">Déposer une vidéo</button>
+    <button class="ds-btn ds-btn--secondary ds-btn--sm ds-btn--on-card">Voir le calendrier</button>
+  </div>
+  <button class="ds-btn ds-btn--primary ds-btn--sm ds-btn--block">Activer Programmation</button>
+</div>
+```
+
+- Classes : `.ds-panel` · `__actions` · `.is-locked`.
 - L'encart ne se clique pas en entier : l'action est l'élément interactif. Un titre ou une
   provenance au-dessus (« Détecté par… », « À compléter ») est une composition de l'app.
 - **`.ds-inset--stack`** (v0.4.0) : un texte en plusieurs blocs — un hook, un script en blocs
@@ -1207,6 +1337,42 @@ la ligne d'elle-même à 390 px. Estompée sous un voile : la poser dans `.ds-ve
 
 - Classes : `.ds-steps` · `.ds-step` · `.ds-step__mark` · `.is-done` · `.is-current` (ou `aria-current="step"`).
 
+**La barre segmentée — `.ds-steps--bar`** (v0.5.0). L'avancement d'un parcours sans libellé par
+étape (le shell de l'onboarding) : un segment pill par étape (`.ds-steps__seg`, 8 px ; 6 sous
+64 rem) dans `.ds-steps__track`, les étapes faites (`.is-done`) peintes d'UN SEUL dégradé continu —
+chaque segment montre sa tranche, calée par sa place et par le nombre d'étapes, de 2 à 6 — puis le
+compteur (`.ds-steps__counter`, « Étape 2 / 4 », et sa suite en sourdine `.ds-steps__counter-sub`).
+Le `__track` porte `role="progressbar"` et ses valeurs.
+
+```html
+<div class="ds-steps ds-steps--bar">
+  <div class="ds-steps__track" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="2" aria-label="Étape 2 sur 4">
+    <span class="ds-steps__seg is-done"></span><span class="ds-steps__seg is-done"></span>
+    <span class="ds-steps__seg"></span><span class="ds-steps__seg"></span>
+  </div>
+  <p class="ds-steps__counter">Étape 2 / 4 <span class="ds-steps__counter-sub">· Tes outils</span></p>
+</div>
+```
+
+- Classes : `.ds-steps--bar` · `.ds-steps__track` · `.ds-steps__seg` (+ `.is-done`) ·
+  `.ds-steps__counter` · `.ds-steps__counter-sub`.
+
+**La liste verticale — `.ds-steps--vertical`** (v0.5.0). L'avancement d'un traitement, une étape par
+ligne (« Compte trouvé », « Vidéos récupérées », « Analyse en cours ») : faite = le repère success
+et sa coche ; en cours = un `.ds-spinner` dans le repère, libellé en 600 ; à venir = un petit rond
+creux, libellé en sourdine ; une méta en chasse fixe à droite (`.ds-step__meta`, « 14 sur 20 »).
+Sans trait entre les étapes.
+
+```html
+<ol class="ds-steps ds-steps--vertical" aria-label="L'avancement">
+  <li class="ds-step is-done"><span class="ds-step__mark"><!-- <Icon name="check" strokeWidth={3} /> --></span>Compte trouvé<span class="ds-step__meta">public</span></li>
+  <li class="ds-step" aria-current="step"><span class="ds-step__mark"><span class="ds-spinner"></span></span>Vidéos récupérées<span class="ds-step__meta">14 sur 20</span></li>
+  <li class="ds-step"><span class="ds-step__mark"></span>Analyse</li>
+</ol>
+```
+
+- Classes : `.ds-steps--vertical` · `.ds-step__meta` (+ celles de la barre).
+
 **Le voile d'un outil non activé — `.ds-veil`.** Le contenu RESTE VISIBLE, estompé et inerte, et un
 panneau (la carte d'offre) se pose dessus. `.ds-veil` RECOUVRE — une page du hub : un fondu vers la
 surface, le panneau centré en haut, le contenu montré sur `--veil-h`. `.ds-veil--below` EMPILE — un
@@ -1224,24 +1390,77 @@ et `aria-hidden="true"` sur `.ds-veil__content` : rien dedans ne se focalise ni 
 
 **Le prix et les avantages — `.ds-price`, `.ds-perks`.** `.ds-price` : le montant en face display
 800 (`__amount`), la période à côté (`__period`) sur `__line`, une note dessous (`__note`, « Sans
-engagement »). Le montant ne porte aucune couleur : `.accent` sur un `<span>` dedans quand la
-maquette le veut. `--sm` dans un écran de Claude, `--end` aligné à droite. **Le montant vient
-toujours du serveur.** `.ds-perks` : une liste d'avantages en plaques (`.ds-perk`), chacun une
-`Pastille size="puce"` (coche success, ou icône d'un ton choisi) puis le libellé ; deux colonnes dans
-une carte de 680, une seule à 390. Rien ne se coche : ce n'est pas une tuile.
+engagement »). `--accent` (v0.5.0) met le montant en dégradé clippé — un site d'accent de la charte,
+écart de contraste assumé dans la marque ; `--sm` dans un écran de Claude ; `--end` aligné à droite ;
+`--row` (v0.5.0) : le montant à gauche, la période et la note empilées à sa droite dans `__aside` (la
+plaque « Offert avec un outil payant »). **Le montant vient toujours du serveur.** `.ds-perks`
+(v0.5.0, la maquette du 10/10) : une liste NUE à deux colonnes fixes — même à 390 —, chaque
+`.ds-perk` une `Pastille size="coche"` (coche success, ou l'icône d'un ton choisi) puis le libellé en
+body-sm à l'encre ; `--compact` (ou dans un écran de Claude) resserre les colonnes. Plus de plaque.
+Rien ne se coche : ce n'est pas une tuile.
 
 ```html
-<div class="ds-price ds-price--end">
-  <span class="ds-price__line"><span class="ds-price__amount"><span class="accent">12 €</span></span><span class="ds-price__period">/ mois</span></span>
+<div class="ds-price ds-price--end ds-price--accent">
+  <span class="ds-price__line"><span class="ds-price__amount">12 €</span><span class="ds-price__period">/ mois</span></span>
   <span class="ds-price__note">Sans engagement</span>
 </div>
+<div class="ds-price ds-price--row ds-price--accent">
+  <span class="ds-price__amount">Offert</span>
+  <span class="ds-price__aside"><span class="ds-price__period">avec un outil payant</span><span class="ds-price__note">Programmation 12 € / mois · Analyse 9 € / mois</span></span>
+</div>
 <ul class="ds-perks">
-  <li class="ds-perk"><span class="ds-pastille ds-pastille--puce ds-pastille--success"><!-- check --></span>Transcription et sous-titres</li>
+  <li class="ds-perk"><span class="ds-pastille ds-pastille--coche ds-pastille--success"><!-- <Icon name="check" /> --></span>Transcription et sous-titres</li>
+  <li class="ds-perk"><span class="ds-pastille ds-pastille--coche ds-pastille--success">…</span>Descriptions écrites pour chaque réseau</li>
 </ul>
 ```
 
-- Classes : `.ds-price` · `--sm` · `--end` · `__line` · `__amount` · `__period` · `__note` ·
-  `.ds-perks` · `.ds-perk`.
+- Classes : `.ds-price` · `--sm` · `--end` · `--accent` · `--row` · `__line` · `__amount` ·
+  `__period` · `__note` · `__aside` · `.ds-perks` · `--compact` · `.ds-perk`.
+
+**Le compteur à jauge — `.ds-meter`** (v0.5.0). Un libellé (« 41 / 50 analyses »), la `Progress`, une
+note en sourdine (« Ce mois · se renouvelle le 26 octobre »). La tête (`__head`) peut porter une
+VALEUR en face display (« 50 » + « sur 50 utilisées » : `__value` + `__of`). `.ds-meters` : la paire
+en deux colonnes (gap 24 ; 16 dans un écran de Claude). Dans un écran de Claude, le rail de la
+`Progress` passe en `--card` sans rien repeindre ; dans un `.ds-panel`, il garde `--surface-alt`.
+**Les nombres viennent du serveur.**
+
+```html
+<div class="ds-meters">
+  <div class="ds-meter">
+    <div class="ds-meter__head"><span class="ds-meter__label">41 / 50 analyses</span></div>
+    <div class="ds-progress" role="progressbar" aria-valuenow="41" aria-valuemin="0" aria-valuemax="50"><span class="ds-progress__bar" style="width:82%"></span></div>
+    <span class="ds-meter__note">Ce mois · se renouvelle le 26 octobre</span>
+  </div>
+  <div class="ds-meter">
+    <div class="ds-meter__head"><span class="ds-meter__label">Tes analyses du mois</span><span><span class="ds-meter__value">50</span> <span class="ds-meter__of">sur 50 utilisées</span></span></div>
+    <div class="ds-progress" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50"><span class="ds-progress__bar" style="width:100%"></span></div>
+  </div>
+</div>
+```
+
+- Classes : `.ds-meter` · `__head` · `__label` · `__value` · `__of` · `__note` · `.ds-meters`.
+
+**La carte d'outil — `.ds-offers`, `.ds-offer`** (v0.5.0). `.ds-offers` : la pile des cartes d'outil
+de Mes outils et de l'onboarding (16 entre les cartes, l'exception écrite à la règle des 1.5rem).
+`.ds-offer` : la grille d'une carte (`Card size="xl"`) — le contenu à gauche (`__main` : description,
+avantages, jauges), la colonne prix + action de 15 rem à droite (`__aside`, séparée par un filet,
+prix en bas, action en bas) ; sous 64 rem la colonne passe dessous, le prix à gauche, l'action
+pleine largeur. L'en-tête de la carte (logo, nom, badge `Actif`) est celui de `Card` (`badge`).
+L'outil « à venir » : `Card upcoming`. Le vocabulaire de l'outil reste à l'app.
+
+```html
+<div class="ds-offers">
+  <div class="ds-card ds-card--xl">
+    <div class="ds-card__header">…logo, titre + badge…</div>
+    <div class="ds-offer">
+      <div class="ds-offer__main"><p>…</p><ul class="ds-perks">…</ul><div class="ds-meters">…</div></div>
+      <div class="ds-offer__aside"><div class="ds-price ds-price--end ds-price--accent">…</div><button class="ds-btn ds-btn--primary">Activer Analyse</button></div>
+    </div>
+  </div>
+</div>
+```
+
+- Classes : `.ds-offers` · `.ds-offer` · `__main` · `__aside`.
 
 **La zone de dépôt en balisage — `.ds-dropzone`.** Le composant `Dropzone` en React ; dans un écran
 de Claude, le même balisage : `.ds-dropzone` (+ `.is-dragover`, `.is-invalid`, `.is-disabled`),

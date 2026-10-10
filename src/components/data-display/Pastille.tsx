@@ -8,10 +8,11 @@ import { cva } from 'class-variance-authority';
  */
 export interface PastilleProps extends HTMLAttributes<HTMLSpanElement> {
   /**
-   * puce 1.75 · carte 2.25 · dialogue 2.625 · panneau 3.25 · héros 4 · écran 5rem — radius steps with the size.
-   * `puce` (v0.4.0) : un numéro d'étape, la coche d'un avantage — son chiffre est en body-sm gras.
+   * coche 1.5 · puce 1.75 · carte 2.25 · dialogue 2.625 · panneau 3.25 · héros 4 · écran 5rem — radius steps with the size.
+   * `puce` (v0.4.0) : un numéro d'étape — son chiffre est en body-sm gras.
+   * `coche` (v0.5.0) : la coche d'un avantage, l'étape faite d'une liste — 24 px, glyphe 0.875rem, trait 3.
    */
-  size?: 'puce' | 'carte' | 'dialogue' | 'panneau' | 'heros' | 'ecran';
+  size?: 'coche' | 'puce' | 'carte' | 'dialogue' | 'panneau' | 'heros' | 'ecran';
   /** square = softened square (radius follows size) · round = --radius-pill. */
   shape?: 'square' | 'round';
   /**
@@ -33,6 +34,7 @@ export interface PastilleProps extends HTMLAttributes<HTMLSpanElement> {
 const pastille = cva('ds-pastille', {
   variants: {
     size: {
+      coche: 'ds-pastille--coche',
       puce: 'ds-pastille--puce',
       carte: 'ds-pastille--carte',
       dialogue: 'ds-pastille--dialogue',

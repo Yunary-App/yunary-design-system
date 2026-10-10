@@ -20,7 +20,11 @@ chaque personne qui monte un écran Yunary sans avoir lu le CSS.
 en surface.
 
 **La règle qui décide** — une seule phrase :
-> « L'accent est rationné : si un deuxième élément chaud apparaît dans la vue, l'un des deux est de trop. »
+> « L'accent est rationné par une liste (§ 3) : un site qui n'y est pas n'en porte pas. »
+
+Depuis le 10/10/2026, **la maquette fait foi** : un motif qu'elle dessine et que le ds n'a pas
+s'ajoute au ds, ce n'est pas un conflit. Seules deux règles d'accessibilité l'emportent sur
+elle : jamais `--primary` en couleur de texte (§ 9.3), et tout reste lisible en sombre.
 
 ---
 
@@ -29,12 +33,17 @@ en surface.
 **Où ça vit :** la coquille web (le hub), les écrans MCP et le site vitrine. Chaque
 surface monte exactement deux imports — `@yunary/ds/core.css` puis
 `@yunary/ds/brand-yunary.css` (et `@yunary/ds/theme.css` côté CSS pour une app Tailwind).
-Aucune surface ne redéclare un jeton de marque : une divergence locale est un bug. Un écran
-MCP prend fond, texte et bordures aux variables de l'hôte ; l'accent, les formes et les
-polices restent ceux de Yunary.
-**Thème principal :** clair d'abord ; le sombre est complet et à parité de règles.
-**Densité :** confortable — cartes à padding 28/32, grilles de cartes gap ≥ 1.5rem.
-**Écran de référence :** 1440, desktop ; le mobile est secondaire (cibles 44 px tenues par le socle).
+Aucune surface ne redéclare un jeton de marque : une divergence locale est un bug.
+**Un écran MCP monte les surfaces du ds, forcées** (`Card variant="screen"`, décision du
+10/10/2026) : fond `--background`, blocs relevés en `--card`, filets `--border`. Seul le clair ou
+le sombre suit l'hôte (la coque applique `.dark` d'après le thème que Claude annonce). Les bulles
+de conversation autour de l'écran appartiennent à Claude, jamais au ds.
+**Thème principal :** clair d'abord ; le sombre est complet et à parité de règles — la vitrine
+montre chaque motif en sombre même quand la maquette ne le dessine pas.
+**Densité :** confortable — cartes à padding 24 (28 / 32 pour les cartes d'outil et d'offre),
+grilles de cartes gap ≥ 1.5rem, pile de cartes d'outil à 16.
+**Écran de référence :** 1440, desktop ; le mobile est secondaire (cibles 44 px tenues par le socle,
+390 px vérifié dans la vitrine).
 
 Thème clair en `:root`, sombre en `.dark`, jamais un media query.
 
@@ -82,23 +91,36 @@ sont assumées par écrit dans le fichier de marque.
 | `--ring` | `#f08029` clair · `#f5a524` sombre | le focus porte un arrêt du dégradé (2,41 assumé — compensé par bord 1,5px + halo 3px) |
 | `--brand-from/via/to` | `#f5a524` / `#f08029` / `#e84c3d` | le dégradé signature, identique dans les deux thèmes |
 
-**Où l'accent a le droit d'apparaître** — liste FERMÉE, valable dans TOUTES les apps :
+**Où l'accent a le droit d'apparaître** — liste FERMÉE, valable dans TOUTES les apps,
+élargie le 10/10/2026 (la maquette fait foi) :
 
 1. le logo (l'icône Y en squircle, dégradé)
 2. un mot par titre (dégradé clippé, un seul)
 3. le sur-titre (eyebrow)
-4. le CTA primaire — un seul par vue, avec sa lueur
+4. le CTA primaire, avec sa lueur — **plusieurs par vue quand la vue propose plusieurs
+   choix équivalents** (cinq hooks, trois structures, deux outils à activer) ; un seul quand
+   une action domine
 5. le halo (hero et section CTA uniquement)
 6. les tuiles/icônes de marque (pastille `--pill-coral-bg` + icône `--primary`)
 7. l'élément sélectionné d'une barre posée sur la page (plaque `--accent` + texte `--primary`)
+8. le prix d'une offre (`.ds-price--accent`, le montant en dégradé clippé)
+9. les numéros de section d'une fiche (`.ds-card__band`, 01 à 06, en dégradé clippé)
+10. la colonne du jour de l'agenda semaine (plaque `--accent`, numéro en dégradé ; aujourd'hui
+    en plaque dégradée)
+11. le filet « Recommandé » d'une tuile (`.is-recommended` : filet `--primary` sans plaque, sans
+    être choisie)
+12. le badge dégradé (`Badge tone="brand"` : « À connecter », « 12 € / mois »)
 
-**Où il n'a jamais le droit :** un fond de page, un grand aplat, une bordure de carte,
-deux mots d'un même titre, mélangé à une autre couleur d'accent. Une nouvelle app qui a
-besoin d'un 8ᵉ site d'accent l'ajoute ICI, par PR — pas dans son code.
+Les sites 9 et 10 sont écrits ici et livrés avec les motifs correspondants (version suivante).
 
-**Vérification :** `TOKENS=src/styles/brand-yunary.css node check-contrast.mjs` — 26 écarts
-assumés par écrit dans le fichier (signature CTA, ring dégradé, contours doux, élément
-sélectionné en corail), le reste conforme.
+**Où il n'a jamais le droit :** un fond de page, un grand aplat, la bordure d'une carte qui
+n'est ni choisie ni recommandée, deux mots d'un même titre, mélangé à une autre couleur
+d'accent. Une nouvelle app qui a besoin d'un 13ᵉ site d'accent l'ajoute ICI, par PR — pas
+dans son code.
+
+**Vérification :** `TOKENS=src/styles/brand-yunary.css node check-contrast.mjs` — 28 écarts
+assumés par écrit dans le fichier (signature CTA, badge et prix en dégradé, ring dégradé,
+contours doux, élément sélectionné en corail), le reste conforme.
 
 ---
 
@@ -127,10 +149,14 @@ d'autre. Chaque app hérite de l'`@import` via le fichier de marque.
 16 px à 48 de haut, 14 à 42, ~12,7 à 38, ~14,7 sous 64rem — l'arrondi Yunary aux grandes
 hauteurs, jamais un petit contrôle quasi-pill. Chips, menus, pastilles, cartes restent sur
 l'échelle `--radius-*`.
-**Cartes :** `--card-pad` 28 / `--card-pad-lg` 32 — la carte respire (kit maître).
+**Cartes :** `--card-pad` 24 / `--card-pad-lg` 28 — les valeurs du socle, la marque ne les
+redéclare plus (10/10/2026 : la contradiction entre la charte et le jeton est réglée) ; le palier
+`xl` 28 / 32 (`Card size="xl"`, jetons `--card-pad-xl-y/-x`) pour les cartes d'outil et d'offre.
 **Barre latérale :** largeur FLUIDE `clamp(15rem, 11rem + 5vw, 18rem)` — 240 ≤ 1280 · 256 à
 1600 · 272 à 1920 · 288 ≥ 2240 ; bord optique intérieur 24 px (16 de boîte + 8 de contenu).
-**Densité :** rail de contrôles du socle inchangé (3rem, 2.75rem sous 64rem).
+**Densité :** rail de contrôles du socle inchangé (3rem, 2.75rem sous 64rem), plus **un cran
+`xs` à 28 px** (`--control-xs`, `Button size="xs"`) pour « Copier » et les actions de méta — au-dessus
+du minimum d'accessibilité de 24 px, jamais un CTA ni un bouton de pied.
 
 ---
 
@@ -148,14 +174,24 @@ ou enfoncé. Jamais « noir gras ». Décision Julien, 11/09/2026 : `bg-accent t
 **l'écart de contraste est assumé** — 3,00 sur `--accent`, le seuil des graphiques, pas celui
 du texte — sept blocs `@a11y-assume` dans
 `brand-yunary.css`, § 3.6 de `docs/accessibilite.md`. `--primary-readable` reste le jeton des
-liens, du badge accent, du bandeau info, des erreurs. La tuile cochée garde son titre en encre.
+liens, du badge accent, du bandeau info, des erreurs, et de la coche d'une tuile de choix. La tuile
+cochée garde son titre en encre. **Recommandée sans être choisie** (`.is-recommended`) : le filet
+`--primary` et l'ombre douce, pas de plaque. Dans un écran de Claude, la tuile choisie redescend sur
+`--background` avec son filet, les autres restent relevées sur `--card`.
 Les contrôles cochés (case, switch, jour choisi) ne suivent pas : ils portent le dégradé plein.
-Les toasts et bandeaux centrent leur icône verticalement.
+L'interrupteur verrouillé (`Switch locked`) garde sa piste pleine : il n'est pas désactivé.
+Les toasts et bandeaux centrent leur icône verticalement (`Banner align="start"` l'aligne en
+haut quand le texte fait plusieurs lignes).
+**Le danger doux porte un filet** de 1,5 px à 30 % de `--destructive` (10/10/2026, version
+suivante).
 **La pastille de marque est outlined**, carrée, sur toutes les maquettes —
 `Pastille tone="brand" outlined` : état vide, carte d'état héros, en-tête de carte. Pleine ou
 ronde, c'est un écart aux maquettes.
 **L'espacement interne d'une carte** reste à 24 px (`--card-pad`), et sa pile sur l'échelle
-`--space-*` (`Card gap={3|4|5|6}`) — pas de palier 20 (décision Julien, 11/09/2026).
+`--space-*` (`Card gap={3|4|5|6}`) — pas de palier 20 (décision Julien, 11/09/2026). Les cartes
+d'outil et d'offre sont au palier `xl` (28 / 32) et s'empilent à 16 (`.ds-offers`).
+**Les avantages d'une offre** sont une liste nue à deux colonnes (`.ds-perks`, même à 390), chaque
+ligne une `Pastille size="coche"` (24 px) et un libellé en body-sm à l'encre.
 
 **Un motif qu'on refuse :** le glassmorphism, les fonds photographiques, les textures.
 
@@ -192,8 +228,9 @@ plateformes sociales vivent dans le projet qui les fabrique.
    lisibles. (Exceptions écrites : icônes de marque, texte de l'onglet actif — décisions
    § 6, portées par la plaque + la forme, jamais par la couleur seule.)
 4. Jamais un rayon pill sur un bouton, un champ ou une barre d'onglets. Il est réservé aux badges, aux compteurs et aux pastilles de choix (`.ds-tile--chip`).
-5. Jamais la couleur seule pour porter un sens — couleur + icône + texte.
-6. Jamais deux éléments chauds dans la même vue (la règle qui décide, § 1).
+5. Jamais la couleur seule pour porter un sens : le TEXTE le porte. L'icône d'un badge est
+   facultative (10/10/2026) — la maquette dessine ses statuts sans icône, le libellé suffit.
+6. Jamais un site d'accent hors de la liste du § 3 (la règle qui décide, § 1).
 7. Jamais un utilitaire de couleur, fond, `background-clip` ou dimension sur `.accent` / `.eyebrow`.
 8. Jamais un défaut de design en style inline.
 9. Jamais d'emoji d'interface — les icônes sont Lucide. Seule exception : un emoji qui EST la donnée affichée (l'emoji d'une passion, fourni par l'app), dans le glyphe de tête d'une tuile (`.ds-tile__lead`).
@@ -222,6 +259,8 @@ plateformes sociales vivent dans le projet qui les fabrique.
 | 2026-08-31 | Marque exportée sous `./brand-yunary.css` dans package.json | sous-chemin stable de chaque surface |
 | 2026-09-11 | Élément sélectionné en corail (`--primary` sur `--accent`), écart de contraste assumé | décision de marque Julien |
 | 2026-09-11 | Titre de page à 36 px, `Card gap` sur l'échelle `--space-*` sans palier 20 | décisions Julien |
-| 2026-10-09 | 0.4.0 : motifs des parcours en classes, `Dropzone` seul composant nouveau ; la colonne du jour de la semaine sur `--muted`, l'`--accent` gardé au jour d'aujourd'hui | maquettes Script et Programmation ; la liste fermée des sites de l'accent (§ 3) |
+| 2026-10-10 | **La maquette fait foi.** Les quatre règles du 09/10 tombent : badges de statut sans icône, plusieurs CTA primaires par vue, prix et numéros de section en dégradé, danger doux avec un filet. Deux règles d'accessibilité restent au-dessus : jamais `--primary` en texte, tout lisible en sombre | audit du ds 0.4.0 face aux maquettes retouchées le 10/10 ; décision Julien |
+| 2026-10-10 | 0.5.0 : liste de l'accent élargie (§ 3, 12 sites), cran `xs` du rail, `--card-pad` revenu à 24 / 28 + palier `xl` 28 / 32, surfaces du ds forcées dans un écran de Claude (`Card variant="screen"`), `Badge corner` retiré (plus dessiné) | même audit ; la colonne du jour de la semaine repassera sur `--accent` avec les motifs de la version suivante |
+| 2026-10-09 | 0.4.0 : motifs des parcours en classes, `Dropzone` seul composant nouveau ; la colonne du jour de la semaine sur `--muted`, l'`--accent` gardé au jour d'aujourd'hui | maquettes Script et Programmation ; la liste fermée des sites de l'accent (§ 3) — **renversé le 10/10** |
 | 2026-09-29 | 0.3.0 : pastille de choix en pilule, emoji de contenu autorisé en tête de tuile | les listes de choix du profil créateur (maquette HubProfil) |
 | 2026-09-29 | 0.2.0 : retrait de l'extension de visuels d'export et des composants React sans consommateur | le paquet ne porte que ce que les surfaces emploient |

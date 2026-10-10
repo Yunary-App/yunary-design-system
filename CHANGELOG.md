@@ -14,6 +14,81 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.5.0 — la maquette fait foi, première moitié : offre, compteurs, badges, étapes, coque d'écran
+
+L'audit du ds 0.4.0 face aux maquettes retouchées le 10/10/2026 (Outils, Onboarding, Script et
+Programmation Web, HubParametres, Script, Programmation, Compte, Analyse et Métriques MCP), et les
+arbitrages de Julien : **la maquette fait foi**. Un motif qu'elle dessine et que le ds n'a pas
+s'ajoute au ds ; seules deux règles d'accessibilité l'emportent sur elle (jamais `--primary` en
+texte, tout lisible en sombre). Ce lot couvre les points 1 à 11 de l'arbitrage ; les points 12 à
+20 (dépôt, média, agenda, rangées, états vides, têtes de section, onglets et modales, danger doux,
+avatars et champs, brique réseau) viennent en 0.6.0. `docs/DESIGN.md` est réécrit en conséquence
+(liste de l'accent élargie, icône de badge facultative, cran `xs`, `--card-pad` réglé).
+
+- **Rupture, une seule : `Badge corner` est retiré** (`.ds-badge--corner`, 0.4.0). « Recommandé »
+  est revenu en fin de rangée sur la maquette ; `check-catalogue` empêche son retour.
+- **Rendus qui bougent chez les consommateurs** (à relire à la montée de version) :
+  - `--card-pad` revient aux valeurs du socle, 24 / 28 (la marque ne le redéclare plus : toutes les
+    cartes du hub passent de 28 à 24) ; les cartes d'outil et d'offre prennent `Card size="xl"`
+    (28 / 32).
+  - `.ds-perks` / `.ds-perk` : plus de plaque, body-sm à l'encre, deux colonnes fixes (même à 390),
+    `Pastille size="coche"` (24 px) à la place de `puce`. Hub : `CheckLine` (qui réduisait `carte` à
+    1,5 rem), `ToolCard`, l'offre de la fiche ; mcp-ui : `OfferCard`.
+  - `.ds-banner--inset .ds-banner__title` passe en body gras.
+  - `.ds-veil__panel` : padding 64 / 32 (était 48 / 32).
+- **1 · Bénéfices** : `.ds-perk` nu, `Pastille size="coche"` (jeton `--pastille-coche`, coche
+  0,875 rem trait 3), `.ds-perks--compact` (et dans un écran de Claude). Hub : `CheckLine`,
+  `ToolCard`, `Offre.tsx`, `OutilChoixCarte` ; mcp-ui : `OfferCard`.
+- **2 · Cartes d'outil** : `Card size="xl"`, `badge` (collé au titre, `.ds-card__title-row`),
+  `upcoming` (`.is-upcoming`), `.ds-offers` (pile à 16), `.ds-offer` (+ `__main`, `__aside`,
+  empilée sous 64 rem), `.ds-panel` (+ `__actions`, `.is-locked` : un seul estompage). Hub :
+  `ToolCard`, `PackLine`, `OutilChoixCarte`, la page Mes outils ; mcp-ui : les cartes d'outil de
+  Compte (« Ce que Yunary sait faire »), le bloc profil.
+- **3 · Compteurs** : `.ds-meter` (+ `__head`, `__label`, `__value`, `__of`, `__note`) et
+  `.ds-meters` ; le rail de `Progress` passe en `--card` dans un écran de Claude, `--surface-alt`
+  dans un `.ds-panel`. Hub : `ToolCard` (ses deux jauges et son `bg-background`), la carte Analyse
+  de l'onboarding ; mcp-ui : `mon_compte`, le refus de quota d'Analyse.
+- **4 · Interrupteur verrouillé** : `Switch locked` (`.is-locked`, `aria-readonly`, cadenas
+  `.ds-switch__lock`) et `labelPosition="start"` (`.ds-switch--label-start`). Hub :
+  `OutilChoixCarte` (« Toujours actif »).
+- **5 · Badges** : icône facultative (doc), créneau d'icône hors `dense` (0,875 rem),
+  `tone="brand"` (`.ds-badge--brand`), `lead` (`.ds-badge--lead`), `onRemove` /
+  `removeLabel` (`.ds-badge__remove`), `corner` retiré. Hub : `StatutBadge`, `SubscribedTools`,
+  `ComptesConnectes` (« À connecter » en dégradé), le chip « Demandé depuis Claude » de
+  `?ajouter=`, l'en-tête de fiche ; mcp-ui : `Badge` (ton `brand`), les chips de filtre de la liste
+  d'Analyse, les cartes de hook (« Recommandé » sans languette).
+- **6 · Étapes** : `.ds-steps--bar` (+ `__track`, `__seg`, `__counter`, `__counter-sub`, jetons
+  `--steps-seg-h(-compact)`), `.ds-steps--vertical` (+ `.ds-step__meta`). Hub : `OnboardShell`
+  (sa barre de progression), `StepMark`, `VerifyProgressCard`, `AuditChecklist`, `ToiVerif` ;
+  mcp-ui : `Steps` (sa liste verticale et sa frise).
+- **7 · Offre et prix** : `.ds-price--accent`, `.ds-price--row` (+ `__aside`), `Card
+  variant="plaque"` (`.ds-card--plaque`, `.ds-card__body`) et `foot` (`.ds-card__foot`, lavis sur
+  une feature). Hub : `Offre.tsx` (le voile et sa carte), `ComptesConnectes` (la plaque
+  verrouillée), l'encart « Depuis Claude » de l'état vide, le bandeau total de l'onboarding ;
+  mcp-ui : `OfferCard`, la plaque « Offert » de Métriques, le refus d'Analyse.
+- **8 · Coque des écrans de Claude** : `Card variant="screen"` (`.ds-card--screen` : padding
+  18 / 20 / 20, `--background`, sans ombre, pile, en-tête à gap 10, tout ce qui s'y pose relevé en
+  `--card`, tuile choisie redescendue), `.ds-card__foot`. Décision écrite : surfaces du ds forcées
+  dans Claude, seul le thème suit l'hôte ; les bulles sont à Claude. mcp-ui : `Card`,
+  `CardHeader`, `components.css` (la coque `y-card` et ses variables `--hs/--ht/--hm/--hb/--hbg`),
+  `FullScreen`.
+- **9 · Encarts** : `Banner` — titre d'encart en body gras, une `Pastille` à la place de
+  l'icône, `align="start"` (`.ds-banner--start`). Hub : `VideosAnalyseesLine`, les tuiles
+  d'information de la carte Analyse, le bandeau « Compte privé » de `ToiVerif` ; mcp-ui :
+  `Notice`, les erreurs de dépôt de Programmation.
+- **10 · Copier** : `Button size="xs"` (`.ds-btn--xs`, jeton `--control-xs` 28 px). Hub :
+  `CopyButton`, les en-têtes de champ des fiches (`TextesSection`, `TranscriptionSection`,
+  `ScriptSection`) ; mcp-ui : `CopyButton`, les en-têtes de champ de Textes.
+- **11 · Tuiles de choix** : `.ds-tile--choice` (+ `.ds-tiles`, `.ds-tile--span`,
+  `<button aria-pressed>` accepté), `.ds-tile--lift`, `.is-recommended`, et dans un écran les
+  surfaces inversées (portées par `.ds-card--screen`). Hub : `PlatformTile`, la tuile « Je n'ai
+  pas de compte », `NouveauContenuModal` (ses deux tuiles) ; mcp-ui : `HookCard`,
+  `ScriptVersion` (recommandée), les créneaux et les panneaux de miniature de Programmation.
+- **Contraste** : 5 paires de plus, 83 au total ; deux écarts assumés de plus (28) : le badge et
+  le montant en dégradé, la même décision que le label du CTA.
+- **Vitrine** : une page « Outils et écrans » montre chaque motif en clair, en sombre (la coque
+  d'écran y est rendue sombre même quand la vitrine est claire) et à 390 px.
+
 ## 0.4.0 — les parcours : étapes, voile, offre, dépôt, média, agenda
 
 Les manques des maquettes Yunary Script et Yunary Programmation (dans Claude et dans le hub), de

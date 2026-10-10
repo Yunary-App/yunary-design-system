@@ -206,7 +206,15 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Marque-contenu', '.ds-week__day.is-today — jour et numéro', g('--primary-readable'), over(g('--primary'), .12, g('--accent')), 4.5, '12 / 700');
   add('Texte', '.ds-agenda__cell.is-outside — numéro sur --muted', g('--text-muted'), g('--muted'), 4.5, '13 / 600');
   add('Texte', '.ds-media__badge — durée sur la vidéo', g('--tone-light'), on('--overlay-play-bg', '--tone-dark'), 4.5, '11 / 600');
-  add('Texte', '.ds-perk — libellé sur --background', g('--text-secondary'), g(B), 4.5, '13 / 600');
+  add('Texte', '.ds-perk — libellé sur --card', g('--foreground'), g(C), 4.5, '14 / 400');
+  /* v0.5.0 — le badge de marque et le montant en dégradé : du texte sur le dégradé plein ou clippé,
+     mesuré sur l'arrêt clair, le pire. Le compteur et le repère d'étape à venir : du texte en sourdine
+     et un contour sur la porteuse. */
+  add('Marque-aplat', '.ds-badge--brand — texte sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 4.5, '12 / 700');
+  add('Marque-aplat', '.ds-price--accent — montant sur --brand-from (pire arrêt)', g('--brand-from'), g(C), 3, '36 / 800');
+  add('Texte', '.ds-meter__of — texte sur --background', g('--text-muted'), g(B), 4.5, '14 / 400');
+  add('Texte', '.ds-steps__counter-sub — texte sur --background', g('--text-muted'), g(B), 4.5, '18 / 400');
+  add('Non-texte', '.ds-tile--choice — coche --primary-readable sur --accent', g('--primary-readable'), g('--accent'), 3, 'icône');
 
   for (const n of ['coral', 'amber', 'danger', 'warning', 'success', 'neutral']) {
     add('Pill', `.ds-badge--${n} sur --card`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, C), 4.5, '12 / 700');
