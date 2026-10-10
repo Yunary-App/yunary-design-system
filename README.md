@@ -1,7 +1,7 @@
 # @yunary/ds
 
 **Le design system de Yunary.** Deux couches qui ne se mélangent pas : un **socle**
-générique — structure, comportements, échelles, rail de contrôles, motion, 37 composants
+générique — structure, comportements, échelles, rail de contrôles, motion, 38 composants
 React + TypeScript, **zéro couleur** — et la **marque Yunary**, qui porte les couleurs, les
 polices, les dégradés et la lueur.
 
@@ -58,7 +58,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/yunary-design-system#v0.5.0
+npm i github:Yamiro02/yunary-design-system#v0.6.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -243,7 +243,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > lève aucune erreur : il rend 4 px, hors barème.
 
 > **Le paquet n'est pas scanné par Tailwind.** v4 ne lit pas `node_modules`. Sans effet
-> aujourd'hui : les 37 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
+> aujourd'hui : les 38 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
 > Tailwind. C'est une précaution pour l'avenir — le jour où un composant du DS écrira une classe
 > Tailwind, l'app devra pointer le paquet :
 > ```css
@@ -259,14 +259,14 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 
 | Famille | Composants |
 |---|---|
-| `icons` | `Icon` — 56 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
+| `icons` | `Icon` — 60 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
 | `actions` | `Button` · `IconButton` — 5 variantes, `danger-soft` compris (6 pour `IconButton`, `accent` compris), 4 tailles pour `Button` (`xs` = « Copier »), jamais un pill |
 | `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` (verrouillé, libellé avant la piste) · `FormField` (action à droite du libellé) · `Calendar` · `DatePicker` · `Dropzone` (dépôt d'un fichier) |
 | `data-display` | `Card` (+ en-tête à slots, badge collé au titre, pied, palier `xl`, plaque, coque d'écran de Claude) · `Pastille` (de la coche à l'écran) · `Badge` (2 rembourrages, ton dégradé, tête, croix de retrait) · `Tooltip` · `Separator` · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables |
 | `feedback` | `Toast` · `Banner` (+ encart dans une carte, pastille à la place de l'icône) · `EmptyState` · `StateCard` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
-| `overlays` | `Modal` (3 phases + feuille basse sous 64 rem) |
-| `navigation` | `Navbar` · `Footer` · `Tabs` (onglets ou choix d'une valeur, barre compacte) · `Pagination` · `AppShell` · `Sidebar` |
-| `brand` | `Logo` · `Halo` · `Avatar` |
+| `overlays` | `Modal` (3 phases + feuille basse sous 64 rem, sous-titre, 480 / 560 / 600) |
+| `navigation` | `Navbar` · `Footer` · `Tabs` (onglets ou choix d'une valeur, barre compacte, qui défile) · `Pagination` · `AppShell` (+ barre haute mobile) · `Sidebar` |
+| `brand` | `Logo` · `Halo` · `Avatar` (tailles des pastilles, tons, anneau, pastille de réseau) · `Reseau` (Instagram, TikTok, YouTube, Claude) |
 
 Tous sont exportés en nommé depuis la racine, avec leurs types :
 

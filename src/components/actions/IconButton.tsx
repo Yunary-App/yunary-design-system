@@ -12,11 +12,13 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
    * « sélectionné doux » d'un lien-icône ou d'un raccourci. La variante que les apps
    * recomposaient à la main en détournant l'aide de démo `is-active` et en annulant la
    * bordure en inline.
-   * `danger-soft` (v0.1.4) : la corbeille — fond `--pill-danger-bg`, glyphe `--pill-danger-fg`,
-   * sans bordure. Le `danger` plein reste l'action destructrice UNIQUE d'une vue (une modale de
-   * confirmation) ; à côté de chaque ligne supprimable, c'est le doux.
+   * `danger-soft` (v0.1.4) : la corbeille — fond `--pill-danger-bg`, glyphe `--pill-danger-fg`, filet
+   * 1,5 px à 30 % du rouge (v0.6.0, la maquette fait foi). Le `danger` plein reste l'action destructrice
+   * UNIQUE d'une vue (une modale de confirmation) ; à côté de chaque ligne supprimable, c'est le doux.
+   * `ghost-danger` (v0.6.0) : la corbeille NUE — le glyphe seul en rouge lisible, pour le 390 où la
+   * plaque n'a plus sa place (la barre d'une fiche).
    */
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'danger-soft' | 'accent';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'danger-soft' | 'ghost-danger' | 'accent';
   size?: 'sm' | 'md' | 'lg';
   /**
    * The surface the button sits on — the twin of Button's `surface`, same three values,
@@ -47,6 +49,7 @@ const iconButton = cva('ds-icon-btn', {
       ghost: 'ds-icon-btn--ghost',
       danger: 'ds-icon-btn--danger',
       'danger-soft': 'ds-icon-btn--danger-soft',
+      'ghost-danger': 'ds-icon-btn--ghost-danger',
       accent: 'ds-icon-btn--accent',
     },
     size: { sm: 'ds-icon-btn--sm', md: 'ds-icon-btn--md', lg: 'ds-icon-btn--lg' },

@@ -103,6 +103,10 @@ img{max-width:100%;display:block}
    `.eyebrow`, plus haut, clippe le dégradé avec les mêmes quatre déclarations : même
    piège, même règle. L'interdit est dans docs/DESIGN.md § 9. */
 .accent{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+/* v0.6.0 — le sur-titre en sourdine (« LA SUITE ») : même casse et même chasse que l'eyebrow, sans le
+   dégradé — l'encre discrète. SEUL sur son nœud, à la place de `.eyebrow` (jamais avec : le garde des
+   classes fragiles n'admet rien à côté d'`.eyebrow`). */
+.eyebrow--muted{font-family:var(--font-body);font-size:var(--text-eyebrow);font-weight:var(--weight-semibold);text-transform:uppercase;letter-spacing:var(--tracking-eyebrow);line-height:var(--leading-snug);color:var(--text-muted);width:fit-content}
 
 /* Warm radial halo — bottom-anchored, never full-screen */
 .halo{position:absolute;inset:0;pointer-events:none;background:var(--gradient-halo)}

@@ -25,7 +25,7 @@ export interface PastilleProps extends HTMLAttributes<HTMLSpanElement> {
    * track, selected calendar day) carry none, and a Pastille is never pressable. A caller
    * that wants the halo adds it at the call site, knowingly.
    */
-  tone?: 'brand' | 'brand-solid' | 'coral' | 'amber' | 'success' | 'warning' | 'danger' | 'neutral' | 'inverse';
+  tone?: 'brand' | 'brand-solid' | 'coral' | 'amber' | 'success' | 'warning' | 'danger' | 'neutral' | 'inverse' | 'accent';
   /** 1px currentColor @22% contour — EmptyState's hairline, generalised to every tone. */
   outlined?: boolean;
   children?: ReactNode;
@@ -53,6 +53,7 @@ const pastille = cva('ds-pastille', {
       danger: 'ds-pastille--danger',
       neutral: 'ds-pastille--neutral',
       inverse: 'ds-pastille--inverse',
+      accent: 'ds-pastille--accent',
     },
     outlined: { true: 'ds-pastille--outlined', false: '' },
   },

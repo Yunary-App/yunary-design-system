@@ -1,11 +1,11 @@
 import type { CSSProperties, JSX } from 'react';
 import {
-  ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Calendar, Check, ChevronDown,
+  ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Bookmark, Calendar, Check, ChevronDown,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,
-  CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder,
+  CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder, Heart,
   Download, Info, LayoutDashboard, List, LoaderCircle, Lock, LogOut, Mail, Menu, MessageSquare, Minus,
-  PanelLeft, Pause, Pencil, Play, Plus, Quote, Rocket, Search, Settings, SlidersHorizontal,
-  Terminal, Trash2, TrendingUp, TriangleAlert, Upload, User, Video, VideoOff, X, Zap,
+  PanelLeft, Pause, Pencil, Play, Plus, Quote, Rocket, Search, Settings, Share, SlidersHorizontal,
+  Terminal, Trash2, TrendingUp, TriangleAlert, Upload, User, Users, Video, VideoOff, X, Zap,
   type LucideIcon,
 } from 'lucide-react';
 import { Github } from './brand-glyphs';
@@ -32,7 +32,8 @@ export type IconName =
   | 'message-square' | 'quote' | 'rocket' | 'file-text'
   | 'chevrons-left' | 'chevrons-right' | 'ellipsis' | 'panel-left'
   | 'sliders-horizontal' | 'layout-dashboard' | 'house' | 'video' | 'dumbbell' | 'settings' | 'lock'
-  | 'upload' | 'download' | 'pause' | 'video-off' | 'list' | 'pencil' | 'log-out';
+  | 'upload' | 'download' | 'pause' | 'video-off' | 'list' | 'pencil' | 'log-out'
+  | 'users' | 'heart' | 'share' | 'bookmark';
 
 /** Ce que tout rendu d'icône partage, quelle que soit la provenance du tracé. */
 export interface IconBaseProps {
@@ -147,6 +148,7 @@ const ICONS: Record<IconName, LucideIcon> = {
   'list': List,
   'pencil': Pencil,
   'log-out': LogOut,
+  users: Users, heart: Heart, share: Share, bookmark: Bookmark,
 };
 
 export function Icon({

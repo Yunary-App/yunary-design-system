@@ -102,6 +102,8 @@ export { Halo } from './components/brand/Halo';
 export type { HaloProps } from './components/brand/Halo';
 export { Avatar } from './components/brand/Avatar';
 export type { AvatarProps } from './components/brand/Avatar';
+export { Reseau } from './components/brand/Reseau';
+export type { ReseauProps, ReseauName } from './components/brand/Reseau';
 
 /* utilitaire de composition de classes */
 export { cn, makeCn, PALIERS_TYPO } from './lib/cn';

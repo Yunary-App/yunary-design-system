@@ -111,7 +111,7 @@ sont assumées par écrit dans le fichier de marque.
     être choisie)
 12. le badge dégradé (`Badge tone="brand"` : « À connecter », « 12 € / mois »)
 
-Les sites 9 et 10 sont écrits ici et livrés avec les motifs correspondants (version suivante).
+Les sites 9 et 10 sont livrés en 0.6.0 (`.ds-card__band`, `.ds-week`).
 
 **Où il n'a jamais le droit :** un fond de page, un grand aplat, la bordure d'une carte qui
 n'est ni choisie ni recommandée, deux mots d'un même titre, mélangé à une autre couleur
@@ -182,11 +182,14 @@ Les contrôles cochés (case, switch, jour choisi) ne suivent pas : ils portent 
 L'interrupteur verrouillé (`Switch locked`) garde sa piste pleine : il n'est pas désactivé.
 Les toasts et bandeaux centrent leur icône verticalement (`Banner align="start"` l'aligne en
 haut quand le texte fait plusieurs lignes).
-**Le danger doux porte un filet** de 1,5 px à 30 % de `--destructive` (10/10/2026, version
-suivante).
-**La pastille de marque est outlined**, carrée, sur toutes les maquettes —
-`Pastille tone="brand" outlined` : état vide, carte d'état héros, en-tête de carte. Pleine ou
-ronde, c'est un écart aux maquettes.
+**Le danger doux porte un filet** de 1,5 px à 30 % de `--destructive` (10/10/2026, livré en
+0.6.0) ; la corbeille nue (`IconButton ghost-danger`) est sa forme de 390.
+**Le champ invalide porte un anneau** rouge doux en plus de sa bordure (0.6.0) ; le focus reste
+une bordure seule.
+**La pastille de marque est outlined**, carrée — `Pastille tone="brand" outlined` : carte
+d'état héros, en-tête de carte, étape numérotée d'une feature. **L'état vide, lui, porte une
+pastille RONDE et NEUTRE** (`EmptyState`, 10/10/2026 : la maquette fait foi), et le panneau
+d'état compact une pastille pleine danger ou neutre.
 **L'espacement interne d'une carte** reste à 24 px (`--card-pad`), et sa pile sur l'échelle
 `--space-*` (`Card gap={3|4|5|6}`) — pas de palier 20 (décision Julien, 11/09/2026). Les cartes
 d'outil et d'offre sont au palier `xl` (28 / 32) et s'empilent à 16 (`.ds-offers`).
@@ -215,8 +218,10 @@ d'UN outil reste dans sa couche. En cas de doute, ça reste dans la couche.
 **Le fichier de marque est un export du paquet** : `@yunary/ds/brand-yunary.css` — le
 sous-chemin stable du second import de chaque surface. Il ne se copie jamais dans une app
 (le site vitrine, déployé à part, en porte une copie dans `site/src/styles/ds/`).
-**Pas de visuels d'export dans le paquet :** miniatures, cartes motion et icônes de
-plateformes sociales vivent dans le projet qui les fabrique.
+**Pas de visuels d'export dans le paquet :** miniatures et cartes motion vivent dans le projet
+qui les fabrique. **Les marques tierces, elles, sont une brique du ds** depuis 0.6.0 (`Reseau` :
+Instagram, TikTok, YouTube, Claude) : leurs couleurs vivent dans le fichier de marque, section
+« marques tierces », avec leurs jumeaux sombres — jamais dans une app.
 
 ---
 
@@ -260,6 +265,7 @@ plateformes sociales vivent dans le projet qui les fabrique.
 | 2026-09-11 | Élément sélectionné en corail (`--primary` sur `--accent`), écart de contraste assumé | décision de marque Julien |
 | 2026-09-11 | Titre de page à 36 px, `Card gap` sur l'échelle `--space-*` sans palier 20 | décisions Julien |
 | 2026-10-10 | **La maquette fait foi.** Les quatre règles du 09/10 tombent : badges de statut sans icône, plusieurs CTA primaires par vue, prix et numéros de section en dégradé, danger doux avec un filet. Deux règles d'accessibilité restent au-dessus : jamais `--primary` en texte, tout lisible en sombre | audit du ds 0.4.0 face aux maquettes retouchées le 10/10 ; décision Julien |
+| 2026-10-10 | 0.6.0 : la seconde moitié — dépôt compact et envoi à nu, un seul dessin de média, agenda sur `--accent` + barre + tuiles, rangées et réglages, états vides ronds neutres + compact, bande de section et barre de fiche, étapes en tuiles (une brique pour « 1 · 2 · 3 » et « La suite »), onglets qui défilent, modales 480 / 560 / 600, danger doux à filet, `Avatar` réécrit, `Reseau`, ton doux `Banner soft`, cadres de miniature détourés en sombre | même audit + compléments de la liste du hub et trois précisions de Julien |
 | 2026-10-10 | 0.5.0 : liste de l'accent élargie (§ 3, 12 sites), cran `xs` du rail, `--card-pad` revenu à 24 / 28 + palier `xl` 28 / 32, surfaces du ds forcées dans un écran de Claude (`Card variant="screen"`), `Badge corner` retiré (plus dessiné) | même audit ; la colonne du jour de la semaine repassera sur `--accent` avec les motifs de la version suivante |
 | 2026-10-09 | 0.4.0 : motifs des parcours en classes, `Dropzone` seul composant nouveau ; la colonne du jour de la semaine sur `--muted`, l'`--accent` gardé au jour d'aujourd'hui | maquettes Script et Programmation ; la liste fermée des sites de l'accent (§ 3) — **renversé le 10/10** |
 | 2026-09-29 | 0.3.0 : pastille de choix en pilule, emoji de contenu autorisé en tête de tuile | les listes de choix du profil créateur (maquette HubProfil) |

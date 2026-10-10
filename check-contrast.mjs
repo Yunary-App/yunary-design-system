@@ -202,7 +202,18 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Marque-contenu', '.ds-banner--amber — texte sur --card', g('--pill-amber-fg'), on('--pill-amber-bg', C), 4.5, '14 / 400');
   add('Marque-aplat', '.ds-step en cours — chiffre sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 4.5, '13 / 700');
   add('Marque-aplat', '.ds-agenda__cell.is-today — numéro sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 4.5, '13 / 600');
-  add('Texte', '.ds-week__wd — jour sur --muted', g('--text-secondary'), g('--muted'), 4.5, '12 / 700');
+  add('Texte', '.ds-week__wd — jour sur --accent', g('--text-secondary'), g('--accent'), 4.5, '12 / 700');
+  /* v0.6.0 — la colonne du jour en dégradé, aujourd'hui sur la plaque, la vignette dégradée, le disque de
+     lecture, le ton doux, la note, la corbeille nue, l'avatar à anneau. */
+  add('Marque-aplat', '.ds-week__num — numéro en dégradé sur --accent', g('--brand-from'), g('--accent'), 3, '29 / 800');
+  add('Marque-aplat', '.ds-week__day.is-today — numéro sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 4.5, '22 / 800');
+  add('Marque-aplat', '.ds-media--brand — glyphe sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 3, 'icône');
+  add('Marque-contenu', '.ds-media__play — glyphe sur le disque', g('--primary'), over(g('--tone-light-alt'), .92, g('--tone-dark')), 3, 'icône');
+  add('Marque-contenu', '.ds-banner--soft — texte sur --accent', g('--foreground'), g('--accent'), 4.5, '14 / 400');
+  add('Texte', '.ds-note — texte sur --card', g('--text-muted'), g(C), 4.5, '13 / 400');
+  add('Marque-contenu', '.ds-icon-btn--ghost-danger — glyphe sur --card', g('--destructive-readable'), g(C), 3, 'icône');
+  add('Marque-contenu', '.ds-avatar--ring — initiales sur --card', g('--primary-readable'), g(C), 4.5, '14 / 700');
+  add('Marque-contenu', '.ds-pastille--accent — glyphe sur --accent', g('--primary-readable'), g('--accent'), 3, 'icône');
   add('Marque-contenu', '.ds-week__day.is-today — jour et numéro', g('--primary-readable'), over(g('--primary'), .12, g('--accent')), 4.5, '12 / 700');
   add('Texte', '.ds-agenda__cell.is-outside — numéro sur --muted', g('--text-muted'), g('--muted'), 4.5, '13 / 600');
   add('Texte', '.ds-media__badge — durée sur la vidéo', g('--tone-light'), on('--overlay-play-bg', '--tone-dark'), 4.5, '11 / 600');

@@ -79,6 +79,21 @@
    v0.5.0 — le montant d'une offre en dégradé clippé (« 12 € »), en face display 800 à 36 px : du
    gros texte, lu 1,83 sur l'arrêt clair comme `.accent`. Décision de marque du 10/10/2026, le même
    écart que le mot de titre ; la période et la note restent en encre. */
+/* @a11y-assume: .ds-media__play — glyphe sur le disque
+   v0.6.0 — le glyphe de lecture en corail sur le disque clair d'une vignette (2,85, comme l'icône de
+   la pastille de marque) : un graphique décoratif, jamais seul — la vignette, sa durée et le titre du
+   contenu disent la vidéo. Un seul dessin pour Analyse, Métriques et les fiches (décision du 10/10). */
+/* @a11y-assume: .ds-media--brand — glyphe sur --brand-from (pire arrêt)
+   v0.6.0 — la vignette d'un contenu qui n'a pas encore de vidéo : un aplat du dégradé avec le glyphe
+   vidéo en blanc (2,04 sur l'arrêt jaune). Décoratif, toujours à côté du titre du contenu ; même
+   décision que la pastille pleine. */
+/* @a11y-assume: .ds-week__num — numéro en dégradé sur --accent
+   v0.6.0 — la colonne du jour de l'agenda semaine porte son numéro en dégradé clippé sur la plaque
+   --accent (1,83 sur l'arrêt clair, la propriété de la technique, comme `.accent`). Le numéro est
+   redondant avec le nom du jour écrit dessous en encre ; décision du 10/10/2026, la maquette fait foi. */
+/* @a11y-assume: .ds-week__day.is-today — numéro sur --brand-from (pire arrêt)
+   v0.6.0 — aujourd'hui, le numéro passe sur une plaque dégradée de 36 px (2,04 sur l'arrêt jaune) ;
+   même décision que le jour d'aujourd'hui de l'agenda mois. */
 /* @a11y-assume: .ds-btn--danger — label sur --destructive
    3,80 dans les deux thèmes. Corail sémantique #e84c3d (= --brand-to) sous label blanc —
    aligné sur le DS Julien Fernandes : le rouge foncé qui tiendrait 4,5 sortirait de la
@@ -238,6 +253,18 @@
   --shadow-glow-lg:0 10px 28px rgba(245,165,36,.42), 0 4px 12px rgba(232,76,61,.30);
   --shadow-glow-sm:0 2px 8px rgba(245,165,36,.25);
   --shadow-logo-dot:0 0 12px rgba(240,128,41,.5);
+
+  /* MARQUES TIERCES — v0.6.0. Les couleurs des réseaux et de Claude ne sont pas celles de Yunary,
+     mais la brique qui les dessine (`Reseau`, `.ds-reseau`) est partagée par le hub et les écrans
+     de Claude : elles vivent donc ici, dans le seul fichier qui a le droit de porter une couleur,
+     et nulle part ailleurs. Les logos sont exempts de la mesure de contraste (ce sont des marques,
+     WCAG 1.4.3) ; leurs jumeaux sombres, eux, sont une décision : la tuile TikTok noire et la tuile
+     Claude crème disparaissaient sur une carte sombre. */
+  --reseau-instagram:linear-gradient(45deg,#feda75 0%,#fa7e1e 25%,#d62976 50%,#962fbf 75%,#4f5bd5 100%); /* @kind color */
+  --reseau-instagram-fg:#ffffff;
+  --reseau-tiktok:#010101; --reseau-tiktok-fg:#ffffff;
+  --reseau-youtube:#ff0000; --reseau-youtube-fg:#ffffff;
+  --reseau-claude:#faf5ef; --reseau-claude-fg:#d97757;
 }
 
 /* Le mark Yunary est VECTORIEL — l'icône (Y en squircle, dégradé de marque) remplace la
@@ -277,6 +304,10 @@
   --pill-warning-fg:#f7cf9b;
   --pill-success-fg:#9ccc63;
   --pill-neutral-fg:#d4d1cb;
+  /* Les jumeaux sombres des marques tierces : TikTok en tuile claire (glyphe encre), Claude en
+     tuile d'encre chaude (glyphe terre cuite inchangé). Instagram et YouTube ne bougent pas. */
+  --reseau-tiktok:#f2efea; --reseau-tiktok-fg:#1f1e1c;
+  --reseau-claude:#332b25; --reseau-claude-fg:#d97757;
 }
 
 /* ---------- 4 · FACULTATIF — LA FORME ----------

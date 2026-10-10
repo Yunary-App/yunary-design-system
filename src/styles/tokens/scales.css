@@ -119,8 +119,13 @@
   --sidenav-h:2.75rem;            /* 44 — .ds-sidenav */
   --modal-w:23.75rem;             /* 380 — .ds-modal. Ignoré sous 64rem : la modale y est
                                      une feuille en width:100%. */
-  --modal-w-lg:32.5rem;           /* 520 — .ds-modal--lg, la modale à formulaire ou à contenu
-                                     riche. Même sort sous 64rem. */
+  /* v0.6.0 — les trois largeurs des maquettes (480 / 560 / 600) : la modale d'activation, le
+     choix d'un nouveau contenu, la fenêtre à formulaire. --modal-w (380) reste la confirmation. */
+  --modal-w-lg:30rem;             /* 480 — .ds-modal--lg (était 520) */
+  --modal-w-xl:35rem;             /* 560 — .ds-modal--xl */
+  --modal-w-2xl:37.5rem;          /* 600 — .ds-modal--2xl. Même sort sous 64rem. */
+  --topbar-h:4.75rem;             /* 76 — .ds-topbar, la barre d'en-tête d'une fiche (v0.6.0) */
+  --tabs-h-sm:2.25rem;            /* 36 — .ds-tabs--sm (v0.6.0 : la maquette la dessine à 36) */
   --modal-close:2rem;             /* 32 — .ds-modal__close, carré */
   --dropdown-w:14.375rem;         /* 230 — .ds-dropdown */
   --dropdown-item-h:2.75rem;      /* 44 — .ds-dropdown__item : le rail d'un item de menu, au seuil

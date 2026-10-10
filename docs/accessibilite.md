@@ -10,9 +10,9 @@
 > translucides — pilules, plaques de marque — sont **composités sur leur surface porteuse**
 > avant mesure : c'est la couleur que l'œil reçoit, pas celle qui est écrite.
 >
-> **83 paires × 2 thèmes. 55 conformes, 28 écarts assumés.** Un écart assumé n'est pas un
+> **92 paires × 2 thèmes. 60 conformes, 32 écarts assumés.** Un écart assumé n'est pas un
 > oubli : c'est une décision écrite, déclarée dans `src/styles/brand-yunary.css` par un bloc
-> `@a11y-assume:` avec sa raison. Le build tombe si une **vingt-neuvième** apparaît.
+> `@a11y-assume:` avec sa raison. Le build tombe si une **trente-troisième** apparaît.
 
 ---
 
@@ -91,7 +91,12 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 | `.ds-input[readonly] — texte sur --secondary` | 15 / 400 | 4,5 | 5,17 | 6,47 |
 | `.ds-inset--dashed — texte sur --background` | 14 / 400 | 4,5 | 4,91 | 7,51 |
 | `.ds-banner--amber — texte sur --card` | 14 / 400 | 4,5 | 4,99 | 7,13 |
-| `.ds-week__wd — jour sur --muted` | 12 / 700 | 4,5 | 9,37 | 9,85 |
+| `.ds-week__wd — jour sur --accent` | 12 / 700 | 4,5 | 9,51 | 8,82 |
+| `.ds-banner--soft — texte sur --accent` | 14 / 400 | 4,5 | 14,38 | 11,95 |
+| `.ds-note — texte sur --card` | 13 / 400 | 4,5 | 5,12 | 6,47 |
+| `.ds-icon-btn--ghost-danger — glyphe sur --card` | icône | 3 | 6,62 | 6,07 |
+| `.ds-avatar--ring — initiales sur --card` | 14 / 700 | 4,5 | 5,59 | 6,12 |
+| `.ds-pastille--accent — glyphe sur --accent` | icône | 3 | 5,16 | 5,85 |
 | `.ds-week__day.is-today — jour et numéro` | 12 / 700 | 4,5 | 4,54 | 5,04 |
 | `.ds-agenda__cell.is-outside — numéro sur --muted` | 13 / 600 | 4,5 | 4,65 | 6,91 |
 | `.ds-media__badge — durée sur la vidéo` | 11 / 600 | 4,5 | 14,94 | 14,94 |
@@ -124,7 +129,7 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 
 ## 3. Les écarts assumés
 
-28 paires, en six familles. Chacune est déclarée dans `src/styles/brand-yunary.css` par un
+32 paires, en six familles. Chacune est déclarée dans `src/styles/brand-yunary.css` par un
 bloc `@a11y-assume:`. Le script porte la mécanique, **la marque porte ses renoncements** : une
 autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dérogation.
 
@@ -143,6 +148,10 @@ autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dér
 | `.ds-pastille--brand-solid — glyphe sur --brand-via` | icône | 3 | 2,68 ✗ | 2,68 ✗ |
 | `.ds-step en cours — chiffre sur --brand-from (pire arrêt)` | 13 / 700 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-agenda__cell.is-today — numéro sur --brand-from (pire arrêt)` | 13 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
+| `.ds-week__num — numéro en dégradé sur --accent` | 29 / 800 | 3 | 1,76 ✗ | 6,72 |
+| `.ds-week__day.is-today — numéro sur --brand-from (pire arrêt)` | 22 / 800 | 4,5 | 2,04 ✗ | 2,04 ✗ |
+| `.ds-media--brand — glyphe sur --brand-from (pire arrêt)` | icône | 3 | 2,04 ✗ | 2,04 ✗ |
+| `.ds-media__play — glyphe sur le disque` | icône | 3 | 2,79 ✗ | 2,79 ✗ |
 | `.ds-badge--brand — texte sur --brand-from (pire arrêt)` | 12 / 700 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-price--accent — montant sur --brand-from (pire arrêt)` | 36 / 800 | 3 | 1,91 ✗ | 7,03 |
 | `.ds-btn--primary — label sur --primary à plat` | 15 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
@@ -159,14 +168,15 @@ autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dér
 | `.ds-card — bordure --border vs page` | contour 1px | 3 | 1,17 ✗ | 1,44 ✗ |
 | `.ds-sep — filet --border sur --card` | filet 1px | 3 | 1,22 ✗ | 1,24 ✗ |
 
-### 3.1 · La signature CTA — le label blanc sur le dégradé chaud · 12 paires
+### 3.1 · La signature CTA — le label blanc sur le dégradé chaud · 15 paires
 
 **L'écart.** Le CTA primaire porte `--brand-gradient`, ambre → orange → corail. Le label blanc
 mesure **2,04** sur l'arrêt jaune, **2,68** sur l'orange, **3,80** sur le corail, **3,48** sur
 l'aplat `--primary`. La pastille pleine, le jour sélectionné du calendrier, le repère de l'étape en cours et le
 numéro du jour d'aujourd'hui dans l'agenda (v0.4.0), le badge de marque (« À connecter ») et le
-montant d'une offre en dégradé clippé (v0.5.0, la maquette fait foi) portent le même dégradé, le
-bouton danger le même corail. Le chiffre d'une étape ou d'un jour est redondant : la place, le libellé en
+montant d'une offre en dégradé clippé (v0.5.0), le numéro du jour de l'agenda semaine et sa plaque
+d'aujourd'hui, la vignette d'un contenu sans vidéo (v0.6.0, la maquette fait foi) portent le même
+dégradé, le bouton danger le même corail. Le chiffre d'une étape ou d'un jour est redondant : la place, le libellé en
 gras et `aria-current` disent l'état.
 
 **Pourquoi il est assumé.** C'est la signature de la marque, et l'alternative a été mesurée :
@@ -196,7 +206,7 @@ plus halo de 3 px sur les champs, `outline` 2 px avec offset ailleurs. En sombre
 `--brand-from` et tient **8,16**. Le repli existe si l'écart déplaît un jour : `--brand-to`
 `#e84c3d`, qui mesure 3,40.
 
-### 3.4 · Les deux marqueurs en `--primary` — `2,85` et `3,25` · 2 paires
+### 3.4 · Les trois marqueurs en `--primary` — `2,85` et `3,25` · 3 paires
 
 **L'écart.** `.ds-pastille--brand` pose le glyphe en `--primary` sur `--pill-coral-bg`
 (**2,85** en clair pour un seuil de 3 · 3,58 en sombre, tenu), et `.ds-cal__day.is-today` pose

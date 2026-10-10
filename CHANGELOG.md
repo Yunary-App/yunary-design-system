@@ -14,6 +14,76 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.6.0 — la maquette fait foi, seconde moitié : dépôt, média, agenda, rangées, fiches, avatars, réseaux
+
+Les points 12 à 20 de l'arbitrage du 10/10/2026, les sept compléments de la liste du hub
+(`apps/hub/docs/ecarts-maquettes-2026-10-10.md`, « Composants manquants ») et trois précisions de
+Julien (le ton doux des encarts, les cadres de miniature en sombre, « La suite » et `StepCard` en une
+seule brique). Un composant nouveau, `Reseau` (38 composants) ; quatre glyphes (60).
+
+- **Rendus qui bougent chez les consommateurs** (à relire à la montée de version) :
+  - `Avatar` est réécrit : `size` nommé (défaut `heros`), `halo` à `false` par défaut, classes
+    `.ds-avatar*` à la place des styles inline. Hub : `AccountCard`, `InfosTab`, `ComptesConnectes`,
+    `AccountFoundCard` / `AccountPhoto` ; mcp-ui : `CreatorAvatar`.
+  - `EmptyState` : la pastille par défaut devient ronde et neutre (était `panneau brand outlined`).
+  - `.ds-week__date` passe sur `--accent` et son numéro en dégradé (était `--muted`, encre).
+  - `.ds-agenda__cell.is-outside` n'est plus grisé.
+  - `.ds-media__play` devient un disque clair (était un glyphe nu).
+  - `.ds-tabs` défile quand elle est trop étroite ; `--sm` passe à 36 px.
+  - `Modal` : `lg` passe de 520 à 480 ; gap interne 20 (était 24) ; le pied passe à la ligne.
+  - `.ds-btn--danger-soft` et `.ds-icon-btn--danger-soft` portent un filet.
+  - `.ds-input.is-error` porte un anneau ; `.ds-error` passe en graisse normale, gap 5, icône 0,875.
+  - `--card-pad` : rien de plus (réglé en 0.5.0).
+- **12 · Dépôt** : `Dropzone variant="compact"` + `linkLabel` (`.ds-dropzone--compact`,
+  `.ds-dropzone__link`), `.ds-upload--bare`, rayon md dans un écran ; un fichier refusé remplace la
+  zone (doc), pas de « Pause ». Hub : la zone de dépôt de la fiche (`VideoSection`), la modale
+  « J'ai déjà ma vidéo » ; mcp-ui : le dépôt et l'envoi de Programmation.
+- **13 · Média** : `.ds-media__play` en disque (`--sm`), `.ds-media--brand`, `.ds-media--wide` +
+  `__title` + `__note`, cadres `.ds-frame` détourés en sombre. Hub : `VideoSection`,
+  `MiniatureSection`, `Calendrier`, `ListeContenus` ; mcp-ui : les vignettes d'Analyse, de Métriques
+  et de Programmation (un seul dessin).
+- **14 · Agenda** : `.ds-week__date` sur `--accent`, `__num` en dégradé, aujourd'hui en plaque 36,
+  `.ds-week__note` (+ `--danger`), `.ds-agenda__bar` (+ `__nav`, `__title`, `__legend`),
+  `.ds-agenda--tiles` (+ `__day-label`, `__marks`), hors mois non grisé. Hub : `Calendrier` ; mcp-ui :
+  la semaine et le mois de Programmation, la bande du récapitulatif.
+- **15 · Rangées** : `.ds-rows` / `.ds-row` (+ `--lg`, `--plate`, `--danger`, `.is-editing`, `__lead`,
+  `__main`, `__title`, `__meta`, `__value`, `__end`, `__actions`, `__chevron`), `.ds-settings` /
+  `.ds-setting` (+ `--end`, `__label`, `__title`, `__help`, `__control`), `tr.is-danger`. Hub :
+  `ComptesConnectes`, `SettingRow` (Paramètres), `RuleRow` (Mes règles), `ListeContenus` (la ligne en
+  échec), `SubscriptionResultView`, `DocumentsCard` ; mcp-ui : les lignes de compte, de contenu et de
+  confirmation, « La suite », la meilleure vidéo de Métriques.
+- **16 · États vides** : `EmptyState` à pastille ronde neutre, `compact` (`.ds-empty--compact`),
+  cadre plein sur `--card` dans un écran. Hub : l'état vide de Mes contenus, « Textes pas encore
+  écrits » ; mcp-ui : les panneaux d'erreur d'Analyse, « Aucun compte connecté » de Métriques.
+- **17 · Têtes de section et barre** : `.ds-card__band` (+ `.ds-card__num`, `__band-meta`, `--muted`,
+  `--bleed`), `.ds-topbar` (+ `__main`, `__row`, `__title`, `__meta`, `__end`, `__end--mobile`, jeton
+  `--topbar-h`), `.eyebrow--muted`, `.ds-etapes` / `.ds-etape` (+ `--compact`, `__lead`, `__title`,
+  `__text`). Hub : `SectionFiche`, `TextesSection` (la bande réseau), `FicheHeader` / `PageHeader`,
+  `SuiteDansClaudeCard`, les cartes 1 · 2 · 3 de Hub-05 ; mcp-ui : « La suite » de Script, le sur-titre
+  de Confirmation.
+- **18 · Onglets, modales, danger** : `.ds-tabs` défile, `--sm` à 36 (`--tabs-h-sm`) ; `Modal size`
+  `lg·xl·2xl` (480 / 560 / 600, jetons `--modal-w-lg/-xl/-2xl`), `subtitle`
+  (`.ds-modal__head-main`, `__subtitle`), gap 20, pied en `flex-wrap` ; danger doux à filet,
+  `IconButton variant="ghost-danger"`. Hub : `ParametresLayout` (ses onglets), `NouveauContenuModal`,
+  `PaymentModal`, `SubscriptionModals`, `Fenetres`, l'en-tête de fiche (corbeille) ; mcp-ui : rien.
+- **19 · Avatars, chiffres, champs** : `Avatar` (`size` nommé, `tone` muted / neutral / brand, `ring`,
+  `badge`, `surface`, `halo` opt-in), `.ds-stats` / `.ds-stat`, `Pastille tone="accent"`, `Input
+  prefix` (`.ds-input-unit__prefix`), anneau du champ invalide, `.ds-error` à la maquette + `.ds-note`,
+  `.ds-meter--center`, `.ds-sidebar__account`, `.ds-appbar` (slot `appbar` d'`AppShell`). Hub :
+  `AccountCard`, `HubSidebar`, `HubLayout` (la barre haute), `ToiPage` (le « @ »), `AccountFoundCard`,
+  `ToiVerif`, la jauge « non évaluable » ; mcp-ui : `CreatorAvatar`, les tuiles de métrique.
+- **20 · Réseaux et glyphes** : `Reseau` (Instagram, TikTok, YouTube, Claude ; `xs·sm·md·lg·xl` ;
+  jetons `--reseau-*` dans la marque ET le gabarit, jumeaux sombres de TikTok et de Claude),
+  `.ds-reseaux` ; glyphes `users`, `heart`, `share`, `bookmark`. Hub : `ReseauMark`, `PlatformGlyphs`,
+  `ClaudeMark`, `YunaryClaudeLockup` (les couleurs de tiers sortent du hub) ; mcp-ui : `ReseauTile`.
+- **Précisions** : `Banner tone="soft"` (crème rosée, texte à l'encre) ; `.dark .ds-frame` détouré ;
+  `.ds-etapes` sert les deux maquettes.
+- **Contraste** : 9 paires de plus, 92 au total ; quatre écarts assumés de plus (32) : le numéro du
+  jour en dégradé et aujourd'hui sur sa plaque, la vignette dégradée, le glyphe de lecture sur son
+  disque.
+- **Vitrine** : une page « Fiches et rangées » montre chaque motif en clair, en sombre et à 390 px.
+- **Backlog** : le mode photo d'`Avatar`, le préfixe d'`Input` et le pied de `Modal` en sortent.
+
 ## 0.5.0 — la maquette fait foi, première moitié : offre, compteurs, badges, étapes, coque d'écran
 
 L'audit du ds 0.4.0 face aux maquettes retouchées le 10/10/2026 (Outils, Onboarding, Script et

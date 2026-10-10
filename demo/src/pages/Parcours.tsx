@@ -255,7 +255,7 @@ export function ParcoursPage() {
                 <span className="ds-file__main"><span className="ds-file__name">routine-montage-v3.mp4</span><span className="ds-file__meta">312 Mo sur 486 Mo · environ 1 min</span></span>
               </div>
               <Progress value={64} label="Envoi de la vidéo" />
-              <div className="ds-upload__foot"><span>Si la connexion coupe, l'envoi reprend où il s'est arrêté.</span><Button variant="ghost" size="sm" icon={<Icon name="pause" />}>Pause</Button></div>
+              <div className="ds-upload__foot"><span>Si la connexion coupe, l'envoi reprend où il s'est arrêté.</span><Button variant="ghost" size="sm">Annuler l'envoi</Button></div>
             </div>
           </Block>
           <Block label="Interrompu (.is-interrupted)">

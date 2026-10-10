@@ -31,6 +31,8 @@ export interface ModalProps {
   /** Tile tint: danger (default) · brand · neutral · warning · success. */
   iconVariant?: 'danger' | 'brand' | 'neutral' | 'warning' | 'success';
   title?: ReactNode;
+  /** Le sous-titre DANS la tête (v0.6.0) : une ligne en sourdine sous le titre, sur la rangée de la croix. `description` reste le corps. */
+  subtitle?: ReactNode;
   description?: ReactNode;
   footer?: ReactNode;
   /** Ignored while phase="loading": Escape, scrim click and the close button are all inert. */
@@ -52,11 +54,12 @@ export interface ModalProps {
   /** Render the panel without the fixed scrim — for specimen cards. */
   inline?: boolean;
   /**
-   * md (défaut) = --modal-w, 23,75 rem : la confirmation, le résultat. lg = --modal-w-lg,
-   * 32,5 rem : la modale à FORMULAIRE ou à contenu riche (un paiement, une résiliation). Sans
-   * effet sous 64 rem, où les deux sont une feuille en pleine largeur.
+   * md (défaut) = --modal-w, 380 : la confirmation, le résultat. Les trois largeurs des maquettes
+   * (v0.6.0) : lg = 480 (l'activation d'un outil), xl = 560 (le choix d'un nouveau contenu), 2xl = 600
+   * (la fenêtre à formulaire ou à contenu riche). Sans effet sous 64 rem, où toutes sont une feuille en
+   * pleine largeur.
    */
-  size?: 'md' | 'lg';
+  size?: 'md' | 'lg' | 'xl' | '2xl';
   className?: string;
   children?: ReactNode;
 }
@@ -67,7 +70,7 @@ const TILE_TONE: Record<string, TileTone> = {
 };
 
 export function Modal({
-  open = true, icon, iconVariant = 'danger', title, description, footer,
+  open = true, icon, iconVariant = 'danger', title, subtitle, description, footer,
   onClose, closeButton = true, dismissable = true, inline = false, size = 'md',
   phase = 'confirm', result, className = '', children,
 }: ModalProps): JSX.Element | null {
@@ -103,7 +106,7 @@ export function Modal({
   const panel = (
     <div
       ref={panelRef}
-      className={cn('ds-modal', size === 'lg' && 'ds-modal--lg', className)}
+      className={cn('ds-modal', size !== 'md' && `ds-modal--${size}`, className)}
       role="dialog"
       aria-modal="true"
       aria-busy={locked || undefined}
@@ -147,11 +150,20 @@ export function Modal({
             </div>
           ) : (title || closeBtn) ? (
             <div className="ds-modal__head ds-modal__head--inline">
-              {title ? <h3 className="ds-modal__title">{title}</h3> : null}
+              {subtitle ? (
+                <div className="ds-modal__head-main">
+                  {title ? <h3 className="ds-modal__title">{title}</h3> : null}
+                  <p className="ds-modal__subtitle">{subtitle}</p>
+                </div>
+              ) : title ? <h3 className="ds-modal__title">{title}</h3> : null}
               {closeBtn}
             </div>
           ) : null}
-          {icon && title ? <h3 className="ds-modal__title">{title}</h3> : null}
+          {icon && title ? (
+            subtitle ? (
+              <div className="ds-modal__head-main"><h3 className="ds-modal__title">{title}</h3><p className="ds-modal__subtitle">{subtitle}</p></div>
+            ) : <h3 className="ds-modal__title">{title}</h3>
+          ) : null}
           {(description || children) ? (
             <div className="ds-modal__desc">
               {description ? <p className="ds-modal__text">{description}</p> : null}

@@ -135,17 +135,20 @@ qu'il fait le dit.
 <IconButton label="Boutique" variant="accent" as="a" href="/boutique"><Icon name="external-link" /></IconButton>
 ```
 
-- Props : `variant` (`primary·secondary·ghost·danger·danger-soft·accent`, défaut `ghost`) ·
-  `size` (`sm·md·lg`) · `surface` (`auto·page·card`) · `label` (requis) · `as` / `href`.
+- Props : `variant` (`primary·secondary·ghost·danger·danger-soft·ghost-danger·accent`, défaut
+  `ghost`) · `size` (`sm·md·lg`) · `surface` (`auto·page·card`) · `label` (requis) · `as` / `href`.
 - `surface` a le même rôle et les mêmes valeurs que sur `Button` — voir sa section.
 - **`variant="accent"`** : fond `--accent`, sans bordure, icône `--primary` (le corail) —
   l'état « sélectionné doux » d'un lien-icône ou d'un raccourci. Ne pas le recomposer
   avec `is-active` (une aide de démo) et un style inline : c'est cette fraude que la
   variante remplace.
 - **`variant="danger-soft"`** : la corbeille — fond `--pill-danger-bg`, glyphe
-  `--pill-danger-fg`, sans bordure. Le `danger` plein reste l'action destructrice UNIQUE d'une
-  vue ; à côté de chaque ligne supprimable, c'est le doux.
+  `--pill-danger-fg`, filet 1,5 px à 30 % du rouge (v0.6.0, la maquette fait foi). Le `danger` plein
+  reste l'action destructrice UNIQUE d'une vue ; à côté de chaque ligne supprimable, c'est le doux.
   `<IconButton label="Supprimer" variant="danger-soft"><Icon name="trash-2" /></IconButton>`
+- **`variant="ghost-danger"`** (v0.6.0) : la corbeille NUE — le glyphe seul en `--destructive-readable`,
+  sans fond ni filet, pour le 390 où la plaque n'a plus sa place (la barre d'une fiche). Le survol
+  ramène la plaque douce.
 - **`as="a"` + `href`** : un lien-icône reste un LIEN — clic-milieu, « ouvrir
   dans un onglet », annonce correcte au lecteur d'écran. Jumeau du `as` de `Button`.
 - L'icône ne se dimensionne pas au site d'appel : le créneau s'en charge (sm 1rem ·
@@ -159,20 +162,53 @@ qu'il fait le dit.
 
 ## Avatar
 
-Portrait **détouré** (PNG transparent) avec halo de marque derrière les épaules. Sans
-`src`, il retombe sur un monogramme en sourdine — jamais une image cassée.
+L'avatar d'une personne (v0.6.0, réécrit sur `.ds-avatar*`) : rond, aux tailles des pastilles ; une
+photo en cover, ou des initiales de repli — jamais une image cassée. Sept recettes des maquettes
+(sidebar 36, Infos 64, comptes reliés 32, créatrice analysée à anneau, initiale sur `--secondary`…)
+tiennent dans trois tons, un anneau et une pastille.
 
-**Ne pas l'utiliser** pour une vignette de contenu ou une image pleine : c'est un
-portrait, posé bas, jamais centré derrière un titre.
+**Ne pas l'utiliser** pour une vignette de contenu (c'est `.ds-media`) ni pour un logo de réseau
+(c'est `Reseau`).
 
 ```tsx
-<Avatar src="/portrait-cutout.png" size="4rem" />
-<Avatar size="3rem" halo={false} />
+<Avatar size="carte" initials="JF" tone="brand" alt="Julien Fernandes" />
+<Avatar size="heros" src="/photo.jpg" alt="Julien Fernandes" />
+<Avatar size="dialogue" initials="JC" ring badge={<Reseau name="instagram" size="sm" />} alt="Julien Créateur" />
+<Avatar size="panneau" initials="J" tone="neutral" alt="Julien" />
+<Avatar size="ecran" src="/portrait-cutout.png" halo alt="Julien" />
 ```
 
-- Props : `src` · `alt` · `initials` (monogramme de repli) · `size` (longueur CSS, rem) ·
-  `halo` (défaut `true`).
+- Props : `src` · `alt` · `initials` (une ou deux lettres ; défaut `BRAND_MONOGRAM`) · `size`
+  (`puce` 28 · `carte` 36 · `dialogue` 42 · `panneau` 52 · `heros` 64, défaut · `ecran` 80 ; une
+  longueur rem reste acceptée) · `tone` (`muted`, défaut : en sourdine · `neutral` : sur `--secondary`,
+  à l'encre · `brand` : sur le dégradé, en blanc, face display) · `ring` (anneau de 2 px en dégradé,
+  initiales en `--primary-readable`) · `badge` (une `<Reseau size="xs">` ou `"sm"` selon la taille, en bas à droite, détourée par la
+  surface : `surface="page"` hors d'une carte) · `halo` (défaut `false` désormais — le portrait détouré
+  d'une page le demande, les autres usages non).
 - Les défauts (`alt`, `initials`) viennent de `src/brand.ts`.
+
+## Reseau
+
+LA BRIQUE RÉSEAU (v0.6.0) : la tuile d'Instagram, TikTok, YouTube ou Claude, aux couleurs du TIERS
+(jetons `--reseau-*` du fichier de marque, jumeaux sombres de TikTok et de Claude compris), son glyphe
+dedans. Partagée par le hub et les écrans de Claude : chaque couche dessinait six tailles et cinq
+rayons pour la même tuile, et TikTok disparaissait en sombre. Ce n'est pas une icône d'interface (`Icon`
+n'en porte aucune) : c'est une marque, exempte de la mesure de contraste.
+
+**Ne pas l'utiliser** pour une icône d'interface, ni recomposer une tuile de réseau en `div`.
+
+```tsx
+<Reseau name="instagram" />
+<Reseau name="tiktok" size="xs" />
+<Reseau name="youtube" size="lg" label="YouTube" />
+<Reseau name="claude" size="xl" label="Claude" />
+<span className="ds-reseaux"><Reseau name="instagram" size="xs" /><Reseau name="tiktok" size="xs" /></span>
+```
+
+- Props : `name` (`instagram·tiktok·youtube·claude`) · `size` (`xs` 16 · `sm` 24 · `md` 28, défaut ·
+  `lg` 36 · `xl` 42) · `label` (omis : décorative, le nom s'écrit à côté ; passé, la tuile est seule à
+  le dire, `role="img"`).
+- `.ds-reseaux` : la rangée des réseaux d'un contenu. Claude garde son filet.
 
 ## Halo
 
@@ -342,8 +378,8 @@ en div : c'est exactement ce que ce composant remplace.
 
 - Props : `size` (`coche` 1.5 · `puce` 1.75 · `carte` 2.25 · `dialogue` 2.625 · `panneau` 3.25 ·
   `heros` 4 · `ecran` 5rem — le rayon suit la taille) · `shape` (`square·round`) · `tone` (`brand` ·
-  `brand-solid` + les 6 paires sémantiques + `inverse`) · `outlined` (contour 1px
-  currentColor à 22 %).
+  `brand-solid` + les 6 paires sémantiques + `inverse` + `accent` : la plaque `--accent` et le glyphe
+  en corail lisible, une tuile de métrique, v0.6.0) · `outlined` (contour 1px currentColor à 22 %).
 - **`size="puce"`** : un numéro d'étape (`shape="round"`, le chiffre en body-sm gras), l'état d'une
   ligne, la tête d'un badge. Jamais un rem au site d'appel pour réduire `carte`.
   `<Pastille size="puce" shape="round" tone="coral">2</Pastille>`
@@ -443,15 +479,19 @@ champ (c'est `FormField error`).
 <Banner tone="warning" align="start" title="Ce compte est privé">On ne peut lire que les comptes publics. Passe-le en public le temps de l'audit.</Banner>
 ```
 
-- Props : `tone` (`danger·warning·success·info·amber·neutral`, défaut `info`) · `title` ·
+- Props : `tone` (`danger·warning·success·info·amber·neutral·soft`, défaut `info`) · `title` ·
   `children` (corps) · `action` (contrôle à droite) · `inset` · `icon` · `align` (`center·start`).
+- **`tone="soft"`** (v0.6.0) : l'information en ton DOUX — la plaque crème rosée (`--accent`), le texte
+  à l'encre, l'icône en sourdine (« Pas d'audit, pas de souci. », « Tes 20 dernières vidéos ont aussi
+  été analysées »). Jamais l'orange `warning` pour une information.
 - **`inset`** : l'encart d'information posé DANS une carte, entre deux blocs — rayon md, plus
   serré, texte en body-sm ; les tons colorés quittent leur filet, le `neutral` se creuse comme
   un champ (`--secondary` sur la page, `--background` dans une carte ou une modale, `--card` dans
   un écran de Claude). Son `title` est en body gras (v0.5.0).
-- **Les tons doux de l'information** : `info` (la crème rosée `--accent`) pour une précision de
-  marque, `amber` pour une contrainte à connaître sans danger (« TikTok n'accepte qu'un moment »),
-  `neutral` pour une précision. `warning` (l'orange) reste ce qui risque d'échouer.
+- **Les tons de l'information** : `soft` (crème rosée, texte à l'encre) pour une information, `info`
+  (crème rosée, texte corail lisible) pour un message de marque, `amber` pour une contrainte à
+  connaître sans danger (« TikTok n'accepte qu'un moment »), `neutral` pour une précision. `warning`
+  (l'orange) reste ce qui risque d'échouer.
 - **`icon`** remplace le glyphe du ton quand un autre dit mieux le sujet — un glyphe, ou (v0.5.0)
   une `Pastille size="carte"` qui tient la place de l'icône (la tuile « Recharge le 23 octobre »).
   Le bandeau garde TOUJOURS une icône.
@@ -460,9 +500,9 @@ champ (c'est `FormField error`).
 
 ## EmptyState
 
-Emplacement vide en pointillés : tuile `Pastille panneau brand outlined`, titre H4 en face
-display, une description courte, et **le prochain geste**. Toujours donner au lecteur la
-suite.
+Emplacement vide en pointillés : une pastille RONDE et NEUTRE (`panneau · round · neutral`, v0.6.0 —
+la maquette fait foi), titre H4 en face display, une description courte, et **le prochain geste**.
+Toujours donner au lecteur la suite.
 
 **Ne pas l'utiliser** pour une erreur (c'est `Banner` ou `Modal` result), pour un
 chargement (c'est `Skeleton`), ni pour EXPLIQUER un état — l'attente, l'indisponible, le cas
@@ -477,10 +517,14 @@ limite : c'est `StateCard`, une carte pleine, pas un emplacement vide.
 ```
 
 - Props : `icon` (glyphe nu — la Pastille par défaut l'enveloppe) · `tile` (la tuile
-  complète, quand `panneau brand outlined` ne convient pas ; `icon` est alors
-  ignoré) · `title` (requis) · `description` · `action` · `plain`.
+  complète, quand `panneau round neutral` ne convient pas ; `icon` est alors
+  ignoré) · `title` (requis) · `description` · `action` · `plain` · `compact`.
 - **`plain`** : sans cadre pointillé ni fond — l'état vide remplit déjà une section bordée
   (« Textes pas encore écrits » dans une carte).
+- **`compact`** (v0.6.0, `.ds-empty--compact`) : le panneau d'état d'un écran de Claude ou d'une carte
+  (« L'analyse n'a pas abouti », « Aucun compte connecté ») : 20 / 16, gap 14, rayon md, titre
+  heading-sm, une pastille PLEINE danger ou neutre passée par `tile`. Dans un écran de Claude, le cadre
+  devient plein sur `--card`.
 
 ## StateCard
 
@@ -701,14 +745,22 @@ l'envoi, c'est `.ds-upload` (voir « Classes sans composant »), qui REMPLACE la
     <Badge tone="amber" pad="dense">MP4 ou MOV</Badge><Badge tone="amber" pad="dense">3 min maximum</Badge>
   </div>
 </Dropzone>
-<Dropzone invalid title="Dépose ta vidéo ici" actionLabel="Choisir une autre vidéo" onFiles={…} />
+<Dropzone variant="compact" title="Dépose ta vidéo ici" linkLabel="ou choisis un fichier"
+  hint="MP4 ou MOV · 9:16 · 3 min · 500 Mo max" accept="video/*" onFiles={…}
+  tile={<Pastille size="dialogue" shape="round" tone="neutral"><Icon name="upload" /></Pastille>} />
 ```
 
-- Props : `title` (requis) · `dragTitle` · `hint` · `tile` · `actionLabel` (requis) · `accept` ·
-  `multiple` · `disabled` · `invalid` · `onFiles(File[])` (requis) · `children` (les contraintes).
+- Props : `title` (requis) · `dragTitle` · `hint` · `tile` · `actionLabel` · `variant`
+  (`default·compact`) · `linkLabel` · `accept` · `multiple` · `disabled` · `invalid` ·
+  `onFiles(File[])` (requis) · `children` (les contraintes).
+- **Deux dessins, voulus** (v0.6.0) : la zone par défaut (un bouton, des badges — la modale) et la
+  zone COMPACTE (`variant="compact"`, `.ds-dropzone--compact` : le titre en body-sm suivi d'un LIEN
+  `linkLabel` qui ouvre le sélecteur, `.ds-dropzone__link`, les contraintes en caption dans `hint`,
+  pas de bouton — la colonne d'une fiche). Dans un écran de Claude, la zone prend le rayon md.
 - **Le composant ne valide rien** : il rend les fichiers tels quels. Format, durée, poids : l'app
-  contrôle, pose `invalid` et dit POURQUOI à côté (`Banner tone="danger"`), en gardant la
-  contrainte fautive visible (`Badge tone="danger"`).
+  contrôle. **Un fichier refusé fait disparaître la zone** (la maquette) : l'app la REMPLACE par un
+  `Banner tone="danger"` titré (« Ta vidéo dure 4 min 12 s ») et ses actions ; `invalid` reste pour une
+  zone qui doit rester visible. Pas de bouton « Pause » sur l'envoi.
 - L'`<input type="file">` natif reste dans le flux d'accessibilité ; le bouton l'ouvre. Focus
   clavier sur le bouton, l'anneau suit le bouton.
 - La surface se déduit comme un champ : `--secondary` sur la page, `--background` dans une
@@ -739,8 +791,8 @@ l'anatomie.
 ## Input
 
 Champ texte sur le rail de contrôle partagé, bordure 1.5px. Focus = la bordure passe en
-`--ring` — UNE bordure, jamais un anneau en plus. Jamais un pill. `forwardRef` sur
-l'`<input>` natif.
+`--ring` — une bordure seule ; le champ INVALIDE, lui, porte un anneau rouge doux en plus de sa
+bordure (v0.6.0, la maquette fait foi). Jamais un pill. `forwardRef` sur l'`<input>` natif.
 
 **Ne pas l'utiliser** pour du texte multi-lignes (c'est `Textarea`).
 
@@ -750,14 +802,18 @@ l'`<input>` natif.
 <Input invalid defaultValue="pas-un-email" />
 <Input size="lg" placeholder="CTA de héros" />
 <Input unit="kg" inputMode="decimal" placeholder="72" />
+<Input prefix="@" placeholder="julien.crea" />
 <FormField label="E-mail" htmlFor="mail3" help="Sert d'identifiant, ne se change pas.">
   <Input id="mail3" readOnly defaultValue="toi@exemple.com" iconEnd={<Icon name="lock" />} />
 </FormField>
 ```
 
 - Props : `size` (`sm·md·lg`) · `invalid` · `surface` (`page` = fond `--secondary`, posé
-  à même le layout · `card` = fond `--background`, dans une Card) · `unit` · `iconEnd` +
+  à même le layout · `card` = fond `--background`, dans une Card) · `unit` · `iconEnd` · `prefix` +
   attributs natifs (`readOnly` compris).
+- **`prefix`** (v0.6.0) : un ou deux caractères fixes en TÊTE du champ (« @ » d'un identifiant), en
+  sourdine et en gras ; le champ réserve 2,25 rem. Jumeau de `unit`, à gauche ; `aria-hidden`, le
+  libellé le nomme.
 - **`iconEnd`** : un glyphe DANS le champ, à droite, en sourdine, à 1rem (le créneau le
   dimensionne). Décoratif (`aria-hidden`) : le sens — « ne se change pas » — se dit dans le
   libellé ou l'aide du `FormField`. Avec `unit`, l'unité passe à gauche de l'icône.
@@ -849,7 +905,7 @@ vertical uniquement. Même règle de `surface` que l'Input. `forwardRef` sur le
 ## Icon
 
 LE système d'icônes : Lucide, exclusivement. Jamais un emoji, jamais un SVG dessiné à la
-main. 56 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
+main. 60 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
 c'est voulu.
 
 **Ne pas** chercher d'icône de plateforme sociale ici (YouTube, Instagram…) : ce sont des
@@ -872,7 +928,7 @@ enregistrée `inherits: false`, une règle de conteneur est inerte, et c'est vou
 ```
 
 **Ce que le catalogue ne couvre pas se passe en `glyph`.** Lucide compte ~1500 tracés ;
-le catalogue en cure 56 glyphes. Pour le reste, l'app importe le tracé et le socle lui applique
+le catalogue en cure 60 glyphes. Pour le reste, l'app importe le tracé et le socle lui applique
 ses propres règles — même grille, même épaisseur. Plus besoin de publier une version du
 design system pour une icône.
 
@@ -910,8 +966,12 @@ tiroir piloté par `open`/`onClose` de `Sidebar`.
 </AppShell>
 ```
 
-- Props : `sidebar` (un `<Sidebar>`) · `responsive` (défaut `true` ; `false` fige la
+- Props : `sidebar` (un `<Sidebar>`) · `appbar` · `responsive` (défaut `true` ; `false` fige la
   double colonne desktop).
+- **`appbar`** (v0.6.0, `.ds-appbar`) : la barre haute MOBILE, rendue au-dessus du contenu et visible
+  sous 64 rem seulement : le lockup à gauche (`.ds-appbar__brand`), le bouton de menu à droite
+  (`.ds-appbar__end`), sur `--secondary` avec un filet, collée en haut sous la zone système.
+  `appbar={<><span className="ds-appbar__brand"><Logo variant="wordmark" height="1.25rem" /></span><span className="ds-appbar__end"><IconButton label="Menu" onClick={ouvrir}><Icon name="menu" /></IconButton></span></>}`
 
 ## Footer
 
@@ -1010,8 +1070,10 @@ Tabs filtre un contenu en place — ou, en `mode="choice"`, choisit une valeur.
 - Props : `items` (`{value, label, disabled?}[]`) · `value` / `onChange` (contrôlé) · `onCard` ·
   `mode` (`tabs·choice`) · `fullWidth` · `disabled` · `readOnly` (mode `choice`) · `size`
   (`md·sm`).
-- **`size="sm"`** : la barre compacte, sur le rail sm, texte en body-sm — le filtre posé dans
-  une carte d'écran (« Tous · Brouillon · Programmé · Publié »).
+- **La barre DÉFILE** quand elle est trop étroite pour ses onglets (v0.6.0 : Paramètres à 390), sans
+  rien poser au site d'appel. `fullWidth` partage la largeur au lieu de défiler.
+- **`size="sm"`** : la barre compacte, à 36 px (`--tabs-h-sm`), texte en body-sm — le filtre posé
+  dans une carte d'écran (« Tous · Brouillon · Programmé · Publié »).
 - **`mode="choice"`** — choisir UNE valeur parmi trois ou quatre (un niveau, un degré), avec
   le rendu de la barre d'onglets. Sémantique d'un groupe de radios : `radiogroup` / `radio` +
   `aria-checked`, un seul arrêt de tabulation (la valeur choisie), `←` `→` `↑` `↓` déplacent
@@ -1060,17 +1122,19 @@ d'actions (c'est `.ds-dropdown`, voir « Classes sans composant »).
 - Props : `open` · `icon` + `iconVariant` (`danger·brand·neutral·warning·success` — la
   tuile est une `Pastille dialogue`) · `title` / `description` / `children` · `footer` ·
   `onClose` · `closeButton` · `dismissable` · `phase` (`confirm·loading·result`) ·
-  `result` (`{status, title?, message?, onRetry?}`) · `size` (`md·lg`) · `inline` (spécimen
-  sans voile).
+  `result` (`{status, title?, message?, onRetry?}`) · `subtitle` · `size` (`md·lg·xl·2xl`) · `inline`
+  (spécimen sans voile).
 - **Sans icône, le titre partage la ligne de la croix**, centré verticalement — seule sur sa
   rangée, la croix ferait tomber le titre 46-56 px sous le bord. Avec une pastille, la rangée pastille +
   croix reste et le titre passe dessous.
-- **`size="lg"`** : 32,5 rem (`--modal-w-lg`), la modale à FORMULAIRE ou à contenu riche (un
-  paiement, une résiliation). `md` (23,75 rem) reste la confirmation et le résultat. Sans effet
-  sous 64 rem.
-- **Rythme interne `--space-5`** : 24 px entre l'en-tête, le texte, les enfants et le pied ; le
-  pied n'a pas de marge propre. Une ligne d'appoint, un champ : des enfants, le gap fait le
-  reste.
+- **Trois largeurs** (v0.6.0, les maquettes) : `lg` 480 (`--modal-w-lg`, l'activation d'un outil),
+  `xl` 560 (`--modal-w-xl`, le choix d'un nouveau contenu), `2xl` 600 (`--modal-w-2xl`, la fenêtre à
+  formulaire ou à contenu riche). `md` (380) reste la confirmation et le résultat. Sans effet sous
+  64 rem.
+- **`subtitle`** (v0.6.0) : une ligne en sourdine sous le titre, DANS la tête, sur la rangée de la
+  croix (`.ds-modal__head-main`, `.ds-modal__subtitle`). `description` reste le corps.
+- **Rythme interne 20 px** (v0.6.0, la maquette) entre l'en-tête, le texte, les enfants et le pied ;
+  le pied n'a pas de marge propre et passe à la ligne quand deux boutons ne tiennent pas (390).
 - **La croix et les gestes de fuite sont découplés** : `closeButton={false}`
   retire la croix en gardant Échap et le clic-voile ; `dismissable={false}` fait
   l'inverse — la croix devient le seul geste de fermeture, pour une modale à saisie
@@ -1467,8 +1531,8 @@ de Claude, le même balisage : `.ds-dropzone` (+ `.is-dragover`, `.is-invalid`, 
 `__main`, `__title`, `__hint`, et l'`<input type="file">` en `.ds-dropzone__input` (masqué à l'œil,
 présent pour le clavier et le lecteur d'écran). Le glisser-déposer est à la charge de l'app.
 
-- Classes : `.ds-dropzone` · `__main` · `__title` · `__hint` · `__input` · `.is-dragover` ·
-  `.is-invalid` · `.is-disabled`.
+- Classes : `.ds-dropzone` · `--compact` · `__main` · `__title` · `__hint` · `__input` · `__link` ·
+  `.is-dragover` · `.is-invalid` · `.is-disabled`.
 
 **Le fichier et l'envoi — `.ds-file`, `.ds-upload`.** `.ds-file` : une rangée — une tuile
 (`Pastille`), le nom en ellipse et sa méta (`__main`, `__name`, `__meta`), les actions à droite
@@ -1486,8 +1550,9 @@ interrompu, le cadre prend le filet d'avertissement et l'action devient « Repre
 </div>
 ```
 
-- Classes : `.ds-file` · `__main` · `__name` · `__meta` · `__actions` · `.ds-upload` · `__foot` ·
-  `.is-paused` · `.is-interrupted`.
+- Classes : `.ds-file` · `__main` · `__name` · `__meta` · `__actions` · `.ds-upload` · `--bare` (v0.6.0 :
+  sans cadre, dans un écran de Claude ; les actions vont dans le pied de la carte, pas de « Pause ») ·
+  `__foot` · `.is-paused` · `.is-interrupted`.
 
 **Le média vertical et la bande d'images — `.ds-media`, `.ds-frames`.** `.ds-media` : un cadre 9:16
 (une vidéo courte, sa vignette) — sa LARGEUR est celle du parent, posée par l'appelant ; fond
@@ -1503,7 +1568,18 @@ chaque `.ds-frame` est un `<label>` qui porte un radio natif ; choisi : contour 
 </div>
 ```
 
-- Classes : `.ds-media` · `__play` · `__badge` · `--unavailable` · `.ds-frames` · `.ds-frame`.
+- Classes : `.ds-media` · `__play` (v0.6.0 : UN dessin — un disque clair de 2,25 rem, le glyphe plein
+  en corail ; `--sm` sur une vignette de 64 px ou moins) · `__badge` · `--brand` (v0.6.0 : pas encore
+  de vidéo — l'aplat du dégradé et le glyphe vidéo) · `--unavailable` · `--wide` (v0.6.0 : le panneau
+  large « Vidéo plus disponible », sans ratio, rayon lg) · `__title` · `__note` · `.ds-frames` ·
+  `.ds-frame` (en sombre, un cadre vide se détoure sur `--surface-alt`).
+
+```html
+<div style="width:4rem"><div class="ds-media ds-media--sm"><img src="…" alt="" /><span class="ds-media__play">…</span><span class="ds-media__badge">00:52</span></div></div>
+<div style="width:4rem"><div class="ds-media ds-media--brand"><!-- <Icon name="video" /> --></div></div>
+<div class="ds-media ds-media--unavailable ds-media--wide"><span class="ds-pastille ds-pastille--panneau ds-pastille--rond ds-pastille--neutral">…</span>
+  <span class="ds-media__title">Vidéo plus disponible</span><span class="ds-media__note">Elle est gardée 30 jours après la publication.</span></div>
+```
 
 **L'agenda — `.ds-agenda` (le mois), `.ds-week` (la semaine).** `.ds-agenda` : sept colonnes, en-têtes
 `__wd`, cases `__cell` (un `<button>` ou un `<a>` se survole et prend le focus) avec leur numéro
@@ -1531,10 +1607,29 @@ d'événements.
 </ol>
 ```
 
-- Classes : `.ds-agenda` · `--compact` · `__head` · `__wd` · `__grid` · `__cell` · `__num` ·
-  `__event` · `__event--amber` · `__event--success` · `__event--danger` · `__event-label` ·
-  `.is-outside` · `.is-today` · `.is-selected` · `.ds-week` · `--compact` · `__day` · `__date` ·
-  `__num` · `__wd` · `__meta` · `__items` · `__item` · `__empty`.
+- Classes : `.ds-agenda` · `--compact` · `--tiles` (v0.6.0 : sept tuiles séparées, rayon sm, gap 4, le
+  jour dans la tuile — la bande d'un récapitulatif dans Claude) · `__bar` (v0.6.0 : la barre au-dessus
+  de l'agenda : `__nav`, `__title`, `__legend`, les onglets) · `__head` · `__wd` · `__grid` · `__cell` ·
+  `__day-label` · `__num` · `__marks` · `__event` · `__event--amber` · `__event--success` ·
+  `__event--danger` · `__event-label` · `.is-outside` (v0.6.0 : plus grisé, seul le numéro est en
+  sourdine) · `.is-today` · `.is-selected` · `.ds-week` · `--compact` · `__day` · `__date` (v0.6.0 :
+  sur `--accent`, le numéro en dégradé — site 10 de la liste de l'accent ; aujourd'hui, le numéro sur
+  une plaque dégradée de 36 px ; dans Claude, le numéro reste en encre) · `__num` · `__wd` · `__meta` ·
+  `__items` · `__item` · `__note` (v0.6.0 : « TikTok à 20:00 », `--danger` pour « compte à
+  reconnecter ») · `__empty`.
+
+```html
+<div class="ds-agenda__bar">
+  <span class="ds-agenda__nav"><button class="ds-icon-btn ds-icon-btn--secondary ds-icon-btn--sm ds-icon-btn--on-card" aria-label="Semaine précédente">…</button>…</span>
+  <h3 class="ds-agenda__title">5 – 11 octobre 2026</h3>
+  <button class="ds-btn ds-btn--ghost ds-btn--sm">Aujourd'hui</button>
+  <span class="ds-agenda__legend"><span class="ds-badge ds-badge--dense ds-badge--amber">Programmé</span>…</span>
+  <div class="ds-tabs ds-tabs--sm" role="tablist">…</div>
+</div>
+<div class="ds-agenda ds-agenda--tiles"><div class="ds-agenda__grid">
+  <span class="ds-agenda__cell is-today"><span class="ds-agenda__day-label">Mar</span><span class="ds-agenda__num">13</span><span class="ds-agenda__marks"><!-- <Reseau size="xs" /> --></span></span>…
+</div></div>
+```
 
 **Les marques de texte — `.ds-mark`, `.ds-snippet`, `.ds-cues`, `.ds-dl`, `.ds-diff`.**
 `<mark class="ds-mark">` surligne un mot à reprendre (un repère à compléter, un mot douteux d'une
@@ -1554,3 +1649,118 @@ et l'après d'une modification, deux badges reliés par `.ds-diff__arrow`.
 
 - Classes : `.ds-mark` · `--success` · `.ds-snippet` · `--mono` · `.ds-cues` · `.ds-cue` · `__time`
   · `__text` · `.ds-dl` · `.ds-diff` · `__arrow`.
+
+---
+
+**Les fiches et les rangées (v0.6.0).** La seconde moitié de l'arbitrage du 10/10 : ce que les fiches,
+les réglages et les listes partagent entre le hub et les écrans de Claude.
+
+**La rangée — `.ds-row`.** Une ligne de liste ou de réglage, séparée de la précédente par un filet
+(`.ds-rows` les empile, la première sans filet) : une tête (`__lead` : une `Reseau`, un `Avatar`, une
+`Pastille`), le titre et sa méta (`__main`, `__title`, `__meta`), une fin (`__end` : une valeur
+`__value`, un badge, un `Switch`) et des actions (`__actions`, poussées à droite). `--lg` : padding
+16 / 0. Trois formes : `--plate` (une plaque bordée, cliquable — « La suite » d'une confirmation, la
+meilleure vidéo ; `.ds-rows--plates` les espace) ; `--danger` (la rangée en échec, sur la plaque
+danger) ; `.is-editing` (la rangée qu'on modifie, relevée sur `--surface-alt`). Un `<a>` ou un
+`<button>` `.ds-row` se survole et prend le focus ; `__chevron` ferme une plaque de navigation.
+
+```html
+<ul class="ds-rows">
+  <li class="ds-row"><span class="ds-row__lead"><!-- <Reseau name="instagram" size="lg" /> --></span>
+    <span class="ds-row__main"><span class="ds-row__title">Instagram</span><span class="ds-row__meta">@julien.fernandes</span></span>
+    <span class="ds-badge ds-badge--dense ds-badge--success">Connecté</span>
+    <span class="ds-row__end"><label class="ds-switch">…</label></span></li>
+  <li class="ds-row ds-row--danger">…<span class="ds-row__end"><button class="ds-btn ds-btn--secondary ds-btn--sm ds-btn--on-card">Reconnecter</button></span></li>
+  <li class="ds-row is-editing"><span class="ds-row__main">…</span><span class="ds-row__actions"><button class="ds-btn ds-btn--ghost ds-btn--xs">Modifier</button>…</span></li>
+</ul>
+<a class="ds-row ds-row--plate" href="…"><span class="ds-row__lead">…</span><span class="ds-row__main"><span class="ds-row__title">Voir le calendrier</span></span><span class="ds-row__chevron">…</span></a>
+```
+
+- Classes : `.ds-rows` · `--plates` · `.ds-row` · `--lg` · `--plate` · `--danger` · `.is-editing` ·
+  `__lead` · `__main` · `__title` · `__meta` · `__value` · `__end` · `__actions` · `__chevron`.
+
+**La ligne de réglage — `.ds-setting`.** Le libellé et son aide à gauche (un quart : `__label`,
+`__title`, `__help`), le contrôle à droite (trois quarts : `__control` ; `--end` l'aligne à droite) ;
+sous 64 rem, le contrôle passe sous le libellé. `.ds-settings` les empile avec un filet.
+
+```html
+<div class="ds-settings">
+  <div class="ds-setting"><div class="ds-setting__label"><span class="ds-setting__title">E-mail</span><span class="ds-setting__help">Celui de ton compte.</span></div>
+    <div class="ds-setting__control"><input class="ds-input" readonly value="…" /></div></div>
+</div>
+```
+
+- Classes : `.ds-settings` · `.ds-setting` · `--end` · `__label` · `__title` · `__help` · `__control`.
+- **La ligne en échec d'une table** : `<tr class="is-danger">` teinte ses cellules en danger.
+
+**La tête de section et la bande — `.ds-card__band`.** Dans une carte flush, la tête d'une section de
+fiche : sur `--accent`, le numéro en dégradé clippé (`.ds-card__num`, 01 à 06 — site 9 de la liste de
+l'accent), le titre (`.ds-card__title`), une précision en sourdine (`__band-meta`, masquée sous 64 rem),
+une action poussée à droite. `--muted` : la bande d'un réseau dans le corps d'une section (une
+`Reseau`, le nom, le @handle, un badge) sur `--muted` avec ses deux filets ; `--bleed` l'étire d'un
+bord à l'autre du padding de la carte.
+
+```html
+<div class="ds-card ds-card--flush">
+  <div class="ds-card__band"><span class="ds-card__num">05</span><h2 class="ds-card__title">Textes de publication</h2>
+    <span class="ds-card__band-meta">Une base commune, une version par réseau</span><button class="ds-btn ds-btn--secondary ds-btn--sm ds-btn--on-card">Écrire avec Claude</button></div>
+  <div class="p-space-5">
+    <div class="ds-card__band ds-card__band--muted ds-card__band--bleed"><!-- <Reseau name="instagram" /> --><h3 class="ds-card__title">Instagram</h3><span class="ds-card__band-meta">@julien.fernandes</span><span class="ds-badge ds-badge--dense ds-badge--coral">Prérempli</span></div>
+    …
+  </div>
+</div>
+```
+
+- Classes : `.ds-card__band` · `--muted` · `--bleed` · `.ds-card__num` · `__band-meta`.
+- **Le sur-titre en sourdine** : `.eyebrow--muted` (« LA SUITE »), SEUL sur son nœud, à la place de
+  `.eyebrow` — la casse et la chasse de l'eyebrow, à l'encre discrète, sans dégradé.
+
+**La barre d'une fiche — `.ds-topbar`.** 76 px (`--topbar-h`) sur `--secondary`, un filet dessous :
+le retour à gauche (`IconButton ghost`), le titre avec son badge (`__main`, `__row`, `__title`) et sa
+méta (`__meta`), les actions à droite (`__end`) ; sous 64 rem, la barre se resserre et
+`__end--mobile` remplace `__end` (la corbeille nue, `IconButton ghost-danger`, à la place de
+« Supprimer »).
+
+```html
+<div class="ds-topbar">
+  <button class="ds-icon-btn ds-icon-btn--ghost" aria-label="Retour">…</button>
+  <div class="ds-topbar__main"><div class="ds-topbar__row"><h1 class="ds-topbar__title">Trois erreurs qui tuent ta rétention</h1><span class="ds-badge ds-badge--dense ds-badge--neutral">Brouillon</span></div>
+    <span class="ds-topbar__meta">Créé le 03/10 depuis Claude</span></div>
+  <div class="ds-topbar__end"><button class="ds-btn ds-btn--danger-soft ds-btn--sm">Supprimer</button></div>
+  <div class="ds-topbar__end ds-topbar__end--mobile"><button class="ds-icon-btn ds-icon-btn--ghost-danger" aria-label="Supprimer">…</button></div>
+</div>
+```
+
+- Classes : `.ds-topbar` · `__main` · `__row` · `__title` · `__meta` · `__end` · `__end--mobile`.
+
+**Les étapes en tuiles — `.ds-etapes`, `.ds-etape`.** « 1 · Clique », « 2 · Autorise », « 3 · Parle à
+Claude » d'une carte feature, et « La suite » d'une fiche Script dans Claude : UNE brique. Une grille
+de tuiles, chacune un numéro ou une pastille (`__lead`), un titre (`__title`), un texte (`__text`).
+Centrée par défaut ; `--compact` : alignée à gauche, deux colonnes, rayon sm (un écran de Claude).
+
+```html
+<ol class="ds-etapes ds-etapes--compact">
+  <li class="ds-etape"><span class="ds-etape__lead"><span class="ds-pastille ds-pastille--puce ds-pastille--rond ds-pastille--coral">1</span></span>
+    <span class="ds-etape__title">Dépose ta vidéo</span><span class="ds-etape__text">Sur Yunary, en un clic.</span></li>
+</ol>
+```
+
+- Classes : `.ds-etapes` · `--compact` · `.ds-etape` · `__lead` · `__title` · `__text`.
+
+**Les chiffres, la note, le compteur centré, la carte du compte, la barre haute.**
+`.ds-stats` / `.ds-stat` (`__value` en face display, `__label` en caption : « 12,4 k · abonnés », le
+compte trouvé de l'onboarding). `.ds-note` : la jumelle NEUTRE de `.ds-error` (icône 0,875 rem +
+caption en sourdine : « TikTok à 20:00 »). `.ds-meter--center` : la jauge d'un état, barre de 20 rem
+et légende centrées. `.ds-sidebar__account` (+ `-main`, `-name`, `-caption`) : dans le pied de la barre
+latérale, l'avatar, le nom et la formule sur une plaque `--accent` ; repliée, l'avatar seul.
+`.ds-appbar` (+ `__brand`, `__end`) : la barre haute mobile, le slot `appbar` d'`AppShell`.
+
+```html
+<div class="ds-stats"><div class="ds-stat"><span class="ds-stat__value">12,4 k</span><span class="ds-stat__label">abonnés</span></div></div>
+<span class="ds-note"><!-- <Icon name="clock" /> -->TikTok à 20:00</span>
+<a class="ds-sidebar__account" href="/parametres"><!-- <Avatar size="carte" tone="brand" /> --><span class="ds-sidebar__account-main"><span class="ds-sidebar__account-name">Julien Fernandes</span><span class="ds-sidebar__account-caption">1 abonnement · 2 outils</span></span></a>
+```
+
+- Classes : `.ds-stats` · `.ds-stat` · `__value` · `__label` · `.ds-note` · `.ds-meter--center` ·
+  `.ds-sidebar__account` · `.ds-sidebar__account-main` · `.ds-sidebar__account-name` ·
+  `.ds-sidebar__account-caption` · `.ds-appbar` · `.ds-appbar__brand` · `.ds-appbar__end`.

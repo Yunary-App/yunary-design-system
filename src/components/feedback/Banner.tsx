@@ -8,8 +8,12 @@ import { Icon, type IconName } from '../icons/Icon';
  * sans filet sur les tons colorés ; le neutre se creuse comme un champ.
  */
 export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
-  /** `amber` : une contrainte à connaître, sans danger · `neutral` : une précision (v0.4.0). */
-  tone?: 'danger' | 'warning' | 'success' | 'info' | 'amber' | 'neutral';
+  /**
+   * `amber` : une contrainte à connaître, sans danger · `neutral` : une précision (v0.4.0) ·
+   * `soft` (v0.6.0) : l'information en ton doux — la plaque crème rosée, le texte à l'encre, l'icône en
+   * sourdine (`info` garde le texte corail du message de marque, `warning` l'orange de ce qui risque d'échouer).
+   */
+  tone?: 'danger' | 'warning' | 'success' | 'info' | 'amber' | 'neutral' | 'soft';
   title?: ReactNode;
   action?: ReactNode;
   /** L'encart d'information dans une carte (v0.4.0). */
@@ -26,7 +30,7 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
 
 const BANNER_ICONS: Record<string, IconName> = {
   danger: 'triangle-alert', warning: 'triangle-alert', success: 'circle-check', info: 'info',
-  amber: 'triangle-alert', neutral: 'info',
+  amber: 'triangle-alert', neutral: 'info', soft: 'info',
 };
 
 const banner = cva('ds-banner', {
@@ -37,6 +41,7 @@ const banner = cva('ds-banner', {
       success: 'ds-banner--success',
       info: 'ds-banner--info',
       amber: 'ds-banner--amber',
+      soft: 'ds-banner--soft',
       neutral: '',
     },
     inset: { true: 'ds-banner--inset', false: '' },

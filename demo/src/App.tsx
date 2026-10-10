@@ -20,6 +20,7 @@ import { NavigationPage } from './pages/Navigation';
 import { BrandPage } from './pages/Brand';
 import { ParcoursPage } from './pages/Parcours';
 import { OutilsPage } from './pages/Outils';
+import { FichesPage } from './pages/Fiches';
 
 const PAGES = [
   { value: 'brand', label: 'Marque', render: () => <BrandPage /> },
@@ -33,6 +34,7 @@ const PAGES = [
   { value: 'navigation', label: 'Navigation', render: () => <NavigationPage /> },
   { value: 'parcours', label: 'Parcours', render: () => <ParcoursPage /> },
   { value: 'outils', label: 'Outils et écrans', render: () => <OutilsPage /> },
+  { value: 'fiches', label: 'Fiches et rangées', render: () => <FichesPage /> },
 ];
 
 const THEMES = [

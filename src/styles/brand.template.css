@@ -191,9 +191,19 @@
   --shadow-glow-lg:;   /* CTA primaire survolé */
   --shadow-glow-sm:;   /* CTA primaire enfoncé */
   --shadow-logo-dot:;  /* la pastille du logo */
+
+  /* Marques TIERCES — la brique `Reseau` (v0.6.0) dessine les réseaux et Claude avec LEURS
+     couleurs : tuile (`--reseau-x`, un aplat ou un dégradé, @kind color) et glyphe
+     (`--reseau-x-fg`). Elles ne sont pas celles de la marque, mais une couleur ne vit qu'ici.
+     Les logos sont exempts de la mesure de contraste. */
+  --reseau-instagram:;  /* @kind color */
+  --reseau-instagram-fg:;
+  --reseau-tiktok:; --reseau-tiktok-fg:;
+  --reseau-youtube:; --reseau-youtube-fg:;
+  --reseau-claude:; --reseau-claude-fg:;
 }
 
-/* Les 32 jetons dont la valeur DÉPEND DU THÈME. Les 22 autres n'en dépendent pas et ne
+/* Les 36 jetons dont la valeur DÉPEND DU THÈME. Les 26 autres n'en dépendent pas et ne
    se répètent pas ici.
 
    PIÈGE À CONNAÎTRE — la substitution figée. Un jeton dont la valeur contient var(Y) est
@@ -225,6 +235,9 @@
   --pill-warning-fg:;
   --pill-success-fg:;
   --pill-neutral-fg:;
+  /* Les jumeaux sombres des tuiles tierces qui disparaîtraient sur une surface d'encre. */
+  --reseau-tiktok:; --reseau-tiktok-fg:;
+  --reseau-claude:; --reseau-claude-fg:;
 }
 
 /* @section:facultatif — TOUT CE QUI SUIT EST OPTIONNEL. Marqueur lu par check-contract.mjs :
