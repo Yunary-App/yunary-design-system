@@ -184,7 +184,8 @@ tiennent dans trois tons, un anneau et une pastille.
   à l'encre · `brand` : sur le dégradé, en blanc, face display) · `ring` (anneau de 2 px en dégradé,
   initiales en `--primary-readable`) · `badge` (une `<Reseau size="xs">` ou `"sm"` selon la taille, en bas à droite, détourée par la
   surface : `surface="page"` hors d'une carte) · `halo` (défaut `false` désormais — le portrait détouré
-  d'une page le demande, les autres usages non).
+  d'une page le demande, les autres usages non) · `referrerPolicy` (v0.6.2, passé tel quel à l'`<img>` :
+  `"no-referrer"` pour la photo d'un CDN qui l'exige ; plus besoin de poser l'image soi-même dans la coque).
 - Les défauts (`alt`, `initials`) viennent de `src/brand.ts`.
 
 ## Reseau
@@ -337,7 +338,12 @@ poser une grille de cartes avec un gap sous 1.5rem (la pile de cartes d'outil, `
 - **`upcoming`** (v0.5.0, `.is-upcoming`) : l'outil annoncé — la carte s'estompe (.7) et perd son
   ombre ; l'app désactive ses contrôles.
 - **`foot`** (v0.5.0, `.ds-card__foot`) : un filet haut, une phrase en sourdine à gauche, une action
-  à droite qui passe dessous à 390. Le pied d'un écran de Claude comme celui d'une plaque.
+  à droite qui passe dessous à 390. Le pied d'un écran de Claude comme celui d'une plaque. Plusieurs
+  boutons vont dans **`.ds-card__foot-actions`** (0.6.2) : le groupe est poussé à droite, la gouttière
+  entre eux, et il reste aligné à droite quand il passe dessous. Dans la coque
+  (`variant="screen"`), les boutons **md** du pied serrent leur rembourrage à 16 de côté au lieu de 22 :
+  trois actions sur une ligne à 680, la maquette des écrans ; sm, xs et lg ne bougent pas, et rien ne
+  change hors de la coque — porté par `.ds-card--screen`, rien à écrire au site d'appel.
 - **`variant="plaque"`** (v0.5.0) : la carte feature posée DANS une carte (la carte d'offre de
   Comptes connectés, l'encart « Depuis Claude ») : sans ombre ni padding, l'en-tête et le contenu
   dans `.ds-card__body` (20 / 24), le pied sur un lavis `--card` à 60 % sous le filet de marque.

@@ -14,6 +14,30 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.6.2 — `Avatar referrerPolicy`, pied d'écran à trois boutons
+
+Deux ajouts demandés par les consommateurs, le 11/10/2026. Une classe nouvelle, `.ds-card__foot-actions`.
+
+- **`Avatar referrerPolicy`** : passé tel quel à l'`<img>`. Le hub affiche des photos de CDN qui exigent
+  `no-referrer` et posait l'image lui-même dans la coque `.ds-avatar` pour contourner : il écrit
+  désormais `<Avatar src={…} referrerPolicy="no-referrer" />`.
+- **Le pied d'un écran de Claude serre ses boutons.** Dans la coque, les boutons **md** de
+  `.ds-card__foot` prennent un rembourrage horizontal de 16 au lieu de 22 : trois actions tiennent sur
+  une ligne à 680, la maquette des écrans. Une règle de coque,
+  `.ds-card--screen .ds-card__foot .ds-btn:where(:not(.ds-btn--sm,.ds-btn--xs,.ds-btn--lg))`, rien à écrire
+  au site d'appel ; sm, xs et lg gardent leur cran, les boutons hors de la coque ne bougent pas. Plusieurs
+  boutons vont dans **`.ds-card__foot-actions`** (classe nouvelle) : le groupe poussé à droite, la
+  gouttière entre eux, aligné à droite quand il passe dessous — avant, chaque bouton nu poussait et ils
+  s'écartaient.
+- **Vitrine.** « Outils et écrans » : un écran au pied à trois boutons, en clair et en sombre ; « Fiches et
+  rangées » : un avatar photo avec `referrerPolicy`.
+- **Migration.** **Hub** : `AccountPhoto` disparaît au profit de `<Avatar src referrerPolicy="no-referrer" />`.
+  **mcp-ui** : retirer `.y-foot__actions > .ds-btn:not(.ds-btn--sm) { padding-inline: 1rem }` de
+  `components.css` ; `.y-foot__actions` devient `.ds-card__foot-actions` quand les actions vont à droite
+  (`--start` et `--col` restent à mcp-ui).
+
+---
+
 ## 0.6.1 — la coque gagne dans son périmètre, les grilles cèdent une colonne
 
 Deux corrections remontées par mcp-ui et le hub, le 11/10/2026. Aucun nom nouveau pour les

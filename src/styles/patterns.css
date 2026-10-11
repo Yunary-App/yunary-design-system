@@ -78,6 +78,9 @@
 .ds-card--screen .ds-tile{background:var(--card);border-width:1px}
 .ds-card--screen .ds-tile--panel:not(.is-checked,[aria-pressed="true"]):not(:has(.ds-choice input:checked)){background:var(--card)}
 .ds-card--screen .ds-tile:is(:has(input:checked),.is-checked,[aria-pressed="true"]),.ds-card--screen .ds-tile--panel:is(:has(.ds-choice input:checked),.is-checked){background:var(--background);border-width:1.5px;border-color:var(--primary);box-shadow:none}
+/* Le pied d'un écran serre ses boutons md à 16 de côté (22 ailleurs) : trois actions tiennent sur une
+   ligne à 680, la maquette des écrans de Claude (0.6.2). Les crans sm, xs et lg gardent le leur. */
+.ds-card--screen .ds-card__foot .ds-btn:where(:not(.ds-btn--sm,.ds-btn--xs,.ds-btn--lg)){padding-inline:1rem}
 /* Les grilles serrent leur gouttière dans un écran : avantages 10 / 20, compteurs 16. */
 .ds-card--screen .ds-perks{--perks-col-gap:1.25rem}
 .ds-card--screen .ds-meters{gap:var(--space-4)}
@@ -535,6 +538,10 @@ div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
    2 » » + « Ouvrir dans Yunary ») comme celui d'une plaque d'offre. */
 .ds-card__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-2) var(--space-3);padding-top:0.875rem;border-top:1px solid var(--border);font-size:var(--text-caption);color:var(--text-muted)}
 .ds-card__foot>.ds-btn{margin-left:auto}
+/* PLUSIEURS BOUTONS — `.ds-card__foot-actions`, 0.6.2 : le groupe d'actions d'un pied (trois boutons à 680 dans
+   un écran de Claude), poussé à droite, la gouttière entre eux, et qui reste aligné à droite quand il
+   passe dessous. Un bouton seul se pose nu dans le pied. */
+.ds-card__foot-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:var(--space-2);margin-left:auto}
 /* LA PLAQUE — `.ds-card--plaque`, v0.5.0 : la carte feature posée DANS une carte (la carte d'offre de
    Comptes connectés, l'encart « Depuis Claude ») : sans ombre ni --card-pad, le corps dans
    `.ds-card__body` (20 / 24), le pied dans `.ds-card__foot` (14 / 24) sur un lavis --card à 60 % et

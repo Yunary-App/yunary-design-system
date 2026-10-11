@@ -344,6 +344,7 @@ export function FichesPage() {
               <div className="flex flex-wrap items-end gap-space-4">
                 <Avatar size="puce" initials="JF" tone="brand" alt="Julien Fernandes" />
                 <Avatar size="carte" initials="JF" tone="brand" alt="Julien Fernandes" />
+                <Avatar size="carte" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' fill='%23d97757'/%3E%3C/svg%3E" referrerPolicy="no-referrer" alt="Photo d'un CDN (referrerPolicy no-referrer)" />
                 <Avatar size="dialogue" initials="JC" ring badge={<Reseau name="instagram" size="xs" />} alt="Julien Créateur" />
                 <Avatar size="panneau" initials="J" tone="neutral" alt="Julien" />
                 <Avatar size="heros" initials="JF" tone="brand" alt="Julien Fernandes" />

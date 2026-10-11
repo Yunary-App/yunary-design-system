@@ -166,6 +166,17 @@ function EcranClaude({ dark = false }: { dark?: boolean }) {
   );
 }
 
+function PiedTrois({ dark = false }: { dark?: boolean }) {
+  return (
+    <div className={dark ? 'dark rounded-xl bg-background p-space-4' : 'rounded-xl bg-secondary p-space-4'} style={{ maxWidth: '42.5rem' }}>
+      <Card variant="screen" icon={<Lockup />} title="Yunary Script" action={<span className="ds-help">Deux idées</span>}
+        foot={<><span>Dis laquelle tu gardes.</span><span className="ds-card__foot-actions"><Button variant="secondary">Reprendre le hook 1</Button><Button variant="secondary">Changer l'accroche</Button><Button>Garder cette version</Button></span></>}>
+        <p className="text-body-sm">Deux idées de hook, prêtes à tourner. Dis laquelle tu gardes, ou demande une troisième.</p>
+      </Card>
+    </div>
+  );
+}
+
 export function OutilsPage() {
   const [reseau, setReseau] = useState('instagram');
   const [filtres, setFiltres] = useState(['@julien.crea', '15 derniers jours']);
@@ -327,6 +338,12 @@ export function OutilsPage() {
           <Block label="Clair"><EcranClaude /></Block>
           <Block label="Sombre (forcé, même quand la vitrine est claire)"><EcranClaude dark /></Block>
         </Grid>
+      </Section>
+      <Section title="Le pied d'un écran à trois boutons" note="Dans la coque, les boutons md du pied (.ds-card__foot) serrent leur rembourrage à 16 de côté : trois actions sur une ligne à 680 (0.6.2). Les crans sm, xs et lg ne bougent pas, les boutons hors de la coque non plus. Plusieurs boutons vont dans .ds-card__foot-actions : à droite avec la gouttière, et toujours à droite quand ils passent dessous à 390.">
+        <div className="flex flex-col gap-space-4">
+          <Block label="Clair"><PiedTrois /></Block>
+          <Block label="Sombre"><PiedTrois dark /></Block>
+        </div>
       </Section>
     </div>
   );

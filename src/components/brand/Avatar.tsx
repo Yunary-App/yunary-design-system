@@ -1,4 +1,4 @@
-import type { HTMLAttributes, JSX, ReactNode } from 'react';
+import type { HTMLAttributeReferrerPolicy, HTMLAttributes, JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { BRAND_MONOGRAM, BRAND_NAME } from '../../brand';
 
@@ -31,13 +31,15 @@ export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
   halo?: boolean;
   /** La surface qui détoure le badge : `card` (défaut) ou `page`. */
   surface?: 'card' | 'page';
+  /** Passé tel quel à l'`<img>` (v0.6.2) : `"no-referrer"` pour une photo d'un CDN qui l'exige. */
+  referrerPolicy?: HTMLAttributeReferrerPolicy;
 }
 
 const TAILLES = new Set(['puce', 'carte', 'dialogue', 'panneau', 'heros', 'ecran']);
 
 export function Avatar({
   src, alt = BRAND_NAME, initials = BRAND_MONOGRAM, size = 'heros', tone = 'muted', ring = false,
-  badge, halo = false, surface = 'card', className = '', style, ...rest
+  badge, halo = false, surface = 'card', referrerPolicy, className = '', style, ...rest
 }: AvatarProps): JSX.Element {
   const nommee = TAILLES.has(size);
   return (
@@ -51,7 +53,7 @@ export function Avatar({
     >
       {halo ? <span className="ds-avatar__halo" aria-hidden="true" /> : null}
       {src
-        ? <img className="ds-avatar__img" src={src} alt={alt} />
+        ? <img className="ds-avatar__img" src={src} alt={alt} referrerPolicy={referrerPolicy} />
         : <span className="ds-avatar__initials" role="img" aria-label={alt}>{initials}</span>}
       {badge ? <span className="ds-avatar__badge">{badge}</span> : null}
     </span>
