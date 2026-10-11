@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { Badge, Banner, Button, Card, FormField, Icon, Input, Logo, Pastille, Progress, Switch, Tabs } from '@yunary/ds';
+import { Badge, Banner, Button, Card, Dropzone, EmptyState, FormField, Icon, Input, Logo, Pastille, Progress, Switch, Tabs } from '@yunary/ds';
 import { Block, Grid, Section, Stack } from '../ui';
 
 /* La page des outils et des écrans (v0.5.0) : la carte d'outil et son offre, les compteurs, les badges, les
@@ -149,6 +149,15 @@ function EcranClaude({ dark = false }: { dark?: boolean }) {
         </div>
         <Banner inset tone="amber">TikTok n'accepte qu'un moment de la vidéo comme miniature.</Banner>
         <Banner inset tone="neutral">Chaque réseau se règle à part.</Banner>
+        {/* 0.6.1 : encart, dépôt, envoi et état vide se relèvent en --card quoi qu'en disent les règles de contexte d'une carte (check-coque.mjs) */}
+        <p className="ds-inset"><span className="ds-inset__value">« Trois erreurs qui tuent ta rétention » · 42 s · 1080 × 1920</span></p>
+        <Dropzone variant="compact" title="Dépose ta vidéo" linkLabel="ou choisis un fichier" hint="MP4 ou MOV, 500 Mo max." onFiles={() => {}} />
+        <div className="ds-upload">
+          <div className="ds-file"><Pastille size="dialogue" shape="round" tone="neutral"><Icon name="video" /></Pastille><div className="ds-file__main"><span className="ds-file__name">retention-3-erreurs.mp4</span><span className="ds-file__meta">38 Mo · 61 %</span></div></div>
+          <Progress value={61} max={100} label="Envoi" />
+          <div className="ds-upload__foot"><span>Tu peux continuer à parler à Claude pendant l'envoi.</span></div>
+        </div>
+        <EmptyState compact icon={<Icon name="video" />} title="Aucune analyse ce mois" description="Dépose une vidéo pour commencer." />
         <FormField label="Description" htmlFor={dark ? 'desc-s' : 'desc'} action={<Button variant="ghost" size="xs" icon={<Icon name="copy" />}>Copier</Button>}>
           <Input id={dark ? 'desc-s' : 'desc'} defaultValue="Trois erreurs qui tuent ta rétention, et comment les corriger." />
         </FormField>
@@ -313,7 +322,7 @@ export function OutilsPage() {
         </Grid>
       </Section>
 
-      <Section title="La coque d'un écran de Claude" note="Card variant=screen : --background, sans ombre, padding 18 / 20, pile ; tout ce qui s'y pose se relève en --card (panneau, champ, encart, barre, tuile au repos) ; la tuile choisie redescend sur --background. Le pied .ds-card__foot. À gauche sur la crème de l'hôte, à droite en sombre.">
+      <Section title="La coque d'un écran de Claude" note="Card variant=screen : --background, sans ombre, padding 18 / 20, pile ; tout ce qui s'y pose se relève en --card (panneau, champ, encart, dépôt, envoi, état vide, barre, tuile au repos) quoi qu'en disent les règles de contexte d'une carte (0.6.1, mesuré par check-coque.mjs) ; la tuile choisie redescend sur --background. Le pied .ds-card__foot. À gauche sur la crème de l'hôte, à droite en sombre.">
         <Grid cols={2}>
           <Block label="Clair"><EcranClaude /></Block>
           <Block label="Sombre (forcé, même quand la vitrine est claire)"><EcranClaude dark /></Block>

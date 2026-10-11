@@ -1,6 +1,6 @@
 {
   "name": "@yunary/ds",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Design system Yunary — jetons, couche Tailwind v4 et primitives React.",
   "license": "UNLICENSED",
   "private": false,
@@ -35,7 +35,7 @@
     "typecheck": "tsc --noEmit",
     "setup": "npm install && npm install --prefix demo",
     "rebrand": "node rebrand.mjs",
-    "lint": "npm run typecheck && node check-token-refs.mjs && node check-version.mjs && node check-contract.mjs && node check-utility-collisions.mjs && node check-dead-utilities.mjs && node check-font-px.mjs && node check-fragile-classes.mjs && node check-dark-substitution.mjs && node check-contrast.mjs && node check-surfaces.mjs && node check-catalogue.mjs && node check-preflight-drift.mjs && bash check-literals.sh",
+    "lint": "npm run typecheck && node check-token-refs.mjs && node check-version.mjs && node check-contract.mjs && node check-utility-collisions.mjs && node check-dead-utilities.mjs && node check-font-px.mjs && node check-fragile-classes.mjs && node check-dark-substitution.mjs && node check-contrast.mjs && node check-surfaces.mjs && node check-catalogue.mjs && node check-coque.mjs && node check-preflight-drift.mjs && bash check-literals.sh",
     "demo": "npm --prefix demo run dev",
     "demo:build": "npm --prefix demo run build",
     "check:classes": "npm --prefix demo run build:vite && node check-classes.mjs",
@@ -55,6 +55,7 @@
     }
   },
   "dependencies": {
+    "@yunary/ds": "github:Yunary-App/yunary-design-system#v0.6.0",
     "class-variance-authority": "^0.7.1"
   },
   "devDependencies": {

@@ -37,7 +37,9 @@ Aucune surface ne redéclare un jeton de marque : une divergence locale est un b
 **Un écran MCP monte les surfaces du ds, forcées** (`Card variant="screen"`, décision du
 10/10/2026) : fond `--background`, blocs relevés en `--card`, filets `--border`. Seul le clair ou
 le sombre suit l'hôte (la coque applique `.dark` d'après le thème que Claude annonce). Les bulles
-de conversation autour de l'écran appartiennent à Claude, jamais au ds.
+de conversation autour de l'écran appartiennent à Claude, jamais au ds. **La coque gagne toujours
+dans son périmètre** (0.6.1) : ses règles sont déclarées en tête de `patterns.css`, les règles de
+contexte d'une carte s'écrivent `:where()`, et `check-coque.mjs` le mesure à chaque `npm run lint`.
 **Thème principal :** clair d'abord ; le sombre est complet et à parité de règles — la vitrine
 montre chaque motif en sombre même quand la maquette ne le dessine pas.
 **Densité :** confortable — cartes à padding 24 (28 / 32 pour les cartes d'outil et d'offre),
@@ -264,6 +266,7 @@ Instagram, TikTok, YouTube, Claude) : leurs couleurs vivent dans le fichier de m
 | 2026-08-31 | Marque exportée sous `./brand-yunary.css` dans package.json | sous-chemin stable de chaque surface |
 | 2026-09-11 | Élément sélectionné en corail (`--primary` sur `--accent`), écart de contraste assumé | décision de marque Julien |
 | 2026-09-11 | Titre de page à 36 px, `Card gap` sur l'échelle `--space-*` sans palier 20 | décisions Julien |
+| 2026-10-11 | 0.6.1 : la coque d'écran gagne toujours dans son périmètre (bloc de tête de `patterns.css`, contextes en `:where()`, garde `check-coque.mjs`) ; `.ds-perks` et `.ds-tiles` gardent deux colonnes tant que chacune a sa largeur minimale (`--perks-col-min` 144, `--tiles-col-min` 184) et passent à une en dessous, un mot ne se coupe jamais | remontées de mcp-ui (contournement dans `components.css`) et du hub (cartes d'outil compactes, « Instagram » à 390) |
 | 2026-10-10 | **La maquette fait foi.** Les quatre règles du 09/10 tombent : badges de statut sans icône, plusieurs CTA primaires par vue, prix et numéros de section en dégradé, danger doux avec un filet. Deux règles d'accessibilité restent au-dessus : jamais `--primary` en texte, tout lisible en sombre | audit du ds 0.4.0 face aux maquettes retouchées le 10/10 ; décision Julien |
 | 2026-10-10 | 0.6.0 : la seconde moitié — dépôt compact et envoi à nu, un seul dessin de média, agenda sur `--accent` + barre + tuiles, rangées et réglages, états vides ronds neutres + compact, bande de section et barre de fiche, étapes en tuiles (une brique pour « 1 · 2 · 3 » et « La suite »), onglets qui défilent, modales 480 / 560 / 600, danger doux à filet, `Avatar` réécrit, `Reseau`, ton doux `Banner soft`, cadres de miniature détourés en sombre | même audit + compléments de la liste du hub et trois précisions de Julien |
 | 2026-10-10 | 0.5.0 : liste de l'accent élargie (§ 3, 12 sites), cran `xs` du rail, `--card-pad` revenu à 24 / 28 + palier `xl` 28 / 32, surfaces du ds forcées dans un écran de Claude (`Card variant="screen"`), `Badge corner` retiré (plus dessiné) | même audit ; la colonne du jour de la semaine repassera sur `--accent` avec les motifs de la version suivante |

@@ -14,6 +14,50 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.6.1 — la coque gagne dans son périmètre, les grilles cèdent une colonne
+
+Deux corrections remontées par mcp-ui et le hub, le 11/10/2026. Aucun nom nouveau pour les
+consommateurs, aucun composant ni glyphe ajouté.
+
+- **La coque d'écran gagne toujours dans son périmètre.** `.ds-card--screen` est elle-même une
+  `.ds-card` : trois règles de contexte déclarées après elle à la même spécificité
+  (`.ds-card .ds-inset`, `:is(.ds-card,.ds-modal) .ds-dropzone`, `:is(.ds-card,.ds-modal)
+  .ds-upload`) repeignaient l'encart, le dépôt et l'envoi en `--background`, et le repos de la tuile
+  panneau (0,4,1) battait `.ds-card--screen .ds-tile` (0,2,0). Corrigé à la source, en trois gestes :
+  le bloc de la coque passe **en tête de `patterns.css`** (il ne gagne sur un défaut qu'à la
+  spécificité, et un état déclaré après lui — survol, coché, invalide, désactivé — le bat à égalité,
+  donc survit sans être recopié) ; **toute règle de contexte qui peint un descendant s'écrit
+  `:where(.ds-card,.ds-modal) .ds-x`** (champ, encart, encart de bandeau, barre d'onglets et son onglet
+  choisi, voile, dépôt, envoi, colonne de semaine, barre d'agenda) ; et la coque **redit** ce qui doit
+  la battre dans son périmètre (le repos de la tuile panneau, « La suite » en étapes compactes sur le
+  fond, le rail d'un panneau relevé en `--surface-alt`). La règle de la carte elle-même s'écrit
+  `.ds-card.ds-card--screen`. La règle redondante `.ds-card--screen .ds-btn--secondary` disparaît
+  (le bouton secondaire porte `--secondary` partout), de même que `.ds-card--screen .ds-tile.is-recommended`
+  (la règle du motif suffit, et le focus repasse devant l'ombre).
+  **Garde nouveau, `check-coque.mjs`** (quatorze dans `npm run lint`) : il calcule la spécificité de
+  chaque règle, vérifie l'ordre, que chaque défaut recouvert est battu, qu'aucun état n'est avalé, et
+  qu'un état redit par la coque bat le même état écrit par un contexte ; jumeau de falsification à
+  chaque appel. Piège 7 de `docs/PIEGES.md`.
+- **`.ds-perks` et `.ds-tiles` : deux colonnes tant que chacune a la place, une en dessous.** Les deux
+  colonnes fixes coupaient des mots dans les cartes d'outil compactes et « Instagram » lettre par
+  lettre à 390 dans la colonne du formulaire d'onboarding. Désormais
+  `repeat(auto-fit, minmax(max(<min>, 50 % − gouttière / 2), 1fr))` : jamais plus de deux colonnes,
+  une seule dès qu'une colonne passerait sous `--perks-col-min` (9 rem, 144) ou `--tiles-col-min`
+  (11,5 rem, 184), deux jetons nouveaux de `tokens/scales.css`. Un mot ne se coupe jamais :
+  l'`overflow-wrap:anywhere` du titre de la tuile de choix est retiré, et la colonne est au moins aussi
+  large que le plus long libellé. La gouttière des avantages devient `--perks-col-gap` (24 ; 20 en
+  `--compact` et dans la coque).
+- **Vitrine.** La coque de « Outils et écrans » montre maintenant un encart, un dépôt compact, un envoi
+  cadré et un état vide compact, relevés en `--card` en clair et en sombre.
+- **Migration.** Rien à renommer. **mcp-ui** : retirer le contournement de `components.css`
+  (`.ds-card.ds-card--screen :is(.ds-inset,.ds-dropzone,.ds-upload)` et
+  `.ds-card--screen .ds-tile--panel:not(…)`) à la montée, le ds le porte. **Hub** : rien à écrire ;
+  `OutilChoixCarte`, `ToolCard` (avantages compacts) et `PlatformTile` (tuiles de choix à 390) changent
+  de rendu seuls ; un site qui veut forcer une colonne plus étroite redéclare `--perks-col-min` ou
+  `--tiles-col-min` sur la grille.
+
+---
+
 ## 0.6.0 — la maquette fait foi, seconde moitié : dépôt, média, agenda, rangées, fiches, avatars, réseaux
 
 Les points 12 à 20 de l'arbitrage du 10/10/2026, les sept compléments de la liste du hub

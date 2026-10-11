@@ -346,6 +346,9 @@ poser une grille de cartes avec un gap sous 1.5rem (la pile de cartes d'outil, `
   rayon lg, padding 18 / 20 / 20, sans ombre, une pile à `--space-4` ; l'en-tête serre son gap à 10.
   Tout ce qui s'y pose se RELÈVE en `--card` (champ, encart, panneau `.ds-panel`, envoi, tuile au
   repos, barre d'onglets) : l'inverse d'une carte. Les bulles de conversation autour sont à Claude.
+  **La coque gagne toujours dans son périmètre** (0.6.1) : ses règles vivent en tête de
+  `patterns.css`, les règles de contexte d'une carte s'écrivent `:where(.ds-card,.ds-modal) .ds-x`,
+  et `check-coque.mjs` le mesure — rien à contourner au site d'appel.
 - **`gap` — la pile, opt-in.** `.ds-card` est `display:block` : un `gap-space-*` posé en
   `className` ne rend RIEN (0 px, en silence). `gap={4}` passe
   la carte en colonne flex avec `--space-4` entre ses enfants ; l'en-tête cède sa marge basse
@@ -1262,7 +1265,9 @@ description] · [coche ou chevron], padding 16 / 18, le titre en body-lg gras, l
 1.625rem (le logo d'un réseau) ou une `Pastille size="dialogue"`. Deux formes : un `<label>` avec son
 `<input>` natif (un formulaire), ou un **`<button aria-pressed>`** (un choix de navigation, sans
 formulaire) — `aria-pressed="true"` vaut cochée. `.ds-tiles` : la grille de deux colonnes qui les
-porte ; `.ds-tile--span` : la tuile qui prend toute la rangée.
+porte — deux tant que chaque colonne a `--tiles-col-min` (184), une seule en dessous (0.6.1 : à 390
+dans une carte, « Instagram » ne se coupe plus lettre par lettre ; un mot ne se coupe jamais) ;
+`.ds-tile--span` : la tuile qui prend toute la rangée.
 
 ```html
 <div class="ds-tiles" role="group" aria-label="Ton réseau">
@@ -1458,7 +1463,9 @@ engagement »). `--accent` (v0.5.0) met le montant en dégradé clippé — un s
 écart de contraste assumé dans la marque ; `--sm` dans un écran de Claude ; `--end` aligné à droite ;
 `--row` (v0.5.0) : le montant à gauche, la période et la note empilées à sa droite dans `__aside` (la
 plaque « Offert avec un outil payant »). **Le montant vient toujours du serveur.** `.ds-perks`
-(v0.5.0, la maquette du 10/10) : une liste NUE à deux colonnes fixes — même à 390 —, chaque
+(v0.5.0, la maquette du 10/10) : une liste NUE à deux colonnes — deux tant que chaque colonne a
+`--perks-col-min` (144), une seule en dessous : une carte d'outil compacte, 390 dans une carte (0.6.1 ;
+un mot ne se coupe jamais) —, chaque
 `.ds-perk` une `Pastille size="coche"` (coche success, ou l'icône d'un ton choisi) puis le libellé en
 body-sm à l'encre ; `--compact` (ou dans un écran de Claude) resserre les colonnes. Plus de plaque.
 Rien ne se coche : ce n'est pas une tuile.

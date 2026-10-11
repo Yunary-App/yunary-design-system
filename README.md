@@ -58,7 +58,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yamiro02/yunary-design-system#v0.6.0
+npm i github:Yunary-App/yunary-design-system#v0.6.1
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -325,10 +325,10 @@ requête, aucun asset à résoudre par le bundler.
 npm install          # dépendances du paquet
 npm run build        # tsup → dist/ (ESM + CJS + .d.ts)
 npm run typecheck    # tsc --noEmit
-npm run lint         # typecheck + les treize gardes
+npm run lint         # typecheck + les quatorze gardes
 ```
 
-`npm run lint` enchaîne le typecheck et **treize gardes** ; un quatorzième, `check-classes.mjs`,
+`npm run lint` enchaîne le typecheck et **quatorze gardes** ; un quinzième, `check-classes.mjs`,
 vit dans `npm run build`. Le premier de la chaîne est
 [`check-token-refs.mjs`](check-token-refs.mjs) — c'est le moins cher, et un jeton manquant rend le
 diagnostic des autres trompeur : il refuse tout `var(--x)` lu par le CSS du système ou par un style
@@ -341,6 +341,13 @@ Vient ensuite, entre autres, [`check-utility-collisions.mjs`](check-utility-coll
 refuse tout `@utility` de `theme.css` portant le nom d'une classe qu'un jeton de thème génère
 déjà : en Tailwind v4 les deux déclarations **fusionnent** dans la même règle et la dernière gagne,
 sans erreur ni avertissement.
+
+[`check-coque.mjs`](check-coque.mjs) (0.6.1) mesure que **la coque d'un écran de Claude gagne partout
+dans son périmètre** : `.ds-card--screen` est elle-même une `.ds-card`, et une règle de contexte « dans
+une carte, l'encart se creuse » déclarée après elle à la même spécificité la repeignait en silence. Le
+garde calcule la spécificité de chaque règle, exige que le bloc de la coque soit en tête de
+`patterns.css`, qu'il batte tout défaut de motif à la spécificité, et qu'aucun état (survol, coché,
+invalide) ne soit avalé — d'où l'écriture `:where(.ds-card,.ds-modal) .ds-x` des règles de contexte.
 
 **Trois gardes lisent le CODE, pas le CSS** — [`check-dead-utilities.mjs`](check-dead-utilities.mjs),
 [`check-font-px.mjs`](check-font-px.mjs) et [`check-fragile-classes.mjs`](check-fragile-classes.mjs).

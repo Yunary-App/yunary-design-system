@@ -143,6 +143,8 @@
   --steps-seg-h:0.5rem;           /* 8 — un segment de .ds-steps--bar (v0.5.0) */
   --steps-seg-h-compact:0.375rem; /* 6 — le même sous 64rem */
   --dropzone-h:13.75rem;          /* 220 — la hauteur minimum de .ds-dropzone */
+  --perks-col-min:9rem;           /* 144 — la colonne d'avantages la plus étroite : en dessous, .ds-perks passe à une colonne (0.6.1) */
+  --tiles-col-min:11.5rem;        /* 184 — la colonne de tuiles de choix la plus étroite : en dessous, .ds-tiles passe à une colonne (0.6.1) */
   --veil-h:55rem;                 /* 880 — la hauteur montrée du contenu sous .ds-veil */
   --agenda-cell-h:7rem;           /* 112 — la case d'un jour de .ds-agenda */
   --agenda-cell-h-compact:3rem;   /* 48 — la même, dans un écran de Claude (--compact) */

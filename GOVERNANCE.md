@@ -151,8 +151,8 @@ L'ordre, sans exception :
    `check-version.mjs` ne peut pas passer à cette étape
 5. le commit unique du lot
 6. `git tag -a vX.Y.Z -m "…"` — **annoté** : un tag léger ne part pas avec `--follow-tags`
-7. **les gardes, second passage** — `npm run lint` en ENTIER, les treize. Rien ne part sans
-   les treize
+7. **les gardes, second passage** — `npm run lint` en ENTIER, les quatorze. Rien ne part sans
+   les quatorze
 8. `git push --follow-tags`
 
 ### À quel moment lancer les gardes — et pourquoi il y a DEUX passages
@@ -168,13 +168,13 @@ Ce n'est pas une entorse à signaler à chaque lot, c'est la séquence :
 |---|---|---|
 | avant le tag (4) | les douze autres gardes + `npm run demo:build` + `npm run build` | tous verts |
 | avant le tag (4) | `check-version.mjs` | **rouge**, et c'est correct : le tag n'existe pas encore |
-| après le tag (7) | `npm run lint` en entier | **les treize verts** |
+| après le tag (7) | `npm run lint` en entier | **les quatorze verts** |
 | puis (8) | `git push --follow-tags` | — |
 
 Lancer `npm run lint` à l'étape 4 est utile quand même : il s'arrête sur `check-version` et
 laisse les onze suivants non joués. Le premier passage se fait donc garde par garde, ou en
 acceptant de relancer. **La règle qui compte est la dernière ligne : rien ne part sans les
-treize verts, tag posé.**
+quatorze verts, tag posé.**
 
 ⚠️ Le **quatorzième** garde du dépôt, `check-classes.mjs`, n'est pas dans `lint` — et c'est
 voulu : `lint` doit rester lançable sans construire la vitrine. Il est dans `npm run build`,

@@ -235,7 +235,39 @@ est un flottant.
 
 ---
 
-## 7 · La forme récurrente — une valeur du socle hors de portée de l'appelant
+## 7 · La coque d'un écran de Claude perd contre une règle de contexte
+
+**Ce qui casse.** `Card variant="screen"` rend `.ds-card.ds-card--screen` : la coque EST une carte.
+Les règles de contexte du socle — « dans une carte, l'encart se creuse en `--background` »
+(`.ds-card .ds-inset`, `:is(.ds-card,.ds-modal) .ds-dropzone`, `.ds-upload`) — s'appliquent donc
+à elle aussi. En 0.5.0 et 0.6.0 elles portaient la même spécificité (0,2,0) que
+`.ds-card--screen .ds-inset` et venaient APRÈS dans le fichier : l'encart, le dépôt et l'envoi
+d'un écran de Claude rendaient sur `--background`, le fond de la coque, donc invisibles. Et le
+repos de la tuile panneau, `.ds-tile--panel:not(.is-checked):not(:has(…))`, à (0,4,1), battait
+`.ds-card--screen .ds-tile` (0,2,0) à la spécificité, quel que soit l'ordre.
+
+**Pourquoi la panne est muette.** Rien n'est invalide : chaque règle est correcte, chaque
+jeton existe, les gardes de contraste mesurent des paires de jetons, pas des cascades. Seul
+l'écran rendu dans Claude le montre, et mcp-ui l'a contourné dans son propre CSS — la forme 1
+du piège 8, à l'envers : c'est le socle qui perd contre lui-même.
+
+**La parade**, en trois phrases, depuis 0.6.1 (en tête de `patterns.css`) :
+1. la coque est le PREMIER bloc du fichier : elle ne gagne sur un défaut qu'à la spécificité, et
+   un état déclaré après elle (survol, coché, invalide, désactivé) la bat à égalité — les états
+   survivent sans qu'on les recopie ;
+2. une règle de contexte qui peint un descendant s'écrit `:where(.ds-card,.ds-modal) .ds-x`, au
+   rang d'un défaut (0,1,0) : la coque, à (0,2,0), passe par-dessus quel que soit l'ordre ;
+3. un défaut plus spécifique (le repos de la tuile panneau) ou un contexte emboîté qui garde la
+   main (le rail d'un panneau, « La suite » en étapes compactes) a sa contrepartie dans la coque.
+
+**Le garde.** [`check-coque.mjs`](../check-coque.mjs) calcule la spécificité de chaque règle de
+`patterns.css`, vérifie l'ordre, que chaque défaut recouvert est battu, qu'aucun état n'est avalé
+et qu'un état redit par la coque bat le même état écrit par un contexte. Il rejoue un jumeau de
+falsification à chaque appel.
+
+---
+
+## 8 · La forme récurrente — une valeur du socle hors de portée de l'appelant
 
 Ce n'est pas un cas, c'est **le moule** des autres. Trois formes d'un même mal, toutes
 constatées en usage réel :
@@ -280,7 +312,7 @@ doctrine prise à revers — le socle fournit les VALEURS, l'app écrit les NOMS
    parade** · **le garde**. Si la panne n'est pas muette, ce n'est pas un piège, c'est un
    bug — corrige-le.
 3. Un garde vaut mieux qu'un paragraphe. Les gardes de cette page vivent à la racine du
-   dépôt (`check-*.mjs`), sont enchaînés par `npm run lint` — treize, plus
+   dépôt (`check-*.mjs`), sont enchaînés par `npm run lint` — quatorze, plus
    `check-classes.mjs` que `npm run build` joue à part — et **prennent un dossier en
    argument** pour qu'une app les pointe sur son propre `src/` :
 

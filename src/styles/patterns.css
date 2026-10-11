@@ -27,6 +27,61 @@
    typographique du même nombre : celui-là est devenu --text-body-sm et a quitté ce fichier. Un
    même nombre, deux métiers. */
 
+/* ═══════════════════════════════════════════════════════════════════════════════
+   LA COQUE D'UN ÉCRAN DE CLAUDE — `.ds-card--screen`, v0.5.0 ; EN TÊTE DU FICHIER depuis 0.6.1.
+
+   Décision du 10/10/2026 : les surfaces du ds sont FORCÉES dans Claude, seul le clair ou le sombre
+   suit l'hôte (la coque applique `.dark` d'après `prefers-color-scheme` ou le thème que l'hôte
+   annonce). La carte d'écran : fond --background, filet, rayon lg, padding 18 / 20 / 20, SANS ombre,
+   une pile à --space-4 ; son en-tête serre son gap à 10 et cède sa marge à la pile. Tout ce qui se
+   pose dedans se RELÈVE en --card (un champ, un encart, un panneau, un envoi, une tuile au repos) :
+   l'inverse d'une carte, où tout se creuse en --background. Les bulles de conversation autour
+   appartiennent à Claude, jamais au ds.
+
+   POURQUOI EN TÊTE — ET C'EST MESURÉ, par check-coque.mjs à chaque `npm run lint`. La coque est
+   elle-même une `.ds-card` : en 0.5.0 et 0.6.0, les règles de contexte « dans une carte, l'encart se
+   creuse », déclarées après elle à la même spécificité, la repeignaient en --background à l'ordre de
+   source, et le repos de la tuile panneau la battait à la spécificité. La doctrine depuis 0.6.1 :
+     1. la coque est déclarée AVANT tout motif : elle ne gagne sur un DÉFAUT qu'à la spécificité, et
+        un ÉTAT déclaré après elle (survol, coché, invalide, désactivé) la bat à égalité — les états
+        survivent dans la coque sans qu'on les recopie ;
+     2. une règle de contexte qui peint un descendant s'écrit `:where(.ds-card,.ds-modal) .ds-x`,
+        au rang d'un défaut (0,1,0) : la coque, à (0,2,0), passe par-dessus quel que soit l'ordre ;
+     3. un défaut plus spécifique (le repos de la tuile panneau) ou un contexte emboîté qui garde la
+        main (le rail d'un panneau relevé, « La suite » en étapes compactes) a sa CONTREPARTIE ici,
+        plus spécifique que lui.
+   La règle de la carte elle-même s'écrit `.ds-card.ds-card--screen` : à (0,1,0), `.ds-card`,
+   déclarée plus bas, la battrait à l'ordre.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.ds-card.ds-card--screen{display:flex;flex-direction:column;gap:var(--space-4);padding:1.125rem 1.25rem 1.25rem;background:var(--background);color:var(--foreground);box-shadow:none}
+.ds-card--screen>.ds-card__header{gap:0.625rem;margin-bottom:0}
+/* La barre d'onglets garde sa largeur de contenu : la pile étirerait un `inline-flex` sur toute la carte. */
+.ds-card--screen>.ds-tabs{align-self:flex-start}
+.ds-card--screen .ds-input,.ds-card--screen .ds-inset,.ds-card--screen .ds-dropzone,.ds-card--screen .ds-upload:not(.ds-upload--bare),.ds-card--screen .ds-week__item,.ds-card--screen .ds-tabs{background:var(--card)}
+.ds-card--screen .ds-banner--inset:not(.ds-banner--info,.ds-banner--danger,.ds-banner--warning,.ds-banner--success,.ds-banner--amber,.ds-banner--soft){background:var(--card)}
+.ds-card--screen .ds-dropzone{border-radius:var(--radius-md);border-color:var(--border);gap:0.875rem}
+.ds-card--screen .ds-empty{border-style:solid;background:var(--card)}
+.ds-card--screen .ds-etape,.ds-card--screen .ds-row--plate{background:var(--card)}
+/* Deux contextes emboîtés que la coque redit : « La suite » (étapes compactes) reste sur le fond, le rail
+   d'un panneau relevé garde la teinte d'un rail sur --card. */
+.ds-card--screen .ds-etapes--compact .ds-etape{background:var(--background)}
+.ds-card--screen .ds-panel .ds-progress{background:var(--surface-alt)}
+.ds-card--screen .ds-tabs .ds-tab[aria-selected="true"],.ds-card--screen .ds-tabs .ds-tab[aria-checked="true"],.ds-card--screen .ds-tabs .ds-tab.is-selected{background:var(--accent);color:var(--primary)}
+.ds-card--screen .ds-progress{background:var(--card)}
+.ds-card--screen .ds-veil__panel{background:linear-gradient(to bottom,color-mix(in srgb,var(--background) 45%,transparent),color-mix(in srgb,var(--background) 92%,transparent) 55%)}
+.ds-card--screen .ds-veil--below .ds-veil__panel{background:none}
+/* Dans un écran, la tuile se pose RELEVÉE (--card, filet 1 px) et la tuile choisie redescend sur le
+   fond (--background, filet --primary 1,5 px, sans ombre) : la maquette (créneaux, miniature) inverse
+   le régime de la page. La tuile recommandée garde son ombre (règle du motif, rien à redire ici). Le
+   repos de la tuile panneau porte (0,4,1) pour ignorer un radio coché dans sa bande d'images : sa
+   contrepartie suit. */
+.ds-card--screen .ds-tile{background:var(--card);border-width:1px}
+.ds-card--screen .ds-tile--panel:not(.is-checked,[aria-pressed="true"]):not(:has(.ds-choice input:checked)){background:var(--card)}
+.ds-card--screen .ds-tile:is(:has(input:checked),.is-checked,[aria-pressed="true"]),.ds-card--screen .ds-tile--panel:is(:has(.ds-choice input:checked),.is-checked){background:var(--background);border-width:1.5px;border-color:var(--primary);box-shadow:none}
+/* Les grilles serrent leur gouttière dans un écran : avantages 10 / 20, compteurs 16. */
+.ds-card--screen .ds-perks{--perks-col-gap:1.25rem}
+.ds-card--screen .ds-meters{gap:var(--space-4)}
+
 /* LA HAUTEUR D'UN CONTRÔLE VIENT DE SON RAIL, PAS DE L'INTERLIGNE DE LA PAGE — v0.10.0.
    Le preflight fait hériter la police ET l'interligne aux contrôles natifs (`font: inherit`
    sur button / input / select / textarea). Les trois règles ci-dessous n'avaient jamais
@@ -209,7 +264,7 @@
    SOUS elle, sur --background. Couvre Input, Textarea, Select et le déclencheur de
    DatePicker (tous portent .ds-input). La prop surface="card" reste comme échappatoire
    explicite, elle n'est plus une obligation. */
-.ds-card .ds-input,.ds-modal .ds-input,.ds-dropdown .ds-input,.ds-datepicker__pop .ds-input{background:var(--background)}
+:where(.ds-card,.ds-modal,.ds-dropdown,.ds-datepicker__pop) .ds-input{background:var(--background)}
 .ds-input--sm{min-height:var(--control-sm)}
 .ds-input--lg{min-height:var(--control-lg)}
 .ds-input--sm{border-radius:calc(var(--control-sm) / 3)}
@@ -416,16 +471,17 @@ div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
    une rangée [tête] · [titre, description] · [coche ou chevron], padding 16 / 18, le titre en
    body-lg gras, la coche de fin à 1.125rem en --primary-readable. La tête (`.ds-tile__lead`) porte
    un glyphe de 1.625rem (un logo de réseau) ou une `Pastille` (dialogue). Un <label> + input natif,
-   ou un <button aria-pressed>. `.ds-tiles` : la grille de deux colonnes qui les porte ;
+   ou un <button aria-pressed>. `.ds-tiles` : la grille de deux colonnes qui les porte — deux tant que chaque
+   colonne a --tiles-col-min, une en dessous (0.6.1 : « Instagram » ne se coupe plus lettre par lettre à 390) ;
    `.ds-tile--span` : la tuile qui prend toute la rangée. */
 .ds-tile--choice{gap:0.875rem;padding:1rem 1.125rem}
-.ds-tile--choice .ds-tile__title{font-size:var(--text-body-lg);font-weight:var(--weight-bold);overflow-wrap:anywhere}
+.ds-tile--choice .ds-tile__title{font-size:var(--text-body-lg);font-weight:var(--weight-bold)}
 .ds-tile--choice .ds-tile__lead svg{--ds-icon-size:1.625rem}
 .ds-tile--choice .ds-tile__lead .ds-pastille svg{--ds-icon-size:1.25rem}
 .ds-tile--choice .ds-tile__check{color:var(--primary-readable)}
 .ds-tile--choice .ds-tile__check svg{--ds-icon-size:1.125rem}
 .ds-tile--choice .ds-tile__end{display:inline-flex;flex:none;color:var(--text-muted)}
-.ds-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)}
+.ds-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(max(var(--tiles-col-min),calc(50% - var(--space-4) / 2)),1fr));gap:var(--space-4)}
 .ds-tile--span{grid-column:1/-1}
 /* LA TUILE QUI SE SOULÈVE — `.ds-tile--lift`, v0.5.0 : choisie, elle remonte au niveau de la carte
    (fond --card, filet --primary, ombre douce) au lieu de prendre la plaque --accent — la recette de
@@ -488,33 +544,7 @@ div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
 .ds-card--plaque>.ds-card__body>.ds-card__header{margin-bottom:0}
 .ds-card--plaque>.ds-card__foot{padding:0.875rem 1.5rem}
 .ds-card--feature>.ds-card__foot{border-top-color:color-mix(in srgb,var(--brand-from) 28%,transparent);background:color-mix(in srgb,var(--card) 60%,transparent)}
-/* LA COQUE D'UN ÉCRAN DE CLAUDE — `.ds-card--screen`, v0.5.0. Décision du 10/10/2026 : les surfaces
-   du ds sont FORCÉES dans Claude, seul le clair ou le sombre suit l'hôte (la coque applique `.dark`
-   d'après `prefers-color-scheme` ou le thème que l'hôte annonce). La carte d'écran : fond
-   --background, filet, rayon lg, padding 18 / 20 / 20, SANS ombre, une pile à --space-4 ; son en-tête
-   serre son gap à 10 et cède sa marge à la pile. Tout ce qui se pose dedans se RELÈVE en --card (un
-   champ, un encart, un panneau, un envoi, une tuile au repos) : l'inverse d'une carte, où tout se
-   creuse en --background. Les bulles de conversation autour appartiennent à Claude, jamais au ds. */
-.ds-card--screen{display:flex;flex-direction:column;gap:var(--space-4);padding:1.125rem 1.25rem 1.25rem;background:var(--background);color:var(--foreground);box-shadow:none}
-.ds-card--screen>.ds-card__header{gap:0.625rem;margin-bottom:0}
-/* La barre d'onglets garde sa largeur de contenu : la pile étirerait un `inline-flex` sur toute la carte. */
-.ds-card--screen>.ds-tabs{align-self:flex-start}
-.ds-card--screen .ds-input,.ds-card--screen .ds-inset,.ds-card--screen .ds-dropzone,.ds-card--screen .ds-upload,.ds-card--screen .ds-week__item,.ds-card--screen .ds-tabs{background:var(--card)}
-.ds-card--screen .ds-banner--inset:not(.ds-banner--info,.ds-banner--danger,.ds-banner--warning,.ds-banner--success,.ds-banner--amber,.ds-banner--soft){background:var(--card)}
-.ds-card--screen .ds-dropzone{border-radius:var(--radius-md);border-color:var(--border);gap:0.875rem}
-.ds-card--screen .ds-empty{border-style:solid;background:var(--card)}
-.ds-card--screen .ds-etape,.ds-card--screen .ds-row--plate{background:var(--card)}
-.ds-card--screen .ds-tabs .ds-tab[aria-selected="true"],.ds-card--screen .ds-tabs .ds-tab[aria-checked="true"],.ds-card--screen .ds-tabs .ds-tab.is-selected{background:var(--accent);color:var(--primary)}
-.ds-card--screen .ds-btn--secondary:not(.ds-btn--on-card){background:var(--secondary)}
-.ds-card--screen .ds-progress{background:var(--card)}
-.ds-card--screen .ds-veil__panel{background:linear-gradient(to bottom,color-mix(in srgb,var(--background) 45%,transparent),color-mix(in srgb,var(--background) 92%,transparent) 55%)}
-.ds-card--screen .ds-veil--below .ds-veil__panel{background:none}
-/* Dans un écran, la tuile se pose RELEVÉE (--card, filet 1 px) et la tuile choisie redescend sur le
-   fond (--background, filet --primary 1,5 px, sans ombre) : la maquette (créneaux, miniature) inverse
-   le régime de la page. La tuile recommandée garde son ombre. */
-.ds-card--screen .ds-tile{background:var(--card);border-width:1px}
-.ds-card--screen .ds-tile:is(:has(input:checked),.is-checked,[aria-pressed="true"]),.ds-card--screen .ds-tile--panel:is(:has(.ds-choice input:checked),.is-checked){background:var(--background);border-width:1.5px;border-color:var(--primary);box-shadow:none}
-.ds-card--screen .ds-tile.is-recommended{box-shadow:var(--shadow-sm)}
+/* LA COQUE D'UN ÉCRAN DE CLAUDE — `.ds-card--screen` — vit EN TÊTE de ce fichier (0.6.1) : voir là-bas. */
 /* LE PANNEAU — `.ds-panel`, v0.5.0 : le bloc RELEVÉ d'un écran de Claude (une carte d'outil dans
    « Ce que Yunary sait faire », le bloc profil, un panneau d'état) : padding 14 / 16, rayon md,
    --card sur --background, une pile à --space-3. L'inverse de `.ds-inset`, qui se creuse. Ses
@@ -658,7 +688,7 @@ div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
 .ds-banner--inset{align-items:flex-start;gap:0.625rem;padding:0.75rem 0.875rem;border-radius:var(--radius-md);font-size:var(--text-body-sm);line-height:var(--leading-normal)}
 .ds-banner--inset:is(.ds-banner--info,.ds-banner--danger,.ds-banner--warning,.ds-banner--success,.ds-banner--amber,.ds-banner--soft){border-color:transparent}
 .ds-banner--inset:not(.ds-banner--info,.ds-banner--danger,.ds-banner--warning,.ds-banner--success,.ds-banner--amber,.ds-banner--soft){background:var(--secondary)}
-:is(.ds-card,.ds-modal) .ds-banner--inset:not(.ds-banner--info,.ds-banner--danger,.ds-banner--warning,.ds-banner--success,.ds-banner--amber,.ds-banner--soft){background:var(--background)}
+:where(.ds-card,.ds-modal) .ds-banner--inset:not(.ds-banner--info,.ds-banner--danger,.ds-banner--warning,.ds-banner--success,.ds-banner--amber,.ds-banner--soft){background:var(--background)}
 .ds-banner--inset .ds-banner__text{font-size:var(--text-body-sm);color:inherit}
 .ds-banner--inset .ds-banner__icon{margin-top:0.125rem}
 /* v0.5.0 — le titre d'un encart est en body gras (« Ta vidéo dure 4 min 12 s ») ; une `Pastille`
@@ -710,7 +740,7 @@ span.ds-banner__icon{display:inline-flex;flex:none}
    lecture seule). La surface se DÉDUIT comme celle d'un champ : --secondary sur la page,
    --background dans une carte, une modale ou un menu. */
 .ds-inset{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-2) var(--space-4);margin:0;padding:0.75rem 0.875rem;box-sizing:border-box;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--secondary);color:var(--foreground);font-size:var(--text-body-sm);line-height:var(--leading-normal);text-wrap:pretty}
-.ds-card .ds-inset,.ds-modal .ds-inset,.ds-dropdown .ds-inset{background:var(--background)}
+:where(.ds-card,.ds-modal,.ds-dropdown) .ds-inset{background:var(--background)}
 .ds-inset--dashed{border:1.5px dashed var(--border)}
 .ds-inset--bare{border-color:transparent}
 .ds-inset__value{flex:1 1 12rem;min-width:0;margin:0}
@@ -864,8 +894,8 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 /* La barre d'onglets DÉDUIT la carte comme le champ (même défaut d'opt-in que surface="card") :
    posée dans une carte, elle se creuse en --background et son onglet actif remonte au niveau
    de la carte. La prop onCard reste comme échappatoire explicite. */
-.ds-card .ds-tabs{background:var(--background)}
-.ds-card .ds-tabs .ds-tab[aria-selected="true"],.ds-card .ds-tabs .ds-tab[aria-checked="true"],.ds-card .ds-tabs .ds-tab.is-selected{background:var(--card);color:var(--primary)}
+:where(.ds-card) .ds-tabs{background:var(--background)}
+:where(.ds-card) .ds-tabs .ds-tab[aria-selected="true"],:where(.ds-card) .ds-tabs .ds-tab[aria-checked="true"],:where(.ds-card) .ds-tabs .ds-tab.is-selected{background:var(--card);color:var(--primary)}
 .ds-tab:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 /* LA BARRE PLEINE LARGEUR — les onglets se partagent la largeur à parts égales ; le padding
    latéral descend à --space-1 pour que quatre valeurs tiennent dans une colonne étroite. */
@@ -1127,11 +1157,11 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-veil{position:relative;display:grid;border-radius:var(--radius-lg);overflow:hidden}
 .ds-veil__content{grid-area:1/1;max-height:var(--veil-h);overflow:hidden;opacity:.4;pointer-events:none;user-select:none}
 .ds-veil__panel{grid-area:1/1;position:relative;z-index:1;display:flex;justify-content:center;align-items:flex-start;padding:4rem var(--space-6);background:linear-gradient(to bottom,color-mix(in srgb,var(--background) 45%,transparent),color-mix(in srgb,var(--background) 92%,transparent) 55%)}
-:is(.ds-card,.ds-modal) .ds-veil__panel{background:linear-gradient(to bottom,color-mix(in srgb,var(--card) 45%,transparent),color-mix(in srgb,var(--card) 92%,transparent) 55%)}
+:where(.ds-card,.ds-modal) .ds-veil__panel{background:linear-gradient(to bottom,color-mix(in srgb,var(--card) 45%,transparent),color-mix(in srgb,var(--card) 92%,transparent) 55%)}
 .ds-veil__panel>*{width:100%}
 .ds-veil--below{display:flex;flex-direction:column;gap:var(--space-4);border-radius:0;overflow:visible}
 .ds-veil--below .ds-veil__content{max-height:none;opacity:.5}
-.ds-veil--below .ds-veil__panel,:is(.ds-card,.ds-modal) .ds-veil--below .ds-veil__panel{display:block;padding:0;background:none}
+.ds-veil--below .ds-veil__panel{display:block;padding:0;background:none}
 @media (max-width:64rem){.ds-veil__panel{padding:var(--space-6) var(--space-4)}}
 
 /* ---------- le prix et les avantages ---------- */
@@ -1154,13 +1184,16 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-price--accent .ds-price__amount{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
 .ds-price--row{flex-direction:row;align-items:center;gap:var(--space-3)}
 .ds-price__aside{display:flex;flex-direction:column;gap:0.125rem;min-width:0}
-/* LES AVANTAGES — v0.5.0 : une liste nue, deux colonnes FIXES (gap 10 / 24 ; 10 / 20 dans un écran de
-   Claude), qui le restent à 390 — la maquette du 10/10/2026. Chaque `.ds-perk` : une `Pastille
+/* LES AVANTAGES — v0.5.0 : une liste nue, deux colonnes (gap 10 / 24 ; 10 / 20 en `--compact` et dans un
+   écran de Claude) — la maquette du 10/10/2026. Depuis 0.6.1 les deux colonnes tiennent TANT QUE chacune a
+   --perks-col-min (144) ; en dessous (une carte d'outil compacte, 390 dans une carte) la liste passe à une
+   colonne. Un mot ne se coupe jamais : la colonne est au moins aussi large que le plus long libellé. Chaque `.ds-perk` : une `Pastille
    size="coche"` (coche success, ou l'icône d'un ton choisi) puis le libellé en body-sm à l'encre.
    Plus de plaque : la plaque de 0.4.0 a été retirée. Rien ne se coche : ce n'est pas une tuile. */
-.ds-perks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0.625rem 1.5rem;margin:0;padding:0;list-style:none}
+/* @tokenref-assume: --perks-col-gap — posé par .ds-perks et redéfini par --compact et la coque */
+.ds-perks{--perks-col-gap:1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(max(var(--perks-col-min),calc(50% - var(--perks-col-gap) / 2)),1fr));gap:0.625rem var(--perks-col-gap);margin:0;padding:0;list-style:none}
 .ds-perk{display:flex;align-items:center;gap:0.625rem;min-width:0;color:var(--foreground);font-size:var(--text-body-sm);font-weight:var(--weight-regular);line-height:var(--leading-normal)}
-.ds-perks--compact,.ds-card--screen .ds-perks{column-gap:1.25rem}
+.ds-perks--compact{--perks-col-gap:1.25rem}
 /* LE COMPTEUR À JAUGE — `.ds-meter`, v0.5.0 : un libellé (« 41 / 50 analyses »), la `Progress`, une
    note en sourdine (« Ce mois · se renouvelle le 26 octobre »). La tête peut porter une VALEUR en
    face display (« 50 » + « sur 50 utilisées » : `__value` + `__of`). `.ds-meters` : la paire en deux
@@ -1172,7 +1205,6 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-meter__of{font-size:var(--text-body-sm);color:var(--text-muted)}
 .ds-meter__note{font-size:var(--text-caption);color:var(--text-muted)}
 .ds-meters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}
-.ds-card--screen .ds-meters{gap:var(--space-4)}
 
 /* ---------- le dépôt d'un fichier ---------- */
 /* LA ZONE DE DÉPÔT — un cadre pointillé, une colonne centrée : une tuile, un titre, une aide, des
@@ -1182,7 +1214,7 @@ span.ds-banner__icon{display:inline-flex;flex:none}
    se déduit comme un champ. L'<input type="file"> reste dans le flux d'accessibilité
    (`.ds-dropzone__input`) ; le composant React `Dropzone` câble le glisser-déposer. */
 .ds-dropzone{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-3);min-height:var(--dropzone-h);padding:var(--space-5) var(--space-4);box-sizing:border-box;border:1.5px dashed var(--input);border-radius:var(--radius-lg);background:var(--secondary);color:var(--foreground);text-align:center;transition:border-color var(--duration-base) var(--ease-standard),background var(--duration-base) var(--ease-standard),box-shadow var(--duration-base) var(--ease-standard)}
-:is(.ds-card,.ds-modal) .ds-dropzone{background:var(--background)}
+:where(.ds-card,.ds-modal) .ds-dropzone{background:var(--background)}
 .ds-dropzone__main{display:flex;flex-direction:column;align-items:center;gap:var(--space-1);max-width:var(--container-narrow)}
 .ds-dropzone__title{margin:0;font-family:var(--font-display);font-weight:var(--heading-weight);font-size:var(--text-body-lg);line-height:var(--leading-snug)}
 .ds-dropzone__hint{margin:0;font-size:var(--text-caption);color:var(--text-muted);line-height:var(--leading-normal)}
@@ -1211,13 +1243,13 @@ span.ds-banner__icon{display:inline-flex;flex:none}
    En pause (`.is-paused`) ou interrompu (`.is-interrupted`), la barre s'estompe ; interrompu, le cadre
    prend le filet d'avertissement. Un bloc encadré : --card sur la page, --background dans une carte. */
 .ds-upload{display:flex;flex-direction:column;gap:var(--space-3);padding:var(--space-4);box-sizing:border-box;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--card)}
-:is(.ds-card,.ds-modal) .ds-upload{background:var(--background)}
+:where(.ds-card,.ds-modal) .ds-upload{background:var(--background)}
 .ds-upload.is-interrupted{border-color:color-mix(in srgb,var(--brand-via) 35%,transparent)}
 .ds-upload:is(.is-paused,.is-interrupted) .ds-progress{opacity:.45}
 .ds-upload__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-2) var(--space-3);font-size:var(--text-caption);color:var(--text-muted)}
 /* L'ENVOI SANS CADRE — `--bare`, v0.6.0 : dans un écran de Claude, le fichier, sa barre et sa ligne de
    pied à nu ; les actions (« Annuler l'envoi ») vont dans le pied de la carte. Pas de bouton « Pause ». */
-.ds-upload--bare,:is(.ds-card,.ds-modal) .ds-upload--bare{padding:0;border:0;background:transparent}
+.ds-upload--bare{padding:0;border:0;background:transparent}
 
 /* ---------- le média vertical ---------- */
 /* LE CADRE 9:16 — une vidéo courte, sa vignette, une image. La LARGEUR est celle du parent (l'appelant la
@@ -1302,8 +1334,8 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-agenda__nav{display:inline-flex;align-items:center;gap:var(--space-1)}
 .ds-agenda__title{margin:0;font-family:var(--font-display);font-size:var(--text-heading-sm);font-weight:var(--heading-weight);letter-spacing:var(--tracking-heading-sm);line-height:var(--leading-snug);text-transform:none}
 .ds-agenda__legend{display:inline-flex;flex-wrap:wrap;align-items:center;gap:var(--space-2);margin-left:auto}
-.ds-agenda__bar .ds-tabs{background:var(--background)}
-.ds-agenda__bar .ds-tabs .ds-tab[aria-selected="true"],.ds-agenda__bar .ds-tabs .ds-tab[aria-checked="true"]{background:var(--card);color:var(--primary)}
+:where(.ds-agenda__bar) .ds-tabs{background:var(--background)}
+:where(.ds-agenda__bar) .ds-tabs .ds-tab[aria-selected="true"],:where(.ds-agenda__bar) .ds-tabs .ds-tab[aria-checked="true"]{background:var(--card);color:var(--primary)}
 /* LES TUILES — `--tiles`, v0.6.0 : sept tuiles séparées (rayon sm, gap 4) pour la bande de semaine d'un
    récapitulatif ; le jour s'écrit dans la tuile (`__day-label`), aujourd'hui = plaque --accent + filet
    --primary, le numéro reste en encre. */
@@ -1368,7 +1400,7 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-week--compact .ds-week__day.is-today{border:0;background:var(--accent)}
 .ds-week--compact .ds-week__day.is-today .ds-week__date{background:none}
 .ds-week--compact .ds-week__day.is-today .ds-week__num{width:auto;height:auto;border-radius:0;background:none;color:var(--primary-readable)}
-.ds-card .ds-week__item{background:var(--background)}
+:where(.ds-card) .ds-week__item{background:var(--background)}
 
 /* ---------- les marques de texte ---------- */
 /* LE SURLIGNAGE — `<mark class="ds-mark">` : un mot à reprendre dans un texte (un repère à compléter,
