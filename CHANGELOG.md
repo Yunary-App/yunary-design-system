@@ -14,6 +14,46 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.6.3 — le prix barré
+
+L'offre de lancement (Analyse 6 € au lieu de 9 €, Programmation 8 € au lieu de 12 €, Script « 9 € »
+barré puis « Gratuit / à vie ») entre au ds, d'après les cartes d'offre de la maquette du site
+d'ouverture (`resources/screens website/site/OuverturePage.dc.html`). Le hub la composait lui-même
+(`PrixBarre`). Aucun composant React nouveau : `.ds-price` reste un motif en classes.
+
+- **`.ds-price__old`** : l'ancien prix, dans un `<s>`, à la taille et dans la face du montant
+  (heading-xl, extra-gras ; heading en `--sm`), **à l'encre même quand le montant est en `--accent`**,
+  barré d'un trait de 0,08 em (3 px à 36, comme la maquette). Sa place suit le balisage : dans
+  `__line`, à côté du montant, et au-dessus quand la ligne passe à la ligne ; en enfant de `--row`,
+  devant le montant à la gouttière de la maquette ; posé directement dans `.ds-price`, sur une ligne
+  à lui au-dessus.
+- **Lu comme un ancien prix.** On l'écrit APRÈS le montant, avec le texte masqué **`.ds-price__sr`**
+  « au lieu de » ; `order:-1` le replace devant à l'œil. Un lecteur d'écran lit « 6 €, au lieu de 9 €,
+  / mois à vie ». Un `<s>` seul n'est annoncé par aucun lecteur, et l'`aria-label` que posait
+  `PrixBarre` sur son `<s>` n'est pas lu (rôle générique).
+- **`.ds-price__old--inline`** : dans un badge ou une ligne de méta, la taille et la couleur du texte
+  qui l'entoure, trait de 0,1 em. L'ordre demande un parent flex qui ne contient que le prix (`Badge`
+  l'est, sinon un `__line`).
+- **`.ds-offer--wide`** : la colonne prix de 20 rem de la carte d'offre du site d'ouverture (15 rem
+  par défaut), où ancien prix, montant et « / mois à vie » tiennent sur une ligne à 1440.
+- **Vitrine.** « Parcours », section « Prix barré : l'offre de lancement » : les trois cartes (Script,
+  Analyse, Programmation), `--row`, `--sm`, au-dessus, `--inline` dans un badge et une ligne de méta,
+  vérifiés en clair, en sombre et à 390. La note de « Prix et avantages » ne dit plus « deux colonnes
+  fixes » (périmée depuis 0.6.1).
+- **Migration.**
+  **Hub** : `PrixBarre` disparaît. Dans `PrixOffre`, l'ancien prix passe APRÈS le montant :
+  `<span class="ds-price__amount">{prix}</span>{ancienPrix ? <s class="ds-price__old"><span class="ds-price__sr"> au lieu de </span>{ancienPrix}</s> : null}`
+  (les classes utilitaires de `PrixBarre`, `font-display text-heading-xl decoration-[3px] mr-space-1`,
+  tombent). Les usages `sm` (`ToolCard` méta, `Fenetres`, `Fiche` dans un `Badge`, `PaymentView`)
+  prennent `.ds-price__old--inline`, écrit après le nouveau prix, dans le `Badge` ou dans un
+  `.ds-price__line` qui ne contient que le prix ; `PaymentView` garde son `text-text-muted` sur la
+  ligne. Le libellé `fr.lancement.ancienPrix` (« Prix normal … ») devient le texte masqué « au lieu
+  de ». Les cartes d'outil qui portent l'offre de lancement peuvent prendre `.ds-offer--wide`.
+  **mcp-ui** : rien à retirer ; un écran qui affiche un prix de lancement prend la même écriture
+  (`.ds-price--sm` + `.ds-price__old`, ou `--inline` dans un badge).
+
+---
+
 ## 0.6.2 — `Avatar referrerPolicy`, pied d'écran à trois boutons
 
 Deux ajouts demandés par les consommateurs, le 11/10/2026. Une classe nouvelle, `.ds-card__foot-actions`.

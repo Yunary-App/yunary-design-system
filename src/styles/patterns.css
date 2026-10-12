@@ -571,6 +571,9 @@ div.ds-tile--panel>label.ds-tile__row{cursor:pointer}
 .ds-offer{display:grid;grid-template-columns:minmax(0,1fr) 15rem;align-items:stretch;gap:2.5rem}
 .ds-offer__main{display:flex;flex-direction:column;gap:0.875rem;min-width:0}
 .ds-offer__aside{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:var(--space-4);padding-left:var(--space-6);border-left:1px solid var(--border)}
+/* LA COLONNE PRIX LARGE — `--wide`, v0.6.3 : 20 rem, la carte d'offre du site d'ouverture, où l'ancien prix,
+   le montant et « / mois à vie » tiennent sur une ligne. Empilée sous 64 rem comme la carte standard. */
+.ds-offer--wide{grid-template-columns:minmax(0,1fr) 20rem}
 @media (max-width:64rem){
 .ds-offer{grid-template-columns:minmax(0,1fr);gap:var(--space-4)}
 .ds-offer__aside{align-items:stretch;padding-left:0;border-left:0;padding-top:var(--space-4);border-top:1px solid var(--border)}
@@ -1191,6 +1194,22 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-price--accent .ds-price__amount{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
 .ds-price--row{flex-direction:row;align-items:center;gap:var(--space-3)}
 .ds-price__aside{display:flex;flex-direction:column;gap:0.125rem;min-width:0}
+/* L'ANCIEN PRIX — `.ds-price__old`, v0.6.3 : l'offre de lancement (« 9 € » barré, puis « 6 € / mois à vie »),
+   la maquette du site d'ouverture. À la taille et dans la face du montant, À L'ENCRE même quand le montant
+   est en `--accent`, barré d'un trait de 0,08 em (3 px à 36). Il se pose dans `__line` (à côté du montant,
+   et au-dessus quand la ligne passe à la ligne, à 390) ou en enfant de `.ds-price--row` ; posé directement
+   dans `.ds-price`, il prend une ligne à lui au-dessus.
+   L'ORDRE EST CELUI DE LA PHRASE, PAS CELUI DE L'ŒIL : on l'écrit APRÈS le montant, avec un texte masqué
+   (`__sr`, « au lieu de »), et `order:-1` le replace devant. Un lecteur d'écran lit « 6 €, au lieu de 9 €,
+   / mois à vie » ; un <s> seul n'est annoncé par aucun lecteur, et un aria-label sur un <s> n'est pas lu.
+   `--inline` : dans une ligne de méta ou un badge (« ~~9 €~~ 6 € / mois »), la taille et la couleur du
+   texte qui l'entoure ; il faut alors un parent flex (`.ds-badge` l'est, sinon `__line`) pour l'ordre. */
+.ds-price__old{order:-1;margin-right:var(--space-1);font-family:var(--font-display);font-size:var(--text-heading-xl);font-weight:var(--weight-extrabold);line-height:1;letter-spacing:var(--tracking-display);color:var(--foreground);text-decoration:line-through;text-decoration-color:currentColor;text-decoration-thickness:0.08em;white-space:nowrap}
+.ds-price--sm .ds-price__old{font-size:var(--text-heading)}
+.ds-price--row>.ds-price__old{margin-right:calc(var(--space-2) - var(--space-3))}
+.ds-price:not(.ds-price--row)>.ds-price__old{margin-right:0}
+.ds-price__old--inline{margin-right:0;font:inherit;letter-spacing:inherit;color:inherit;text-decoration-thickness:0.1em}
+.ds-price__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* LES AVANTAGES — v0.5.0 : une liste nue, deux colonnes (gap 10 / 24 ; 10 / 20 en `--compact` et dans un
    écran de Claude) — la maquette du 10/10/2026. Depuis 0.6.1 les deux colonnes tiennent TANT QUE chacune a
    --perks-col-min (144) ; en dessous (une carte d'outil compacte, 390 dans une carte) la liste passe à une

@@ -1491,8 +1491,35 @@ Rien ne se coche : ce n'est pas une tuile.
 </ul>
 ```
 
+**L'ancien prix — `.ds-price__old`** (v0.6.3, l'offre de lancement, maquette du site d'ouverture) :
+« 9 € » barré devant « 6 € / mois à vie ». À la taille et dans la face du montant (`--sm` suit), **à
+l'encre même quand le montant est en `--accent`**, barré d'un trait de 0,08 em (3 px à 36). Sa place :
+dans `__line`, à côté du montant, et au-dessus de lui quand la ligne passe à la ligne ; en enfant de
+`--row`, devant le montant ; posé directement dans `.ds-price`, sur une ligne à lui au-dessus.
+**On l'écrit APRÈS le montant**, dans un `<s>`, avec le texte masqué `__sr` « au lieu de » : un lecteur
+d'écran lit « 6 €, au lieu de 9 €, / mois à vie » (un `<s>` seul n'est annoncé par aucun lecteur, et
+un `aria-label` sur un `<s>` n'est pas lu) ; `order:-1` le replace devant à l'œil. `--inline` : dans un
+badge ou une ligne de méta (« ~~9 €~~ 6 € / mois »), la taille et la couleur du texte qui l'entoure ;
+l'ordre demande un parent flex qui ne contient que le prix (`Badge`, ou un `__line`). Le prix barré
+vient du serveur comme le montant.
+
+```html
+<div class="ds-price ds-price--end ds-price--accent">
+  <span class="ds-price__line">
+    <span class="ds-price__amount">6 €</span>
+    <s class="ds-price__old"><span class="ds-price__sr"> au lieu de </span>9 €</s>
+    <span class="ds-price__period">/ mois à vie</span>
+  </span>
+  <span class="ds-price__note">50 analyses et 2 audits par mois</span>
+</div>
+<!-- Script : « Gratuit » puis « à vie » -->
+<span class="ds-price__line"><span class="ds-price__amount">Gratuit</span><s class="ds-price__old"><span class="ds-price__sr"> au lieu de </span>9 €</s><span class="ds-price__period">à vie</span></span>
+<!-- dans un badge -->
+<span class="ds-badge ds-badge--brand">6 € / mois à vie<s class="ds-price__old ds-price__old--inline"><span class="ds-price__sr"> au lieu de </span>9 €</s></span>
+```
+
 - Classes : `.ds-price` · `--sm` · `--end` · `--accent` · `--row` · `__line` · `__amount` ·
-  `__period` · `__note` · `__aside` · `.ds-perks` · `--compact` · `.ds-perk`.
+  `__period` · `__note` · `__aside` · `__old` · `__old--inline` · `__sr` · `.ds-perks` · `--compact` · `.ds-perk`.
 
 **Le compteur à jauge — `.ds-meter`** (v0.5.0). Un libellé (« 41 / 50 analyses »), la `Progress`, une
 note en sourdine (« Ce mois · se renouvelle le 26 octobre »). La tête (`__head`) peut porter une
@@ -1521,8 +1548,9 @@ en deux colonnes (gap 24 ; 16 dans un écran de Claude). Dans un écran de Claud
 de Mes outils et de l'onboarding (16 entre les cartes, l'exception écrite à la règle des 1.5rem).
 `.ds-offer` : la grille d'une carte (`Card size="xl"`) — le contenu à gauche (`__main` : description,
 avantages, jauges), la colonne prix + action de 15 rem à droite (`__aside`, séparée par un filet,
-prix en bas, action en bas) ; sous 64 rem la colonne passe dessous, le prix à gauche, l'action
-pleine largeur. L'en-tête de la carte (logo, nom, badge `Actif`) est celui de `Card` (`badge`).
+prix en bas, action en bas) ; `--wide` (v0.6.3) : la colonne de 20 rem de la carte d'offre du site
+d'ouverture, où l'ancien prix, le montant et « / mois à vie » tiennent sur une ligne ; sous 64 rem la
+colonne passe dessous, le prix à gauche, l'action pleine largeur. L'en-tête de la carte (logo, nom, badge `Actif`) est celui de `Card` (`badge`).
 L'outil « à venir » : `Card upcoming`. Le vocabulaire de l'outil reste à l'app.
 
 ```html
@@ -1537,7 +1565,7 @@ L'outil « à venir » : `Card upcoming`. Le vocabulaire de l'outil reste à l'a
 </div>
 ```
 
-- Classes : `.ds-offers` · `.ds-offer` · `__main` · `__aside`.
+- Classes : `.ds-offers` · `.ds-offer` · `--wide` · `__main` · `__aside`.
 
 **La zone de dépôt en balisage — `.ds-dropzone`.** Le composant `Dropzone` en React ; dans un écran
 de Claude, le même balisage : `.ds-dropzone` (+ `.is-dragover`, `.is-invalid`, `.is-disabled`),
