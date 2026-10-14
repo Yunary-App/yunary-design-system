@@ -230,7 +230,7 @@ export function FormsPage() {
           </Block>
           <Block label="--compact --chip — choix multiple, glyphe de tête" hint="Pastille en pilule, case masquée, coche en tête une fois cochée. Le glyphe de tête est une Icon, ou un emoji quand l'emoji EST la donnée (ici « Écriture »), jamais une icône d'interface.">
             <div className="flex flex-wrap gap-space-2">
-              {([['Voyage', <Icon key="i" name="rocket" />], ['Écriture', '✍️'], ['Lecture', <Icon key="i" name="book-open" />], ['Musique', null], ['Sport', <Icon key="i" name="dumbbell" />], ['Cinéma', <Icon key="i" name="video" />]] as const).map(([v, g]) => (
+              {([['Voyage', <Icon key="i" name="rocket" />], ['Écriture', '✍️'], ['Lecture', <Icon key="i" name="book-open" />], ['Musique', null], ['Sport', <Icon key="i" name="dumbbell" />], ['Cinéma', <Icon key="i" name="video" />], ['Les coulisses de mon métier de créateur, racontées sans filtre', <Icon key="i" name="video" />]] as const).map(([v, g]) => (
                 <Tuile key={v} chip name="themes" value={v} title={v} lead={g}
                   checked={themes.includes(v)} onChange={() => basculer(v)} />
               ))}

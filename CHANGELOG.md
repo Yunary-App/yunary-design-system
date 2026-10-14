@@ -14,6 +14,32 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.6.4 — retrait du garde-fou de largeur minimale
+
+Décision de Julien du 15/10/2026 : le hub s'adapte entre 390 et 1440 px sans barre de défilement
+horizontale.
+
+- **Retrait du `min-width:1133px` du `body` (`app-scale.css`) ; les apps gèrent elles-mêmes les
+  largeurs entre 64 rem et la mise en page desktop.** La règle `@media (min-width:64rem){body{min-width:1133px}}`
+  et son commentaire « Garde-fou desktop » sont retirés. Entre 1024 et 1133 px, elle forçait une barre
+  horizontale sur toutes les pages des apps qui importent `app-scale.css` (le hub seul aujourd'hui).
+  Les quatre bandes de zoom (103 %, 112 %, 126 %, 130 %) ne changent pas, ni aucun jeton, aucune
+  règle, aucun composant.
+- **README** : la section « L'échelle d'app » ne parle plus de garde-fou ; elle dit que le module ne
+  fixe aucune largeur minimale.
+- **La pastille de choix revient à la ligne au lieu de déborder.** `.ds-tile--chip .ds-tile__main`
+  passe de `flex:none` à `flex:0 1 auto;min-width:0` : le libellé garde sa largeur naturelle mais peut
+  rétrécir. Sur /profil à 390, une pastille au texte long débordait de 45 px ; elle passe maintenant
+  sur deux lignes dans sa pilule. Les pastilles courtes rendent à l'identique (mesuré dans la vitrine :
+  les douze pastilles de « Formulaires », mêmes largeurs et hauteurs à 390 et à 1440). La vitrine
+  montre une pastille au libellé long.
+- **Migration.** **Hub** : à la montée, chaque page doit tenir entre 64 rem et 1133 px sans débordement
+  horizontal (grilles, colonnes fixes, tableaux) ; c'était masqué par la barre de défilement.
+  La pastille longue de /profil se corrige seule à la montée, rien à écrire.
+  **mcp-ui** et **site** : rien, ils n'importent pas `app-scale.css`.
+
+---
+
 ## 0.6.3 — le prix barré
 
 L'offre de lancement (Analyse 6 € au lieu de 9 €, Programmation 8 € au lieu de 12 €, Script « 9 € »

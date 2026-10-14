@@ -58,7 +58,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yunary-App/yunary-design-system#v0.6.3
+npm i github:Yunary-App/yunary-design-system#v0.6.4
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -177,8 +177,9 @@ import { Button, Card, Icon } from '@yunary/ds';
 ### 4. L'échelle d'app — opt-in, les apps
 
 Les apps importent en plus un module d'échelle, qui adapte la taille racine par palier de
-largeur d'écran pour garder une mise en page effective proche de la maquette 1440 (son
-garde-fou de largeur minimale ne s'applique qu'à partir de 64 rem : le mobile reste fluide) :
+largeur d'écran pour garder une mise en page effective proche de la maquette 1440. Il ne fixe
+aucune largeur minimale (0.6.4) : entre 64 rem et la mise en page desktop, c'est l'app qui gère ses
+largeurs, sans barre de défilement horizontale :
 
 ```ts
 import '@yunary/ds/core.css';

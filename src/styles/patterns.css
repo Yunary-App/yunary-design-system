@@ -442,7 +442,9 @@ button.ds-tile{appearance:none;width:100%;font:inherit;margin:0}
    choix, pas un bouton ni un champ. */
 .ds-tile--chip{display:inline-flex;gap:0.4375rem;padding:0.5rem 0.875rem;border-radius:var(--radius-pill);color:var(--foreground)}
 .ds-tile--chip:has(input:checked),.ds-tile--chip.is-checked{background:var(--background)}
-.ds-tile--chip .ds-tile__main{flex:none}
+/* Le libellé garde sa largeur naturelle mais peut rétrécir (0.6.4) : une pastille courte rend à
+   l'identique, une pastille au texte long revient à la ligne au lieu de déborder de sa ligne (390). */
+.ds-tile--chip .ds-tile__main{flex:0 1 auto;min-width:0}
 .ds-tile--chip .ds-tile__title{font-size:var(--text-body-sm);font-weight:var(--weight-semibold)}
 .ds-tile--chip .ds-choice{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .ds-tile__check{display:none;flex:none}

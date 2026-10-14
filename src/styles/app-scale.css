@@ -15,13 +15,6 @@ html{font-size:103%}                             /* < 1600 — plancher, mise en
 @media (min-width:1600px){html{font-size:112%}}  /* 1600–1919 — ~1500 */
 @media (min-width:1920px){html{font-size:126%}}  /* 1920–2399 — ~1524 */
 @media (min-width:2400px){html{font-size:130%}}  /* ≥ 2400 — ~1969, prix assumé du dézoom */
-/* Garde-fou desktop : 1100 × 1.03, en px VOLONTAIREMENT pour ne pas bouger avec le facteur.
-   Sous le seuil mobile du socle (64 rem, celui du tiroir, de la Modal en feuille et des cibles
-   tactiles) il ne s'applique PAS : posé hors media query, il forcerait un défilement
-   horizontal sur téléphone et rendrait le module inutilisable par une app publique. Entre 64 rem et 1133 px, le
-   défilement horizontal reste : c'est le rôle du garde-fou, une mise en page desktop ne
-   s'écrase pas. */
-@media (min-width:64rem){body{min-width:1133px}}
 
 /* ── Aucune retouche de palier typographique ici, et c'est le POINT ────────────
    Ce fichier ne contient QUE les quatre bandes de zoom ci-dessus. Tout étant en rem,
