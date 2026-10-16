@@ -305,6 +305,7 @@
   --spacing-card-pad-lg: var(--card-pad-lg);
 
   /* ---------- Largeurs de contenu par rôle — jamais une largeur inventée. ---------- */
+  --container-app: var(--container-app);
   --container-shell: var(--container-shell);
   --container-wide: var(--container-wide);
   --container-read: var(--container-read);

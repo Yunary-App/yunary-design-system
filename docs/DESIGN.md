@@ -154,6 +154,10 @@ l'échelle `--radius-*`.
 **Cartes :** `--card-pad` 24 / `--card-pad-lg` 28 — les valeurs du socle, la marque ne les
 redéclare plus (10/10/2026 : la contradiction entre la charte et le jeton est réglée) ; le palier
 `xl` 28 / 32 (`Card size="xl"`, jetons `--card-pad-xl-y/-x`) pour les cartes d'outil et d'offre.
+**Largeurs de colonne, par rôle :** `app` 100 rem, la colonne de contenu du hub dans
+`.ds-appshell__main` (remplit la largeur jusqu'à environ 2500 px de fenêtre, alignée à gauche) ·
+`shell` 70 rem, le site · `wide` 56,25 rem, les pages étroites d'une app (Paramètres, Profil) ·
+`read` 45 rem, la lecture. Une page d'app ne se plafonne jamais en `shell`.
 **Barre latérale :** largeur FLUIDE `clamp(15rem, 11rem + 5vw, 18rem)` — 240 ≤ 1280 · 256 à
 1600 · 272 à 1920 · 288 ≥ 2240 ; bord optique intérieur 24 px (16 de boîte + 8 de contenu).
 **Densité :** rail de contrôles du socle inchangé (3rem, 2.75rem sous 64rem), plus **un cran
@@ -266,6 +270,7 @@ Instagram, TikTok, YouTube, Claude) : leurs couleurs vivent dans le fichier de m
 | 2026-08-31 | Marque exportée sous `./brand-yunary.css` dans package.json | sous-chemin stable de chaque surface |
 | 2026-09-11 | Élément sélectionné en corail (`--primary` sur `--accent`), écart de contraste assumé | décision de marque Julien |
 | 2026-09-11 | Titre de page à 36 px, `Card gap` sur l'échelle `--space-*` sans palier 20 | décisions Julien |
+| 2026-10-17 | 0.9.0 : jeton `--container-app` (100 rem) et `max-w-app`, la colonne de contenu d'une app ; `shell` reste au site, `wide` aux pages étroites, `read` à la lecture | le hub plafonnait ses pages en `max-w-shell` : le contenu s'arrêtait dès environ 1470 px de fenêtre |
 | 2026-10-16 | 0.8.0 : le graphique d'évolution `Chart`, fait maison, sans librairie — trois couches (géométrie pure `chartGeometry`, aussi `@yunary/ds/chart-geometry` sans React ; classes `.ds-chart*` ; composant), une courbe par graphique, ligne en escalier, graduations calculées et adaptées à la largeur, jeton `--text-axis` (12) ; le DS ne formate rien | maquette Admin Web, onglet Évolution ; l'écran Métriques de mcp-ui |
 | 2026-10-16 | 0.7.0 : briques de la page Admin, génériques — la carte de chiffre `StatCard` (taille de carte `--stat` 24 / 28 puis 16 / 18, variation hausse `success` · stable `neutral` · baisse `danger`, calcul à l'app), l'en-tête triable `Th sort` contrôlé (`aria-sort`, glyphes `arrow-down` · `arrow-up` · `arrow-up-down`), `.ds-stat--lg` et `.ds-stats--bare` | maquette Admin Web ; l'écran Métriques de mcp-ui en a besoin |
 | 2026-10-12 | 0.6.3 : l'ancien prix barré `.ds-price__old` (offre de lancement), à l'encre même en `--accent`, lu « au lieu de » par un lecteur d'écran (écrit après le montant, replacé devant par `order`) ; `--inline` pour un badge ou une méta ; colonne prix large `.ds-offer--wide` (20 rem) | maquette OuverturePage du site ; `PrixBarre` du hub versé au ds |

@@ -15,7 +15,7 @@ const RAIL = ['--control-sm', '--control-md', '--control-lg', '--icon-control-sm
 const DIMENSIONS = ['--navbar-h', '--sidebar-w', '--sidebar-w-collapsed', '--sidebar-head-h', '--sidenav-h', '--page-min', '--modal-w', '--modal-w-lg', '--modal-close', '--dropdown-w', '--dropdown-item-h', '--toast-w-min', '--toast-w-max', '--choice-box', '--choice-dot', '--progress-h', '--cal-day', '--cal-nav'];
 const DIMENSIONS_RADII = ['--tabs-radius', '--pagination-radius', '--choice-box-radius'];
 const SHADOWS = ['--shadow-sm', '--shadow-md', '--shadow-lg', '--shadow-glow', '--shadow-glow-lg'];
-const WIDTHS = ['--container-shell', '--container-wide', '--container-read', '--container-narrow', '--container-dialog', '--container-aside'];
+const WIDTHS = ['--container-app', '--container-shell', '--container-wide', '--container-read', '--container-narrow', '--container-dialog', '--container-aside'];
 
 export function Foundations() {
   return (
@@ -115,12 +115,20 @@ export function Foundations() {
             ))}
           </div>
         </Block>
-        <Block label="Largeurs de contenu par rôle" hint="Cinq largeurs maximales de colonne et la colonne latérale (--container-aside, w-aside). Chacune peut aussi servir de largeur MINIMALE à la grille auto-fill ci-dessous.">
+        <Block label="Largeurs de contenu par rôle" hint="Six largeurs maximales de colonne et la colonne latérale (--container-aside, w-aside). app : la colonne de contenu d'une app, 100 rem (0.9.0) ; shell : le site ; wide : les pages étroites d'une app (Paramètres, Profil) ; read : la lecture. Chacune peut aussi servir de largeur MINIMALE à la grille auto-fill ci-dessous.">
           {WIDTHS.map(t => (
             <Spec key={t} token={t}>
               <span className="h-space-2 w-full rounded-pill bg-accent" style={{ maxWidth: `var(${t})` }} />
             </Spec>
           ))}
+        </Block>
+        <Block label="La colonne d'une app et celle du site" hint="max-w-app (100 rem) remplit la colonne principale d'une app jusqu'à environ 2500 px de fenêtre, alignée à gauche ; max-w-shell (70 rem) est la largeur du site, centrée. Classes écrites en clair (check-classes.mjs).">
+          <Spec token="max-w-app · la colonne de contenu d'une app">
+            <div className="h-space-2 w-full max-w-app rounded-pill bg-primary" />
+          </Spec>
+          <Spec token="max-w-shell · le site">
+            <div className="mx-auto h-space-2 w-full max-w-shell rounded-pill bg-accent" />
+          </Spec>
         </Block>
         <Block label="Grille de cartes en auto-fill" hint="grid-cards-<rôle> : autant de colonnes que l'écran en tient, aucune carte sous la largeur du rôle, jamais de débordement. À composer avec `grid` et un gap — il ne pose pas display:grid, comme grid-cols-*.">
           {/* Classes écrites EN CLAIR, pas interpolées : c'est ainsi que check-classes.mjs

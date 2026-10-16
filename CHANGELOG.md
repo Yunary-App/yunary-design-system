@@ -14,6 +14,39 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.9.0 — une largeur de colonne pour les apps
+
+Le hub plafonnait ses pages en `max-w-shell` (`--container-shell`, 70 rem), une largeur faite pour le
+site. Sous l'échelle d'app, qui grossit la racine par paliers, le contenu s'arrêtait avant le bord droit
+dès environ 1470 px de fenêtre, et le vide grandissait avec l'écran (131 px à 1920, 685 à 2560).
+
+- **Jeton `--container-app` : 100 rem**, et sa classe **`max-w-app`** (`theme.css`), à côté des autres
+  largeurs. La colonne de contenu d'une app, posée dans `.ds-appshell__main`, alignée à gauche.
+- **Mesures**, sous l'échelle d'app, dans `.ds-appshell__main` avec la barre latérale et les gouttières
+  du hub (1,25 rem) :
+
+  | Fenêtre | Racine | Largeur disponible | `max-w-app` | `max-w-shell` |
+  |---|---|---|---|---|
+  | 1440 | 16,48 | 1137 | 1137, remplit | 1137 |
+  | 1920 | 20,16 | 1542 | 1542, remplit | 1411 (131 de vide) |
+  | 2400 | 20,8 | 1989 | 1989, remplit | 1456 (533 de vide) |
+  | 2560 | 20,8 | 2141 | 2080, s'arrête à 100 rem (61 de vide) | 1456 (685 de vide) |
+
+  `max-w-app` remplit jusqu'à 2495 px de fenêtre, puis s'arrête à 100 rem, alignée à gauche. Aucun
+  débordement horizontal.
+- **La doc des largeurs** (README « Les largeurs de colonne », `DESIGN.md` § 5, `tokens/scales.css`) :
+  `shell` pour le site, `app` pour la colonne de contenu d'une app, `wide` pour les pages étroites
+  (Paramètres, Profil), `read` pour la lecture. Le README ne cite plus `max-w-page`, qui n'existait pas.
+- **Rien ne bouge ailleurs** : `--container-shell` (le site l'utilise) et la coque d'écran sont intacts.
+- **Vitrine.** « Fondations » : `--container-app` dans les largeurs par rôle, et `max-w-app` à côté de
+  `max-w-shell`.
+- **Contient le correctif 0.8.1** du graphique (`Chart` stable en mode strict, voir ci-dessous).
+- **Migration.** **Hub** : la colonne de contenu des pages passe de `max-w-shell` à `max-w-app`
+  (`AdminVue`, `SubscribedTools`, `OutilsPage`, `ContenuPage`, `ReglesPage`…) ; les pages étroites
+  (Paramètres, Profil) en `max-w-wide`. **mcp-ui** et **site** : rien.
+
+---
+
 ## 0.8.1 — Chart stable en mode strict
 
 Correctif remonté par le hub en intégrant la 0.8.0 : en développement, avec le mode strict de React,

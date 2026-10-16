@@ -175,10 +175,19 @@
   --choice-box-radius:0.4375rem;  /* 7 — squircle sur 20px, où --radius-sm clipperait */
   --choice-dot:0.625rem;          /* 10 — le point du radio */
 
-  /* Content widths by ROLE — FROM APP CODE. Name the intent, never invent a width. */
-  --container-shell:70rem;    /* 1120 — widest shell (hero, landing sections) */
-  --container-wide:56.25rem;  /* 900 — wide working column */
-  --container-read:45rem;     /* 720 — continuous reading column (legal, forms) */
+  /* Content widths by ROLE — FROM APP CODE. Name the intent, never invent a width.
+     Quatre rôles de colonne, à ne pas confondre (0.9.0) :
+       shell — LE SITE : le héros et les sections d'une landing, centrés ;
+       app   — la colonne de contenu d'une APP (le hub) dans `.ds-appshell__main` : elle remplit
+               toute la largeur disponible et ne s'arrête qu'au-delà d'environ 2500 px de fenêtre
+               (2495 mesuré, barre latérale du hub), alignée à gauche (l'échelle d'app grossit la
+               racine par paliers : 100 rem y valent 1648 px à 1440, 2016 à 1920, 2080 à 2400) ;
+       wide  — les pages ÉTROITES d'une app (Paramètres, Profil) ;
+       read  — la LECTURE suivie (textes légaux, formulaires longs). */
+  --container-app:100rem;     /* 1600 — la colonne de contenu d'une app (0.9.0) */
+  --container-shell:70rem;    /* 1120 — widest shell (hero, landing sections) — le site */
+  --container-wide:56.25rem;  /* 900 — wide working column — les pages étroites d'une app */
+  --container-read:45rem;     /* 720 — continuous reading column (legal, forms) — la lecture */
   --container-narrow:30rem;   /* 480 — centred message, empty state */
   --container-dialog:27.5rem; /* 440 — carte centrée d'auth ou de dialogue (maquettes A1-A3). ADDED v0.1.2 */
   /* 320 — la COLONNE LATÉRALE (le récapitulatif collé à gauche d'un paiement, le bandeau

@@ -58,7 +58,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yunary-App/yunary-design-system#v0.8.1
+npm i github:Yunary-App/yunary-design-system#v0.9.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -215,10 +215,26 @@ Une section ink au milieu d'une page crème adopte le scope, elle ne peint pas u
 | Ombres | `shadow-sm` `shadow-md` `shadow-lg` `shadow-glow` `shadow-glow-lg` |
 | Typo | `font-display` `font-body` `font-mono` · `text-display-xl` `text-display` `text-heading-xl` `text-heading` `text-subheading` `text-heading-sm` `text-body-lg` `text-body` `text-body-sm` `text-control` `text-caption` `text-eyebrow` `text-chip` |
 | Espacement | `gap-space-1` … `gap-space-8` · `h-control-sm/md/lg` · `w-icon-control-sm/md/lg` · `p-card-pad` `p-card-pad-lg` — **rail unique** : tous les contrôles s'alignent sur `--control-md`, qui descend à 2.75rem sous 64rem |
-| Largeurs | `max-w-shell` `max-w-wide` `max-w-read` `max-w-narrow` `max-w-dialog` `max-w-page` · `w-aside` (la colonne latérale, 20 rem) |
+| Largeurs | `max-w-app` (la colonne de contenu d'une app, 100 rem) `max-w-shell` (le site, 70 rem) `max-w-wide` (les pages étroites d'une app : Paramètres, Profil, 56,25 rem) `max-w-read` (la lecture, 45 rem) `max-w-narrow` `max-w-dialog` · `w-aside` (la colonne latérale, 20 rem) — voir « Les largeurs de colonne » plus bas |
 | Ratios | `aspect-video` et `aspect-square` natifs |
 | Grilles | `grid-cards-dialog` `grid-cards-narrow`… — `grid-cards-<rôle>` pose des colonnes en `auto-fill` dont aucune ne descend sous la largeur du rôle `--container-<rôle>` (`minmax(min(…, 100%), 1fr)`). À composer avec `grid` et un gap, comme `grid-cols-*` ; un `@utility` paramétré, donc variantable |
 | Motion | `ease-standard` |
+
+**Les largeurs de colonne, par rôle** (0.9.0). On nomme l'intention, jamais une mesure :
+
+- **`max-w-app`** (`--container-app`, 100 rem) : la colonne de contenu d'une **app** (le hub), posée
+  dans `.ds-appshell__main`, alignée à gauche. Sous l'échelle d'app, elle remplit toute la largeur
+  disponible à 1440 comme à 1920, et ne s'arrête à 100 rem (2080 px) qu'au-delà d'environ 2500 px de
+  fenêtre (2495 mesuré, avec la barre latérale du hub).
+- **`max-w-shell`** (`--container-shell`, 70 rem) : le **site** — héros et sections d'une landing,
+  centrés. Pas la colonne d'une app : sous l'échelle d'app, elle s'arrête dès environ 1470 px de
+  fenêtre, et le vide à droite grandit avec l'écran.
+- **`max-w-wide`** (`--container-wide`, 56,25 rem) : les **pages étroites** d'une app (Paramètres,
+  Profil).
+- **`max-w-read`** (`--container-read`, 45 rem) : la **lecture** suivie (textes légaux, formulaires
+  longs).
+- `max-w-narrow` (30 rem, un message centré, un état vide) et `max-w-dialog` (27,5 rem, la carte
+  centrée d'auth ou de dialogue) ; `w-aside` (20 rem) est une colonne, pas un plafond de page.
 
 L'échelle d'espacement est **nommée** (`space-5`, pas `5`) : elle n'écrase pas l'échelle numérique
 de Tailwind, sur laquelle reposent les composants shadcn de ton app.
