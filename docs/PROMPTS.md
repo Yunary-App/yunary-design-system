@@ -496,6 +496,9 @@ graduations en valeurs à gauche et en dates en bas. Trois couches : la géomét
 - **Le DS ne formate rien** : `formatValue` et `formatAt` viennent de l'app, comme `label` (le nom lu
   par un lecteur d'écran) et `summary` (la phrase de résumé : « 72 € aujourd'hui, +72 € sur 30 jours »).
   Le libellé de période et l'assemblage de la carte (titres, onglets de période, filet) restent à l'app.
+- **Stable en mode strict** (0.8.1) : chaque mesure (taille du conteneur, étiquettes) n'est écrite
+  que si elle change, les effets ont des dépendances explicites, le ResizeObserver est débranché au
+  démontage et rien n'est écrit après. Le garde : `tests/chart-strict.test.mjs`.
 - Cas limites : un seul point (la valeur s'étale sur le tracé, le point final à droite, une date), une
   série toute à zéro (graduations 0 et 1, la ligne sur le zéro), des valeurs constantes (une marche
   plate), une année jour par jour (les marches nulles ne sont pas écrites). Pas d'infobulle ni de survol.

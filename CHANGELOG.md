@@ -14,6 +14,51 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.8.1 — Chart stable en mode strict
+
+Correctif remonté par le hub en intégrant la 0.8.0 : en développement, avec le mode strict de React,
+`Chart` bouclait dès le montage (« Maximum update depth exceeded »), même minimal, aux props fixes. Le
+rendu ne change pas.
+
+- **La cause, reproduite dans la vitrine** (un build `--mode development`, mode strict) : le second
+  `useLayoutEffect`, sans tableau de dépendances, appelait son setter à CHAQUE passage. La comparaison
+  « la mesure a-t-elle changé ? » se faisait dans la fonction de mise à jour, donc APRÈS que l'appel
+  eut programmé un rendu ; ce rendu relançait l'effet, qui rappelait le setter. Mesuré au montage de la
+  page « Data display » : 644 rendus de `Chart` et 15 920 écritures, toutes à valeur identique sauf
+  les deux premières de chaque graphique. Hors mode strict, React abandonnait ce rendu inutile sans
+  rejouer l'effet ; en mode strict de développement, non. La vitrine tournait déjà en mode strict, mais
+  la recette de la 0.8.0 s'était faite sur le build de production, où le mode strict ne joue pas.
+- **Le correctif, à la racine** :
+  - chaque état (la taille du conteneur, les mesures d'étiquettes) passe par un setter qui compare
+    AVANT d'appeler React, à la dernière valeur posée : même largeur, mêmes marges, pas d'appel, pas de
+    rendu ;
+  - des dépendances explicites : la taille au montage (`ResizeObserver`), les étiquettes quand ce qui
+    est affiché change (taille, libellés) ;
+  - pour une même taille et une même série, les mesures d'étiquettes ne font que croître : la boucle
+    mesure → marges → libellés → mesure s'arrête forcément ;
+  - le `ResizeObserver` est débranché au démontage, et un drapeau coupe tout rappel tardif (rappel
+    d'observateur, chargement des polices) : aucune écriture après démontage ;
+  - une seconde mesure suit le chargement des polices.
+  Pas de contournement : le mode strict reste actif, aucun compteur de passages.
+- **Le garde-fou** : `tests/chart-strict.test.mjs`, enchaîné dans `npm test` et `npm run lint`. React
+  de développement, `StrictMode`, DOM `happy-dom` (dépendance de développement nouvelle), mise en page
+  et `ResizeObserver` simulés, un `Profiler` qui compte les rendus validés. Il exige : aucune erreur,
+  au plus 6 rendus au montage (mesuré : 3), au plus 5 après un changement de largeur (2), aucun quand
+  la largeur annoncée ne change pas, au plus 3 après un nouveau rendu du parent aux formateurs recréés
+  (1), le repos ensuite, l'observateur débranché au démontage, et rien d'écrit par un rappel tardif.
+  **Son jumeau de falsification** : `tests/fixtures/Chart-0.8.0.tsx`, la version fautive telle quelle,
+  doit boucler dans ce banc, sinon le banc ne prouve rien.
+- **Le rendu ne bouge pas** : toutes les mesures de la vitrine (hauteurs, traits, points, graduations,
+  marges, squelettes, accessibilité, redessin au redimensionnement) sont identiques à la 0.8.0, en
+  clair et en sombre, à 1440 et à 390, en build de production comme en développement strict.
+- **Les autres composants** : aucun n'a le motif. Les trois autres effets qui écrivent un état ont des
+  dépendances explicites et n'écrivent qu'en réponse à un changement réel (`Calendar` : la date choisie ;
+  `DatePicker` : clic extérieur et Échap ; `Navbar` : le défilement, un booléen).
+- **README** : la vitrine tourne en mode strict, et un composant à effets se recette en développement.
+- **Migration.** Hub et mcp-ui : rien à changer, monter la version.
+
+---
+
 ## 0.8.0 — le graphique d'évolution, fait maison
 
 La page Admin, lot 2 : l'onglet Évolution de `resources/screens/Yunary Admin Web.dc.html`, sans

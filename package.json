@@ -1,6 +1,6 @@
 {
   "name": "@yunary/ds",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Design system Yunary — jetons, couche Tailwind v4 et primitives React.",
   "license": "UNLICENSED",
   "private": false,
@@ -41,7 +41,7 @@
     "typecheck": "tsc --noEmit",
     "setup": "npm install && npm install --prefix demo",
     "rebrand": "node rebrand.mjs",
-    "test": "node --test tests/chart-geometry.test.mjs",
+    "test": "node --test tests/chart-geometry.test.mjs tests/chart-strict.test.mjs",
     "lint": "npm run typecheck && npm test && node check-token-refs.mjs && node check-version.mjs && node check-contract.mjs && node check-utility-collisions.mjs && node check-dead-utilities.mjs && node check-font-px.mjs && node check-fragile-classes.mjs && node check-dark-substitution.mjs && node check-contrast.mjs && node check-surfaces.mjs && node check-catalogue.mjs && node check-coque.mjs && node check-preflight-drift.mjs && bash check-literals.sh",
     "demo": "npm --prefix demo run dev",
     "demo:build": "npm --prefix demo run build",
@@ -68,6 +68,7 @@
   "devDependencies": {
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "happy-dom": "^20.14.6",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

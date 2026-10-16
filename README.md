@@ -58,7 +58,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yunary-App/yunary-design-system#v0.8.0
+npm i github:Yunary-App/yunary-design-system#v0.8.1
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -327,7 +327,7 @@ npm install          # dépendances du paquet
 npm run build        # tsup → dist/ (ESM + CJS + .d.ts)
 npm run typecheck    # tsc --noEmit
 npm run lint         # typecheck + les tests + les quatorze gardes
-npm test             # les tests de la géométrie du graphique (node --test)
+npm test             # node --test : la géométrie du graphique, et Chart monté en mode strict (happy-dom)
 ```
 
 `npm run lint` enchaîne le typecheck, les tests de la géométrie du graphique (`npm test`, 0.8.0) et **quatorze gardes** ; un quinzième, `check-classes.mjs`,
@@ -383,6 +383,11 @@ npm run demo            # http://localhost:5273
 
 La démo consomme le design system depuis ses **sources** : ce que tu vois est exactement ce qui est
 publié. Elle n'utilise aucun style custom hors tokens.
+
+**Elle tourne en mode strict** (`demo/src/main.tsx`), comme le hub. Le mode strict ne joue qu'en
+DÉVELOPPEMENT : un composant à effets se recette sur `npm run demo` (ou un build `--mode development`),
+jamais sur le seul build de production. C'est là que la boucle du `Chart` de la 0.8.0 était
+invisible (0.8.1).
 
 ---
 
