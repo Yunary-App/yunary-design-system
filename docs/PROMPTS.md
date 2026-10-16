@@ -478,6 +478,79 @@ En classes (mcp-ui) :
 - États rendus : lignes au repos, alternées (`striped`), survolées (`hoverable`) ; en-tête triable
   décroissant, croissant, non trié, survolé, focus clavier.
 
+## Chart
+
+Le graphique d'évolution (v0.8.0, maquette Admin Web, onglet Évolution ; l'écran Métriques de mcp-ui),
+fait maison, sans librairie. **Une courbe par graphique** : la grille, l'aire, la ligne en ESCALIER
+(une valeur tient jusqu'au point suivant, puis la ligne monte à la verticale), le point final, les
+graduations en valeurs à gauche et en dates en bas. Trois couches : la géométrie pure
+`chartGeometry` (ni React ni DOM, exportée seule par `@yunary/ds/chart-geometry`), les classes
+`.ds-chart*` (l'apparence, sur les jetons) et ce composant.
+
+- **La largeur** est celle du conteneur : le composant l'observe et se redessine quand elle change.
+  **La hauteur** est une taille : `md` 260 (180 sous 64 rem), `sm` 150 (120).
+- **Les graduations s'adaptent** : les valeurs, de zéro à un « joli » maximum (au plus une tous les
+  36 px de haut ; `integer` pour un nombre de clients) ; les dates, au plus 5, jamais plus près que
+  deux largeurs d'étiquette (3 à 390). Le composant mesure ses étiquettes : la colonne des valeurs fait
+  au moins 40 (deux graphiques empilés restent alignés) et s'élargit pour une étiquette longue.
+- **Le DS ne formate rien** : `formatValue` et `formatAt` viennent de l'app, comme `label` (le nom lu
+  par un lecteur d'écran) et `summary` (la phrase de résumé : « 72 € aujourd'hui, +72 € sur 30 jours »).
+  Le libellé de période et l'assemblage de la carte (titres, onglets de période, filet) restent à l'app.
+- Cas limites : un seul point (la valeur s'étale sur le tracé, le point final à droite, une date), une
+  série toute à zéro (graduations 0 et 1, la ligne sur le zéro), des valeurs constantes (une marche
+  plate), une année jour par jour (les marches nulles ne sont pas écrites). Pas d'infobulle ni de survol.
+
+**Ne pas l'utiliser** pour un chiffre seul et sa variation (c'est `StatCard`) ni pour une part (c'est
+`Progress`).
+
+```tsx
+<Chart points={mrr} formatValue={v => `${v} €`} formatAt={jourCourt} label="Courbe du MRR"
+  summary="72 € aujourd'hui, +72 € sur 30 jours." />
+<Chart points={clients} formatValue={String} formatAt={jourCourt} label="Courbe des clients payants"
+  summary="7 clients payants aujourd'hui." tone="ink" size="sm" integer />
+<Chart points={[]} formatValue={String} formatAt={String} label="Courbe du MRR" summary="Chargement." loading />
+```
+
+`points` : `{ at, value }[]`, dans l'ordre, espacés régulièrement (un par jour). `at` est ce que
+`formatAt` reçoit (une date, un horodatage, une chaîne).
+
+**La géométrie seule** (mcp-ui, Preact, HTML autonome) : la fonction rend les tracés et les positions
+en pixels CSS pour la taille du cadre ; l'écran pose les classes sur son propre SVG.
+
+```ts
+import { chartGeometry } from '@yunary/ds/chart-geometry';
+
+const g = chartGeometry({ points, width: 318, height: 180, formatValue: v => `${v} €`, formatAt: jourCourt });
+// g.viewBox · g.grid · g.area · g.line · g.end {x, y} · g.yTicks [{pos, label}] · g.xTicks [{pos, label}] · g.plot · g.domain
+```
+
+```html
+<div class="ds-chart" role="img" aria-label="Courbe du MRR" aria-describedby="resume-mrr">
+  <svg class="ds-chart__svg" width="318" height="180" viewBox="0 0 318 180" aria-hidden="true">
+    <path class="ds-chart__grid" d="…g.grid"/><path class="ds-chart__area" d="…g.area"/>
+    <path class="ds-chart__line" d="…g.line"/><circle class="ds-chart__dot" cx="…" cy="…" r="4.5"/>
+  </svg>
+  <span class="ds-chart__ytick" style="top:146px">0 €</span><!-- une par g.yTicks -->
+  <span class="ds-chart__xtick" style="left:65px">1er juil.</span><!-- une par g.xTicks -->
+  <span id="resume-mrr" class="ds-chart__summary">72 € aujourd'hui, +72 € sur 30 jours.</span>
+</div>
+```
+
+- Props : `points` · `formatValue` · `formatAt` · `label` · `summary` · `tone` (`primary`, défaut : la
+  courbe de marque, aire, trait 2,5, point 4,5 · `ink` : à l'encre, sans aire, trait 2, point 4) ·
+  `area` (défaut : oui en `primary`) · `size` (`md` · `sm`) · `integer` · `maxXTicks` (défaut 5) ·
+  `loading`. Les attributs HTML d'un `<div>` passent.
+- `chartGeometry(input)` : `points` · `width` · `height` · `formatValue` · `formatAt` · `integer` ·
+  `padding` (défaut 40 / 8 / 8 / 26, `CHART_PADDING`) · `yTickGap` (36) · `xLabelWidth` (50) ·
+  `maxXTicks` (5). Types `ChartPoint`, `ChartGeometryInput`, `ChartGeometry`, `ChartTick`,
+  `ChartPadding` ; `niceStep(brut, integer)`.
+- Classes : `.ds-chart` · `--sm` · `--ink` · `__svg` · `__grid` · `__area` · `__line` · `__dot` ·
+  `__ytick` · `__xtick` · `__summary` · `__skel`. Jetons : `--chart-h-md` · `--chart-h-sm` ·
+  `--chart-stroke` · `--chart-stroke-ink` · `--chart-dot` · `--chart-dot-ink` · `--chart-ring` ·
+  `--text-axis`. Dans la coque d'écran, le point final se détoure sur `--background`.
+- États rendus : la carte Évolution (trois périodes), un point, toute à zéro, constante, une année,
+  chargement ; clair et sombre, 1440 et 390.
+
 ## StatCard
 
 La carte de chiffre (v0.7.0, maquette Admin Web ; l'écran Métriques de mcp-ui l'écrit en classes) :

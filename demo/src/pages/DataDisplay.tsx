@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Button, Card, EmptyState, Icon, IconButton, Input, Logo, Pastille, Progress, Separator, StatCard, Table, TBody, Td, Th, THead, Tooltip, Tr } from '@yunary/ds';
+import { Badge, Button, Card, Chart, EmptyState, Icon, IconButton, Input, Logo, Pastille, Progress, Separator, StatCard, Table, TBody, Tabs, Td, Th, THead, Tooltip, Tr } from '@yunary/ds';
 import type { ThSort } from '@yunary/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
@@ -33,9 +33,73 @@ function TableTriable() {
   );
 }
 
+/* Les données de la maquette Admin (onglet Évolution) : le MRR et les clients payants, jour par jour.
+   Le format des valeurs et des dates est celui de l'APP : le DS ne formate rien. */
+const JOUR = 86400000;
+const UTC = (s: string) => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10));
+const LANCEMENT = UTC('2026-07-01'), AUJOURDHUI = UTC('2026-10-16');
+const MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+const jourCourt = (t: number) => { const d = new Date(t); const n = d.getUTCDate(); return `${n === 1 ? '1er' : n} ${MOIS[d.getUTCMonth()]}`; };
+const euros = (v: number) => `${v.toLocaleString('fr-FR')} €`;
+const nombre = (v: number) => v.toLocaleString('fr-FR');
+const ABONNES = [['2026-07-03', 14], ['2026-07-19', 6], ['2026-08-08', 14], ['2026-08-27', 8], ['2026-09-21', 14], ['2026-10-02', 6], ['2026-10-11', 8]] as const;
+function serie(jours: number, kind: 'mrr' | 'cli') {
+  const debut = jours === 0 ? LANCEMENT : Math.max(LANCEMENT, AUJOURDHUI - (jours - 1) * JOUR);
+  const n = Math.round((AUJOURDHUI - debut) / JOUR) + 1;
+  return Array.from({ length: n }, (_, i) => {
+    const t = debut + i * JOUR, on = ABONNES.filter(([d]) => UTC(d) <= t);
+    return { at: t, value: kind === 'mrr' ? on.reduce((a, [, m]) => a + m, 0) : on.length };
+  });
+}
+const ANNEE = Array.from({ length: 365 }, (_, i) => ({ at: UTC('2025-10-17') + i * JOUR, value: 6 * Math.floor(i / 11) + (i % 23 < 4 ? 8 : 0) }));
+
+function CarteEvolution() {
+  const [periode, setPeriode] = useState('0');
+  const jours = Number(periode);
+  const mrr = serie(jours, 'mrr'), cli = serie(jours, 'cli');
+  const libelle = { '30': '30 derniers jours', '90': '90 derniers jours', '0': 'Depuis le lancement, le 1er juil. 2026' }[periode];
+  const fin = mrr[mrr.length - 1].value, ecart = fin - mrr[0].value;
+  return (
+    <Card size="lg">
+      <div className="flex flex-col gap-space-5">
+        <div className="flex flex-wrap items-start justify-between gap-space-4">
+          <div className="flex flex-col gap-space-1"><span className="text-body-sm font-semibold">MRR, jour par jour</span><span className="caption text-text-muted">{libelle}</span></div>
+          <Tabs size="sm" value={periode} onChange={setPeriode} items={[{ value: '30', label: '30 jours' }, { value: '90', label: '90 jours' }, { value: '0', label: 'Depuis le lancement' }]} />
+        </div>
+        <Chart points={mrr} formatValue={euros} formatAt={jourCourt} label="Courbe du MRR"
+          summary={`${euros(fin)} aujourd'hui, ${ecart >= 0 ? '+' : ''}${euros(ecart)} sur la période.`} />
+        <Separator />
+        <div className="flex flex-col gap-space-1"><span className="text-body-sm font-semibold">Clients payants</span><span className="caption text-text-muted">Même période</span></div>
+        <Chart points={cli} formatValue={nombre} formatAt={jourCourt} label="Courbe des clients payants" tone="ink" size="sm" integer
+          summary={`${cli[cli.length - 1].value} clients payants aujourd'hui.`} />
+      </div>
+    </Card>
+  );
+}
+
 export function DataDisplayPage() {
   return (
     <div className="flex flex-col gap-space-7">
+      <Section title="Graphique d'évolution — Chart" note="Chart (0.8.0, maquette Admin Web, onglet Évolution), sans librairie : grille, aire, ligne en escalier, point final, graduations en valeurs et en dates (--text-axis, 12). La géométrie vient de chartGeometry (@yunary/ds/chart-geometry, sans React) ; la largeur est celle du conteneur, la hauteur md 260 / 180 ou sm 150 / 120 sous 64 rem. tone=primary (aire, trait 2,5) ou ink (trait 2). Le format et le résumé lu par un lecteur d'écran viennent de l'app. L'assemblage de la carte (titres, période) reste à l'app.">
+        <Block label="La carte Évolution de la maquette, assemblée par l'app" hint="Change la période : 30 jours, 90 jours, depuis le lancement.">
+          <CarteEvolution />
+        </Block>
+        <Block label="Cas limites">
+          <Grid cols={2}>
+            <Card gap={3}><span className="caption text-text-muted">Un seul point</span><Chart points={[{ at: AUJOURDHUI, value: 72 }]} formatValue={euros} formatAt={jourCourt} label="Courbe du MRR" summary="72 € aujourd'hui." size="sm" /></Card>
+            <Card gap={3}><span className="caption text-text-muted">Toute à zéro</span><Chart points={serie(30, 'mrr').map(p => ({ ...p, value: 0 }))} formatValue={euros} formatAt={jourCourt} label="Courbe du MRR" summary="0 € aujourd'hui, aucun abonnement sur 30 jours." size="sm" integer /></Card>
+            <Card gap={3}><span className="caption text-text-muted">Valeurs qui ne bougent pas</span><Chart points={serie(30, 'mrr').map(p => ({ ...p, value: 14 }))} formatValue={euros} formatAt={jourCourt} label="Courbe du MRR" summary="14 € aujourd'hui, stable sur 30 jours." size="sm" /></Card>
+            <Card gap={3}><span className="caption text-text-muted">Une année jour par jour</span><Chart points={ANNEE} formatValue={euros} formatAt={jourCourt} label="Courbe du MRR" summary="Une année de MRR, jour par jour." size="sm" /></Card>
+          </Grid>
+        </Block>
+        <Block label="Chargement" hint="Un squelette aux dimensions finales.">
+          <Grid cols={2}>
+            <Card><Chart points={[]} formatValue={euros} formatAt={jourCourt} label="Courbe du MRR" summary="Chargement." loading /></Card>
+            <Card><Chart points={[]} formatValue={nombre} formatAt={jourCourt} label="Courbe des clients payants" summary="Chargement." loading size="sm" tone="ink" /></Card>
+          </Grid>
+        </Block>
+      </Section>
+
       <Section title="Carte de chiffre — StatCard" note=".ds-card.ds-card--stat.ds-stat-card (0.7.0, maquette Admin Web) : libellé, valeur en --text-heading-xl 800, pied en sourdine (badge de variation dense + phrase). Hausse = success, stable = neutral, baisse = danger ; le texte et le sens viennent de l'app. Paddings 24 / 28 puis 16 / 18 sous 64 rem (--card-pad-stat-*). En chargement, deux squelettes aux places finales, le libellé reste.">
         <Block label="Les trois sens de variation">
           <Grid cols={3}>

@@ -91,6 +91,18 @@
   --card-pad-stat-y:1.5rem;  /* 24 */
   --card-pad-stat-x:1.75rem; /* 28 */
 
+  /* v0.8.0 — LE GRAPHIQUE D'ÉVOLUTION (`.ds-chart`, maquette Admin Web, onglet Évolution). Deux
+     hauteurs (la courbe principale, la courbe d'appoint), redéclarées sous 64 rem ; la largeur est
+     celle du conteneur, jamais un jeton. Les traits et le point final : la courbe de marque
+     (`--primary`, avec aire) et la courbe à l'encre (`--foreground`, sans aire). */
+  --chart-h-md:16.25rem;        /* 260 */
+  --chart-h-sm:9.375rem;        /* 150 */
+  --chart-stroke:0.15625rem;    /* 2,5 — la ligne de marque */
+  --chart-stroke-ink:0.125rem;  /* 2 — la ligne à l'encre */
+  --chart-dot:0.28125rem;       /* 4,5 — rayon du point final, ligne de marque */
+  --chart-dot-ink:0.25rem;      /* 4 — rayon du point final, ligne à l'encre */
+  --chart-ring:0.125rem;        /* 2 — le détourage du point final, à la couleur de la surface */
+
   /* ---------- DIMENSIONS DE COMPOSANTS — DES DÉFAUTS, PAS DES INVARIANTS ----------
      Vingt mesures qui étaient des littéraux dans patterns.css, et qui portent de
      l'IDENTITÉ : la hauteur d'une navbar, la largeur d'un tiroir, la taille d'une case à
@@ -239,7 +251,8 @@
 }
 @media (max-width:64rem){
   :root{ --control-md:2.75rem; /* 44 — mobile touch target */ --control-lg:3rem;
-          --card-pad-stat-y:1rem; /* 16 */ --card-pad-stat-x:1.125rem; /* 18 — carte de chiffre, mobile */ }
+          --card-pad-stat-y:1rem; /* 16 */ --card-pad-stat-x:1.125rem; /* 18 — carte de chiffre, mobile */
+          --chart-h-md:11.25rem; /* 180 */ --chart-h-sm:7.5rem; /* 120 — graphique, mobile */ }
 }
 @media (prefers-reduced-motion:reduce){
   *,::before,::after{ transition-duration:0.01ms!important; animation-duration:0.01ms!important; animation-iteration-count:1!important; }

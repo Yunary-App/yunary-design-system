@@ -14,6 +14,61 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.8.0 — le graphique d'évolution, fait maison
+
+La page Admin, lot 2 : l'onglet Évolution de `resources/screens/Yunary Admin Web.dc.html`, sans
+librairie. Il servira aussi à l'écran Métriques de mcp-ui. Un composant nouveau (40), aucun glyphe.
+
+- **Trois couches.**
+  - **`chartGeometry(input)`**, la géométrie pure (`src/chart/geometry.ts`) : ni React, ni DOM, ni
+    format. Elle reçoit les points (`{ at, value }[]`, espacés régulièrement), la largeur et la hauteur
+    du cadre en pixels CSS, `formatValue` et `formatAt` ; elle rend `viewBox`, `grid`, `area`, `line`,
+    `end`, `yTicks`, `xTicks`, `plot`, `domain`. Exportée par l'index ET seule par
+    **`@yunary/ds/chart-geometry`** (entrée tsup à part, aucun import de React) pour mcp-ui. Options :
+    `integer`, `padding` (défaut 40 / 8 / 8 / 26 de la maquette, `CHART_PADDING`), `yTickGap` (36),
+    `xLabelWidth` (50), `maxXTicks` (5). `niceStep` exporté aussi.
+  - **Les classes `.ds-chart*`** : `__svg`, `__grid` (filets `--border`), `__area` (la couleur de la
+    courbe à 12 %), `__line`, `__dot` (détouré à la couleur de la surface ; `--background` dans la
+    coque d'écran), `__ytick`, `__xtick`, `__summary` (masqué à l'œil), `__skel` ; `--sm`, `--ink`.
+  - **`Chart`**, le composant : `points` · `formatValue` · `formatAt` · `label` · `summary` · `tone`
+    (`primary` · `ink`) · `area` · `size` (`md` · `sm`) · `integer` · `maxXTicks` · `loading`.
+- **Ce qu'il dessine** (la maquette) : une grille, une aire, une ligne en ESCALIER, un point final,
+  les graduations en valeurs à gauche et en dates en bas. La courbe de marque : `--primary`, aire à
+  12 %, trait 2,5, point 4,5 ; la courbe à l'encre : `--foreground`, sans aire, trait 2, point 4.
+- **La largeur** est celle du conteneur (ResizeObserver), redessinée quand elle change ; rien en
+  pixels fixes. **La hauteur** : jetons `--chart-h-md` 260 et `--chart-h-sm` 150, redéclarés à 180
+  et 120 sous 64 rem. Les traits et le point : `--chart-stroke`, `--chart-stroke-ink`, `--chart-dot`,
+  `--chart-dot-ink`, `--chart-ring`. **Les graduations** passent par un jeton nouveau,
+  **`--text-axis`** (0,75 rem, 12), au lieu des 12 px écrits de la maquette : le seul autre 12 de
+  l'échelle est en capitales (eyebrow, chip).
+- **Les graduations se calculent et s'adaptent.** Les valeurs : le zéro toujours dans le domaine,
+  un pas « joli » (1, 2, 2,5, 4, 5 × 10ⁿ ; pas de 2,5 en `integer`), au plus une tous les 36 px de
+  haut — d'où 0 → 80 € par 20 et 0 · 4 · 8, les graduations de la maquette, sans les écrire. Les
+  dates : au plus 5, deux étiquettes jamais plus près que deux largeurs d'étiquette, la première et la
+  dernière ramenées dans le cadre — 5 à 984 de large, 3 à 318. Le composant mesure ses étiquettes :
+  la colonne des valeurs fait au moins 40 et s'élargit pour une étiquette longue, la bande des dates
+  suit leur hauteur.
+- **Cas limites** : un seul point (la valeur s'étale sur le tracé, le point final à droite, une date),
+  une série toute à zéro (graduations 0 et 1, la ligne sur le zéro), des valeurs constantes (une
+  marche plate), une année jour par jour (les marches nulles ne sont pas écrites), aucun point ou un
+  cadre nul (rien à tracer), des valeurs négatives (le zéro reste une graduation).
+- **Accessibilité** : `role="img"`, `aria-label` (`label`), `aria-describedby` vers la phrase de
+  résumé (`summary`) fournie par l'app ; le SVG et les graduations sont masqués aux lecteurs d'écran.
+  Pas d'infobulle ni de survol. **Chargement** : un squelette aux dimensions finales, `aria-busy`.
+- **Le DS ne formate rien** : valeurs et dates viennent de l'app, comme le libellé de période.
+- **Tests.** `npm test` (`node --test tests/chart-geometry.test.mjs`), enchaîné dans `npm run lint` :
+  13 tests, dont les quatre graphiques de la maquette REJOUÉS (son algorithme sur ses données,
+  1440 et 390) et comparés — graduations, ligne, point final, dates —, et chacun des cas limites.
+- **Vitrine.** « Data display », section « Graphique d'évolution » : la carte Évolution de la maquette
+  assemblée comme le fera le hub (trois périodes), les cas limites, le chargement ; clair et sombre,
+  1440 et 390.
+- **Migration.** Rien à changer dans l'existant. **Hub** : la carte Évolution pose deux `Chart` (MRR
+  `primary`, clients payants `ink size="sm" integer`) ; les titres, la période et le filet restent à
+  lui. **mcp-ui** : l'écran Métriques importe `@yunary/ds/chart-geometry` et écrit les classes
+  `.ds-chart*` (exemple dans `docs/PROMPTS.md`, section `Chart`).
+
+---
+
 ## 0.7.0 — les briques génériques de la page Admin
 
 La maquette `resources/screens/Yunary Admin Web.dc.html`, lot 1 : ce qui manquait au DS et servira

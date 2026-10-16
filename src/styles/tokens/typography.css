@@ -38,6 +38,7 @@
   --text-caption:0.8125rem;   /* 13 — --font-body 500 */
   --text-eyebrow:0.75rem;     /* 12 — --font-body 600 CAPS, tracking .18em */
   --text-chip:0.75rem;        /* 12 — --font-body 700 CAPS, tracking .14em, leading 1 */
+  --text-axis:0.75rem;        /* 12 — les graduations d'un graphique (.ds-chart), en bas de casse. v0.8.0 */
 
   /* Tracking — en em, il suit la taille. Valeurs CALIBRÉES SUR UNE DISPLAY CONDENSÉE
      : une display large ou une serif demandera moins de resserrement.

@@ -81,6 +81,8 @@
 /* Le pied d'un écran serre ses boutons md à 16 de côté (22 ailleurs) : trois actions tiennent sur une
    ligne à 680, la maquette des écrans de Claude (0.6.2). Les crans sm, xs et lg gardent le leur. */
 .ds-card--screen .ds-card__foot .ds-btn:where(:not(.ds-btn--sm,.ds-btn--xs,.ds-btn--lg)){padding-inline:1rem}
+/* Le point final d'un graphique se détoure sur le fond de la coque, pas sur --card (0.8.0). */
+.ds-card--screen .ds-chart{--chart-surface:var(--background)}
 /* Les grilles serrent leur gouttière dans un écran : avantages 10 / 20, compteurs 16. */
 .ds-card--screen .ds-perks{--perks-col-gap:1.25rem}
 .ds-card--screen .ds-meters{gap:var(--space-4)}
@@ -1597,6 +1599,33 @@ a.ds-row{cursor:pointer}
 .ds-stat-card__foot>.ds-badge{flex:none}
 .ds-stat-card__skel-value{width:7rem;height:2.5rem}
 .ds-stat-card__skel-foot{width:10rem;max-width:100%;height:1.25rem}
+/* LE GRAPHIQUE D'ÉVOLUTION — `.ds-chart`, v0.8.0 (maquette Admin Web, onglet Évolution ; l'écran Métriques
+   de mcp-ui). Une courbe par graphique : la grille (`__grid`, filets --border), l'aire (`__area`, la
+   couleur de la courbe à 12 %), la ligne en escalier (`__line`), le point final (`__dot`, détouré à la
+   couleur de la surface), les graduations en valeurs à gauche (`__ytick`) et en dates en bas (`__xtick`),
+   au jeton --text-axis, en sourdine. Les TRACÉS et les POSITIONS viennent de `chartGeometry` (export
+   `@yunary/ds/chart-geometry`, sans React) : ce fichier ne dessine que leur apparence. La LARGEUR est
+   celle du conteneur ; la hauteur, une des deux tailles (`--md` 260 / 180, `--sm` 150 / 120 sous
+   64 rem). `--ink` : la courbe à l'encre, trait 2, point 4 (clients payants) ; par défaut, la courbe de
+   marque en --primary, trait 2,5, point 4,5 (MRR). Le résumé (`__summary`) est masqué à l'œil, lu par
+   un lecteur d'écran ; `__skel` : le squelette du chargement, aux dimensions finales. Pas d'infobulle. */
+/* @tokenref-assume: --chart-color — la couleur de la courbe, posée par .ds-chart et .ds-chart--ink ci-dessous */
+/* @tokenref-assume: --chart-line — l'épaisseur de la ligne, posée par .ds-chart et .ds-chart--ink ci-dessous */
+/* @tokenref-assume: --chart-dot-r — le rayon du point final, posé par .ds-chart et .ds-chart--ink ci-dessous */
+/* @tokenref-assume: --chart-surface — la surface qui détoure le point final, posée par .ds-chart et par la coque d'écran */
+.ds-chart{--chart-color:var(--primary);--chart-line:var(--chart-stroke);--chart-dot-r:var(--chart-dot);--chart-surface:var(--card);position:relative;display:block;width:100%;min-width:0;height:var(--chart-h-md)}
+.ds-chart--sm{height:var(--chart-h-sm)}
+.ds-chart--ink{--chart-color:var(--foreground);--chart-line:var(--chart-stroke-ink);--chart-dot-r:var(--chart-dot-ink)}
+.ds-chart__svg{position:absolute;inset:0;display:block;overflow:visible}
+.ds-chart__grid{fill:none;stroke:var(--border);stroke-width:1px}
+.ds-chart__area{fill:color-mix(in srgb,var(--chart-color) 12%,transparent);stroke:none}
+.ds-chart__line{fill:none;stroke:var(--chart-color);stroke-width:var(--chart-line);stroke-linejoin:round}
+.ds-chart__dot{r:var(--chart-dot-r);fill:var(--chart-color);stroke:var(--chart-surface);stroke-width:var(--chart-ring)}
+.ds-chart__ytick,.ds-chart__xtick{position:absolute;font-family:var(--font-body);font-size:var(--text-axis);line-height:var(--leading-snug);color:var(--text-muted);white-space:nowrap;pointer-events:none}
+.ds-chart__ytick{left:0;transform:translateY(-50%)}
+.ds-chart__xtick{bottom:0;transform:translateX(-50%)}
+.ds-chart__skel{position:absolute;inset:0;width:100%;height:100%}
+.ds-chart__summary{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media (max-width:64rem){
 .ds-stats--bare{gap:0.625rem}
 .ds-stat--lg{gap:var(--space-1)}

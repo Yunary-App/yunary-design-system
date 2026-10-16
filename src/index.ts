@@ -59,6 +59,10 @@ export type { SeparatorProps } from './components/data-display/Separator';
 export { Table, THead, TBody, Tr, Th, Td } from './components/data-display/Table';
 export type { TableProps, ThProps, ThSort } from './components/data-display/Table';
 export { StatCard } from './components/data-display/StatCard';
+export { Chart } from './components/data-display/Chart';
+export type { ChartProps } from './components/data-display/Chart';
+export { chartGeometry, niceStep, CHART_PADDING } from './chart/geometry';
+export type { ChartPoint, ChartGeometry, ChartGeometryInput, ChartPadding, ChartTick } from './chart/geometry';
 export type { StatCardProps, StatTrend } from './components/data-display/StatCard';
 
 /* feedback */
