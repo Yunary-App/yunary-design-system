@@ -1,6 +1,6 @@
 import type { CSSProperties, JSX } from 'react';
 import {
-  ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Bookmark, Calendar, Check, ChevronDown,
+  ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, ArrowUpRight, BookOpen, Bookmark, Calendar, Check, ChevronDown,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,
   CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder, Heart,
   Download, Info, LayoutDashboard, List, LoaderCircle, Lock, LogOut, Mail, Menu, MessageSquare, Minus,
@@ -24,7 +24,7 @@ import { House } from './compat-glyphs';
  */
 export type IconName =
   | 'check' | 'x' | 'chevron-down' | 'chevron-right' | 'chevron-left'
-  | 'arrow-right' | 'arrow-up-right' | 'arrow-down' | 'play' | 'eye' | 'clock'
+  | 'arrow-right' | 'arrow-up-right' | 'arrow-down' | 'arrow-up' | 'arrow-up-down' | 'play' | 'eye' | 'clock'
   | 'calendar' | 'copy' | 'search' | 'menu' | 'mail' | 'triangle-alert' | 'info'
   | 'circle-check' | 'circle-alert' | 'circle-x' | 'terminal' | 'code' | 'zap'
   | 'plus' | 'minus' | 'trash-2' | 'external-link' | 'loader-circle'
@@ -93,6 +93,9 @@ const ICONS: Record<IconName, LucideIcon> = {
   'arrow-right': ArrowRight,
   'arrow-up-right': ArrowUpRight,
   'arrow-down': ArrowDown,
+  /* v0.7.0 — les deux autres états d'un en-tête triable (Th sort) : croissant, non trié. */
+  'arrow-up': ArrowUp,
+  'arrow-up-down': ArrowUpDown,
   'play': Play,
   'eye': Eye,
   'clock': Clock,

@@ -57,7 +57,9 @@ export type { TooltipProps } from './components/data-display/Tooltip';
 export { Separator } from './components/data-display/Separator';
 export type { SeparatorProps } from './components/data-display/Separator';
 export { Table, THead, TBody, Tr, Th, Td } from './components/data-display/Table';
-export type { TableProps } from './components/data-display/Table';
+export type { TableProps, ThProps, ThSort } from './components/data-display/Table';
+export { StatCard } from './components/data-display/StatCard';
+export type { StatCardProps, StatTrend } from './components/data-display/StatCard';
 
 /* feedback */
 export { Toast } from './components/feedback/Toast';

@@ -1,13 +1,93 @@
-import { Badge, Button, Card, EmptyState, Icon, IconButton, Input, Pastille, Separator, Table, TBody, Td, Th, THead, Tooltip, Tr } from '@yunary/ds';
+import { useState } from 'react';
+import { Badge, Button, Card, EmptyState, Icon, IconButton, Input, Logo, Pastille, Progress, Separator, StatCard, Table, TBody, Td, Th, THead, Tooltip, Tr } from '@yunary/ds';
+import type { ThSort } from '@yunary/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 const TONES = ['coral', 'amber', 'danger', 'warning', 'success', 'neutral', 'accent', 'outline'] as const;
 const TAILLES = ['carte', 'dialogue', 'panneau', 'heros', 'ecran'] as const;
 const TONS_PASTILLE = ['brand', 'brand-solid', 'coral', 'amber', 'success', 'warning', 'danger', 'neutral', 'inverse'] as const;
 
+const CLIENTS = [
+  { qui: 'Camille', montant: 14, depuis: '2026-07-03', label: '3 juil. 2026' },
+  { qui: 'lea.martin@gmail.com', montant: 6, depuis: '2026-07-19', label: '19 juil. 2026' },
+  { qui: 'Hugo', montant: 14, depuis: '2026-08-08', label: '8 août 2026' },
+  { qui: 'Sarah', montant: 8, depuis: '2026-08-27', label: '27 août 2026' },
+  { qui: 'Mathilde', montant: 8, depuis: '2026-10-11', label: '11 oct. 2026' },
+];
+
+/* Le tri vit dans l'app : Th reçoit l'état et prévient au clic. Même règle que la maquette Admin :
+   une autre colonne repart en décroissant, la même bascule. */
+function TableTriable() {
+  const [tri, setTri] = useState<{ col: 'montant' | 'depuis'; sens: 'asc' | 'desc' }>({ col: 'montant', sens: 'desc' });
+  const etat = (col: 'montant' | 'depuis'): ThSort => (tri.col === col ? tri.sens : 'none');
+  const clic = (col: 'montant' | 'depuis') => () => setTri(t => (t.col === col ? { col, sens: t.sens === 'desc' ? 'asc' : 'desc' } : { col, sens: 'desc' }));
+  const lignes = [...CLIENTS].sort((a, b) => {
+    const d = tri.col === 'montant' ? a.montant - b.montant || a.depuis.localeCompare(b.depuis) : a.depuis.localeCompare(b.depuis);
+    return tri.sens === 'asc' ? d : -d;
+  });
+  return (
+    <div className="overflow-x-auto"><Table hoverable framed>
+      <THead><Tr><Th>Client</Th><Th sort={etat('montant')} onSort={clic('montant')}>Montant / mois</Th><Th sort={etat('depuis')} onSort={clic('depuis')}>Client depuis</Th></Tr></THead>
+      <TBody>{lignes.map(c => <Tr key={c.qui}><Td>{c.qui}</Td><Td>{c.montant} €</Td><Td>{c.label}</Td></Tr>)}</TBody>
+    </Table></div>
+  );
+}
+
 export function DataDisplayPage() {
   return (
     <div className="flex flex-col gap-space-7">
+      <Section title="Carte de chiffre — StatCard" note=".ds-card.ds-card--stat.ds-stat-card (0.7.0, maquette Admin Web) : libellé, valeur en --text-heading-xl 800, pied en sourdine (badge de variation dense + phrase). Hausse = success, stable = neutral, baisse = danger ; le texte et le sens viennent de l'app. Paddings 24 / 28 puis 16 / 18 sous 64 rem (--card-pad-stat-*). En chargement, deux squelettes aux places finales, le libellé reste.">
+        <Block label="Les trois sens de variation">
+          <Grid cols={3}>
+            <StatCard label="MRR" value="84 €" delta={{ text: '+12 € · +17 %', trend: 'up' }} note="sur 30 jours" />
+            <StatCard label="Clients payants" value="7" delta={{ text: '0', trend: 'flat' }} note="aucun nouveau sur 30 jours" />
+            <StatCard label="Désabonnements" value="2" delta={{ text: '−1', trend: 'down' }} note="sur 30 jours" />
+          </Grid>
+        </Block>
+        <Block label="Sans variation, et en chargement">
+          <Grid cols={3}>
+            <StatCard label="Inscrits" value="120" note="comptes créés, payants ou non" />
+            <StatCard label="MRR" loading />
+            <StatCard label="Clients payants" loading />
+          </Grid>
+        </Block>
+      </Section>
+
+      <Section title="En-tête de tableau triable — Th sort" note="Th avec sort (asc · desc · none) et onSort (0.7.0) : un bouton .ds-table__sort, le glyphe de l'état (arrow-down décroissant, arrow-up croissant, arrow-up-down non trié), aria-sort sur le th, la colonne active en --foreground. Contrôlé : l'app trie.">
+        <Block label="Les trois états">
+          <div className="overflow-x-auto"><Table framed>
+            <THead><Tr><Th sort="desc" onSort={() => {}}>Décroissant</Th><Th sort="asc" onSort={() => {}}>Croissant</Th><Th sort="none" onSort={() => {}}>Non trié</Th></Tr></THead>
+            <TBody><Tr><Td>14 €</Td><Td>3 juil. 2026</Td><Td>instagram</Td></Tr></TBody>
+          </Table></div>
+        </Block>
+        <Block label="Un tableau qui trie" hint="Clique sur Montant ou Client depuis : une autre colonne repart en décroissant, la même bascule.">
+          <TableTriable />
+        </Block>
+      </Section>
+
+      <Section title="Chiffres d'une carte produit — .ds-stat--lg, .ds-stats--bare" note="0.7.0 : la valeur en --text-heading 800 (--text-subheading sous 64 rem), le libellé au-dessus ; la rangée en colonnes égales, sans filet. .ds-stats / .ds-stat sans modificateur ne bougent pas (Fiches et rangées).">
+        <Grid cols={2}>
+          <Card size="xl">
+            <div className="flex flex-col gap-space-5">
+              <div className="flex items-center gap-space-3"><Logo variant="monogram" height="2rem" /><span className="font-display text-subheading font-bold">Yunary <span className="accent">Analyse</span></span></div>
+              <div className="ds-stats ds-stats--bare">
+                <div className="ds-stat ds-stat--lg"><span className="ds-stat__value">4</span><span className="ds-stat__label">Abonnés</span></div>
+                <div className="ds-stat ds-stat--lg"><span className="ds-stat__value">24 €</span><span className="ds-stat__label">MRR de l'outil</span></div>
+                <div className="ds-stat ds-stat--lg"><span className="ds-stat__value">43 %</span><span className="ds-stat__label">Part du MRR</span></div>
+              </div>
+              <Progress value={43} max={100} label="Part du MRR" />
+              <span className="caption text-text-muted">Prix de lancement : 6 € / mois à vie, au lieu de 9 €</span>
+            </div>
+          </Card>
+          <Card>
+            <div className="ds-stats">
+              <div className="ds-stat"><span className="ds-stat__value">12,4 k</span><span className="ds-stat__label">abonnés</span></div>
+              <div className="ds-stat"><span className="ds-stat__value">318</span><span className="ds-stat__label">publications</span></div>
+            </div>
+          </Card>
+        </Grid>
+      </Section>
+
       <Section title="Card" note="La surface signature : fond --card teinté, bordure 1px, rayon lg ou xl, ombre teintée. Jamais une card blanche.">
         <Block label="Variantes" hint="Les gaps de grille entre cards sont ≥ 1.5rem.">
           <Grid cols={3}>

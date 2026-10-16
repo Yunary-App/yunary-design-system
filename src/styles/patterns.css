@@ -977,6 +977,15 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 /* v0.6.0 — la ligne EN ÉCHEC d'une table (un contenu dont une publication a échoué) : teintée danger. */
 .ds-table tr.is-danger td{background:var(--pill-danger-bg)}
 .ds-table--hoverable tbody tr.is-danger:hover td{background:color-mix(in srgb,var(--destructive) 10%,var(--pill-danger-bg))}
+/* L'EN-TÊTE TRIABLE — `.ds-table__sort`, v0.7.0 (maquette Admin Web) : un <button> dans le <th>, le libellé
+   puis le glyphe de l'état (arrow-down décroissant, arrow-up croissant, arrow-up-down non trié) à 14 px,
+   gap 6. L'ÉTAT EST PORTÉ PAR `aria-sort` sur le <th> (ascending / descending ; absent quand la colonne
+   n'est pas triée) : c'est lui qui passe la colonne active en --foreground, aucune classe à poser. Le
+   composant `Th` (props `sort`, `onSort`) l'écrit ; il ne trie rien, l'app trie. */
+.ds-table__sort{appearance:none;display:inline-flex;align-items:center;gap:0.375rem;margin:0;padding:0;border:0;border-radius:var(--radius-xs);background:none;font:inherit;color:inherit;white-space:nowrap;cursor:pointer}
+.ds-table__sort svg{--ds-icon-size:0.875rem}
+.ds-table__sort:hover,.ds-table th:is([aria-sort="ascending"],[aria-sort="descending"]) .ds-table__sort{color:var(--foreground)}
+.ds-table__sort:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 
 /* ---------- pagination ---------- */
 .ds-pagination{display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1);background:var(--secondary);border:1px solid var(--border);border-radius:var(--pagination-radius);min-height:var(--control-md);box-sizing:border-box}
@@ -1564,6 +1573,41 @@ a.ds-row{cursor:pointer}
 .ds-stat{display:flex;flex-direction:column;gap:0.125rem;min-width:0}
 .ds-stat__value{font-family:var(--font-display);font-size:var(--text-heading-sm);font-weight:var(--heading-weight);line-height:1.1;letter-spacing:var(--tracking-heading-sm);font-variant-numeric:tabular-nums}
 .ds-stat__label{font-size:var(--text-caption);color:var(--text-muted)}
+/* LA GRANDE TAILLE ET LA RANGÉE SANS FILET — v0.7.0, les trois chiffres d'une carte produit (maquette Admin
+   Web) : `.ds-stat--lg`, la valeur en face display 800 à --text-heading (--text-subheading sous 64 rem),
+   interligne 1, le libellé AU-DESSUS (`order`, le balisage reste valeur puis libellé) à 6 (4 en mobile) ;
+   `.ds-stats--bare`, la rangée en colonnes égales (autant que de chiffres), sans filet ni retrait, gap 16
+   (10 en mobile). `.ds-stat` et `.ds-stats` sans modificateur ne bougent pas. */
+.ds-stats--bare{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:var(--space-4);padding-top:0;border-top:0}
+.ds-stat--lg{gap:0.375rem}
+.ds-stat--lg .ds-stat__value{font-size:var(--text-heading);font-weight:var(--weight-extrabold);line-height:1;letter-spacing:normal;font-variant-numeric:normal}
+.ds-stat--lg .ds-stat__label{order:-1}
+/* LA CARTE DE CHIFFRE — `.ds-card.ds-card--stat.ds-stat-card`, v0.7.0 (maquette Admin Web ; servira à l'écran
+   Métriques de mcp-ui) : un libellé, une grande valeur (--text-heading-xl, 800, interligne 1), puis une
+   ligne de pied en sourdine : le badge de variation dense (hausse = success, stable = neutral, baisse =
+   danger) et une phrase. `--stat` est la TAILLE de carte (24 / 28, puis 16 / 18 sous 64 rem, jetons
+   --card-pad-stat-*). En chargement (`aria-busy`), deux squelettes aux places de la valeur et du pied ; le
+   libellé reste. Sous 64 rem : libellé en caption, valeur à --text-heading, gap 8. Le calcul de la
+   variation et le choix d'un pourcentage restent à l'app. */
+.ds-card--stat{padding:var(--card-pad-stat-y) var(--card-pad-stat-x)}
+.ds-stat-card{display:flex;flex-direction:column;gap:var(--space-3);min-width:0}
+.ds-stat-card__label{font-size:var(--text-body-sm);font-weight:var(--weight-semibold);color:var(--foreground)}
+.ds-stat-card__value{font-family:var(--font-display);font-size:var(--text-heading-xl);font-weight:var(--weight-extrabold);line-height:1;color:var(--foreground)}
+.ds-stat-card__foot{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2);font-size:var(--text-caption);color:var(--text-muted)}
+.ds-stat-card__foot>.ds-badge{flex:none}
+.ds-stat-card__skel-value{width:7rem;height:2.5rem}
+.ds-stat-card__skel-foot{width:10rem;max-width:100%;height:1.25rem}
+@media (max-width:64rem){
+.ds-stats--bare{gap:0.625rem}
+.ds-stat--lg{gap:var(--space-1)}
+.ds-stat--lg .ds-stat__value{font-size:var(--text-subheading)}
+.ds-stat-card{gap:var(--space-2)}
+.ds-stat-card__label{font-size:var(--text-caption)}
+.ds-stat-card__value{font-size:var(--text-heading)}
+.ds-stat-card__foot{gap:0.375rem}
+.ds-stat-card__skel-value{width:4.5rem;height:1.75rem}
+.ds-stat-card__skel-foot{width:70%;height:0.875rem}
+}
 /* LE COMPTEUR CENTRÉ — `.ds-meter--center` : la jauge d'un état (« 5 publications récentes sur 8 »), barre
    de 20 rem et légende centrées. */
 .ds-meter--center{align-items:center;text-align:center;width:100%;max-width:20rem;margin-inline:auto}

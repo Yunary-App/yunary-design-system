@@ -14,6 +14,46 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.7.0 — les briques génériques de la page Admin
+
+La maquette `resources/screens/Yunary Admin Web.dc.html`, lot 1 : ce qui manquait au DS et servira
+ailleurs (l'écran Métriques de mcp-ui affichera aussi des chiffres et leur évolution). Chaque brique
+existe d'abord en classes `.ds-*`, puis en composant React par-dessus. Le graphique (lot 2) et ce qui
+est propre au hub n'y sont pas. Un composant nouveau (39), deux glyphes (62).
+
+- **`StatCard`, la carte de chiffre** — `.ds-card.ds-card--stat.ds-stat-card` (`__label`, `__value`,
+  `__foot`, `__skel-value`, `__skel-foot`). Un libellé (body-sm 600, caption sous 64 rem), une grande
+  valeur en face display 800 (`--text-heading-xl`, `--text-heading` sous 64 rem, interligne 1), puis
+  un pied en caption sourdine : le badge de variation dense et une phrase, tous deux facultatifs. La
+  variation reçoit un texte et un sens : `up` → `success`, `flat` → `neutral`, `down` → `danger` ; le
+  calcul et le choix d'un pourcentage restent à l'app. Chargement : deux squelettes aux places de la
+  valeur et du pied (112 × 40 et 160 × 20, puis 72 × 28 et 70 % × 14 sous 64 rem), le libellé reste,
+  `aria-busy`. Props : `label` · `value` · `delta: { text, trend }` · `note` · `loading` ; type
+  `StatTrend`.
+- **Une taille de carte nommée, `.ds-card--stat`**, et ses jetons `--card-pad-stat-y` /
+  `--card-pad-stat-x` : 24 / 28, redéclarés à 16 / 18 sous 64 rem dans `tokens/scales.css`. Aucune
+  taille de `Card` n'avait ces mesures.
+- **L'en-tête triable, `Th sort` + `onSort`** — `.ds-table__sort`. Avec `sort` (`asc` · `desc` ·
+  `none`, type `ThSort`), le contenu du `<th>` passe dans un `<button>` suivi du glyphe de l'état à
+  14 px ; le `<th>` porte `aria-sort` (`descending`, `ascending`, absent si non trié), qui passe la
+  colonne active en `--foreground`. Contrôlé : il reçoit l'état et prévient au clic, il ne trie rien.
+  Survol en `--foreground`, anneau de focus clavier. Sans `sort`, `Th` rend un `<th>` comme avant.
+- **Deux glyphes, `arrow-up` et `arrow-up-down`** (lucide, même dessin qu'`arrow-down`).
+- **`.ds-stat--lg` et `.ds-stats--bare`**, les trois chiffres d'une carte produit : la valeur en face
+  display 800 à `--text-heading` (`--text-subheading` sous 64 rem), interligne 1, le libellé au-dessus
+  (`order`, le balisage reste valeur puis libellé), gap 6 (4) ; la rangée en colonnes égales, sans filet
+  ni retrait, gap 16 (10). **`.ds-stat` et `.ds-stats` sans modificateur ne changent pas** (mesuré dans
+  la vitrine : valeur 18 px en 700, libellé dessous, filet haut).
+- **Vitrine.** « Data display » : les trois sens de variation, sans variation, chargement ; les trois
+  états de tri et un tableau qui trie ; une carte produit avec `.ds-stat--lg` à côté d'un `.ds-stats`
+  inchangé. Vérifié en clair et en sombre, à 1440 et à 390.
+- **Migration.** Rien à changer dans l'existant. **Hub** : la page Admin prend `StatCard`,
+  `Th sort`/`onSort` et `.ds-stat--lg` dans `.ds-stats--bare` au lieu de les composer. **mcp-ui** :
+  l'écran Métriques écrit la carte de chiffre en classes (exemple dans `docs/PROMPTS.md`, section
+  `StatCard`).
+
+---
+
 ## 0.6.4 — retrait du garde-fou de largeur minimale
 
 Décision de Julien du 15/10/2026 : le hub s'adapte entre 390 et 1440 px sans barre de défilement

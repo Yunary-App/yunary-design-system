@@ -86,6 +86,10 @@
      Script Web). Deux mesures, verticale et horizontale : 28 / 32. */
   --card-pad-xl-y:1.75rem; /* 28 */
   --card-pad-xl-x:2rem;    /* 32 */
+  /* v0.7.0 — la carte de chiffre (`.ds-card--stat`, maquette Admin Web) : 24 / 28, puis 16 / 18 sous
+     64 rem (redéclarés plus bas). Aucune taille de Card n'avait ces deux mesures. */
+  --card-pad-stat-y:1.5rem;  /* 24 */
+  --card-pad-stat-x:1.75rem; /* 28 */
 
   /* ---------- DIMENSIONS DE COMPOSANTS — DES DÉFAUTS, PAS DES INVARIANTS ----------
      Vingt mesures qui étaient des littéraux dans patterns.css, et qui portent de
@@ -234,7 +238,8 @@
   --shadow-knob:0 1px 3px rgba(0,0,0,.45);
 }
 @media (max-width:64rem){
-  :root{ --control-md:2.75rem; /* 44 — mobile touch target */ --control-lg:3rem; }
+  :root{ --control-md:2.75rem; /* 44 — mobile touch target */ --control-lg:3rem;
+          --card-pad-stat-y:1rem; /* 16 */ --card-pad-stat-x:1.125rem; /* 18 — carte de chiffre, mobile */ }
 }
 @media (prefers-reduced-motion:reduce){
   *,::before,::after{ transition-duration:0.01ms!important; animation-duration:0.01ms!important; animation-iteration-count:1!important; }

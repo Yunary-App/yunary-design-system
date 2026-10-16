@@ -445,9 +445,80 @@ Table de données composable pour les UIs d'outil : `Table > THead/TBody > Tr > 
 </Table>
 ```
 
+**L'en-tête triable** (v0.7.0, maquette Admin Web) : `Th` avec `sort` et `onSort`. Le libellé passe
+dans un `<button>` (`.ds-table__sort`) suivi du glyphe de l'état à 14 px (`arrow-down` décroissant,
+`arrow-up` croissant, `arrow-up-down` non trié) ; le `<th>` porte `aria-sort` (`descending`,
+`ascending`, absent quand la colonne n'est pas triée) et c'est lui qui passe la colonne active en
+`--foreground`. **Contrôlé** : `Th` reçoit l'état et appelle `onSort` au clic, il ne trie rien ;
+l'app décide du nouvel état (dans l'admin : une autre colonne repart en décroissant, la même bascule)
+et trie ses lignes.
+
+```tsx
+<Table hoverable>
+  <THead><Tr>
+    <Th>Client</Th>
+    <Th sort={tri.col === 'montant' ? tri.sens : 'none'} onSort={() => basculer('montant')}>Montant / mois</Th>
+    <Th sort={tri.col === 'depuis' ? tri.sens : 'none'} onSort={() => basculer('depuis')}>Client depuis</Th>
+  </Tr></THead>
+  <TBody>{lignes.map(l => <Tr key={l.id}><Td>{l.qui}</Td><Td>{l.montant}</Td><Td>{l.depuis}</Td></Tr>)}</TBody>
+</Table>
+```
+
+En classes (mcp-ui) :
+
+```html
+<th aria-sort="descending"><button type="button" class="ds-table__sort">Montant / mois<!-- <Icon name="arrow-down" /> --></button></th>
+<th><button type="button" class="ds-table__sort">Client depuis<!-- <Icon name="arrow-up-down" /> --></button></th>
+```
+
 - Props de `Table` : `striped` · `hoverable` · `framed` · `columns`. `THead`, `TBody`,
-  `Tr`, `Th`, `Td` acceptent leurs attributs HTML natifs.
-- États rendus : lignes au repos, alternées (`striped`), survolées (`hoverable`).
+  `Tr`, `Th`, `Td` acceptent leurs attributs HTML natifs. `Th` : `sort` (`asc` · `desc` · `none`)
+  · `onSort` (v0.7.0) ; type `ThSort`.
+- Classes : `.ds-table__sort`.
+- États rendus : lignes au repos, alternées (`striped`), survolées (`hoverable`) ; en-tête triable
+  décroissant, croissant, non trié, survolé, focus clavier.
+
+## StatCard
+
+La carte de chiffre (v0.7.0, maquette Admin Web ; l'écran Métriques de mcp-ui l'écrit en classes) :
+un libellé, une grande valeur en face display 800 (`--text-heading-xl`, `--text-heading` sous 64 rem),
+puis un pied en sourdine : le badge de variation dense et une phrase. La variation reçoit un **texte**
+et un **sens** : hausse en `success`, stable en `neutral`, baisse en `danger`. **Le calcul et le
+choix d'afficher un pourcentage restent à l'app** ; les nombres viennent du serveur. Paddings 24 / 28,
+puis 16 / 18 sous 64 rem : la taille de carte `.ds-card--stat` et ses jetons `--card-pad-stat-y/-x`.
+En chargement, deux squelettes aux places de la valeur et du pied, le libellé reste, la carte porte
+`aria-busy`.
+
+**Ne pas l'utiliser** pour une rangée de petits chiffres dans une carte (c'est `.ds-stats`, et
+`.ds-stat--lg` pour la carte produit) ni pour une jauge (c'est `.ds-meter`).
+
+```tsx
+<StatCard label="MRR" value="84 €" delta={{ text: '+12 € · +17 %', trend: 'up' }} note="sur 30 jours" />
+<StatCard label="Clients payants" value="7" delta={{ text: '0', trend: 'flat' }} note="aucun nouveau sur 30 jours" />
+<StatCard label="Inscrits" value="120" note="comptes créés, payants ou non" />
+<StatCard label="MRR" loading />
+```
+
+En classes (mcp-ui) :
+
+```html
+<div class="ds-card ds-card--stat ds-stat-card">
+  <span class="ds-stat-card__label">MRR</span>
+  <span class="ds-stat-card__value">84 €</span>
+  <span class="ds-stat-card__foot"><span class="ds-badge ds-badge--dense ds-badge--success">+12 € · +17 %</span><span>sur 30 jours</span></span>
+</div>
+<div class="ds-card ds-card--stat ds-stat-card" aria-busy="true">
+  <span class="ds-stat-card__label">MRR</span>
+  <span class="ds-skel ds-stat-card__skel-value" aria-hidden="true"></span>
+  <span class="ds-skel ds-stat-card__skel-foot" aria-hidden="true"></span>
+</div>
+```
+
+- Props : `label` · `value` · `delta` (`{ text, trend }`, `trend` : `up` · `flat` · `down`, type
+  `StatTrend`) · `note` · `loading`. Les attributs HTML d'un `<div>` passent.
+- Classes : `.ds-card--stat` · `.ds-stat-card` · `__label` · `__value` · `__foot` · `__skel-value` ·
+  `__skel-foot`. Badge de variation : `.ds-badge--dense` + `--success` · `--neutral` · `--danger`.
+- États rendus : hausse, stable, baisse, sans variation, chargement ; clair et sombre, 1440 et 390.
 
 ## Tooltip
 
@@ -914,7 +985,7 @@ vertical uniquement. Même règle de `surface` que l'Input. `forwardRef` sur le
 ## Icon
 
 LE système d'icônes : Lucide, exclusivement. Jamais un emoji, jamais un SVG dessiné à la
-main. 60 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
+main. 62 glyphes typés (`IconName`) — un nom hors du type est une erreur TypeScript, et
 c'est voulu.
 
 **Ne pas** chercher d'icône de plateforme sociale ici (YouTube, Instagram…) : ce sont des
@@ -937,7 +1008,7 @@ enregistrée `inherits: false`, une règle de conteneur est inerte, et c'est vou
 ```
 
 **Ce que le catalogue ne couvre pas se passe en `glyph`.** Lucide compte ~1500 tracés ;
-le catalogue en cure 60 glyphes. Pour le reste, l'app importe le tracé et le socle lui applique
+le catalogue en cure 62 glyphes. Pour le reste, l'app importe le tracé et le socle lui applique
 ses propres règles — même grille, même épaisseur. Plus besoin de publier une version du
 design system pour une icône.
 
@@ -1790,7 +1861,11 @@ Centrée par défaut ; `--compact` : alignée à gauche, deux colonnes, rayon sm
 
 **Les chiffres, la note, le compteur centré, la carte du compte, la barre haute.**
 `.ds-stats` / `.ds-stat` (`__value` en face display, `__label` en caption : « 12,4 k · abonnés », le
-compte trouvé de l'onboarding). `.ds-note` : la jumelle NEUTRE de `.ds-error` (icône 0,875 rem +
+compte trouvé de l'onboarding). `.ds-stat--lg` (v0.7.0) : la grande taille d'une carte produit, la
+valeur en face display 800 à `--text-heading` (`--text-subheading` sous 64 rem), le libellé AU-DESSUS
+(le balisage reste valeur puis libellé, `order` le remonte) ; `.ds-stats--bare` : la rangée en
+colonnes égales, sans filet ni retrait (gap 16, 10 sous 64 rem). Sans modificateur, rien ne change.
+`.ds-note` : la jumelle NEUTRE de `.ds-error` (icône 0,875 rem +
 caption en sourdine : « TikTok à 20:00 »). `.ds-meter--center` : la jauge d'un état, barre de 20 rem
 et légende centrées. `.ds-sidebar__account` (+ `-main`, `-name`, `-caption`) : dans le pied de la barre
 latérale, l'avatar, le nom et la formule sur une plaque `--accent` ; repliée, l'avatar seul.
@@ -1798,10 +1873,16 @@ latérale, l'avatar, le nom et la formule sur une plaque `--accent` ; repliée, 
 
 ```html
 <div class="ds-stats"><div class="ds-stat"><span class="ds-stat__value">12,4 k</span><span class="ds-stat__label">abonnés</span></div></div>
+<!-- v0.7.0 : les trois chiffres d'une carte produit -->
+<div class="ds-stats ds-stats--bare">
+  <div class="ds-stat ds-stat--lg"><span class="ds-stat__value">4</span><span class="ds-stat__label">Abonnés</span></div>
+  <div class="ds-stat ds-stat--lg"><span class="ds-stat__value">24 €</span><span class="ds-stat__label">MRR de l'outil</span></div>
+  <div class="ds-stat ds-stat--lg"><span class="ds-stat__value">43 %</span><span class="ds-stat__label">Part du MRR</span></div>
+</div>
 <span class="ds-note"><!-- <Icon name="clock" /> -->TikTok à 20:00</span>
 <a class="ds-sidebar__account" href="/parametres"><!-- <Avatar size="carte" tone="brand" /> --><span class="ds-sidebar__account-main"><span class="ds-sidebar__account-name">Julien Fernandes</span><span class="ds-sidebar__account-caption">1 abonnement · 2 outils</span></span></a>
 ```
 
-- Classes : `.ds-stats` · `.ds-stat` · `__value` · `__label` · `.ds-note` · `.ds-meter--center` ·
+- Classes : `.ds-stats` · `--bare` · `.ds-stat` · `--lg` · `__value` · `__label` · `.ds-note` · `.ds-meter--center` ·
   `.ds-sidebar__account` · `.ds-sidebar__account-main` · `.ds-sidebar__account-name` ·
   `.ds-sidebar__account-caption` · `.ds-appbar` · `.ds-appbar__brand` · `.ds-appbar__end`.
