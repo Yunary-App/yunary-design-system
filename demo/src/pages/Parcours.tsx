@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { Badge, Banner, Button, Card, Dropzone, EmptyState, FormField, Icon, Logo, Pastille, Progress, Tabs, Textarea } from '@yunary/ds';
+import { CreditCard, LockOpen } from 'lucide-react';
+import { Badge, Banner, Button, Card, Dropzone, EmptyState, FormField, Frise, Icon, Logo, Pastille, Progress, Tabs, Textarea } from '@yunary/ds';
+import type { FriseStep } from '@yunary/ds';
 import { Block, Grid, Section, Stack } from '../ui';
 
 /* La page des parcours (v0.4.0) : ce que partagent les outils à plusieurs étapes. Les libellés sont des
@@ -51,6 +53,58 @@ function CarteLancement({ o }: { o: (typeof LANCEMENT)[number] }) {
             <span className="ds-price__note">{o.note}</span>
           </div>
           <Button>Créer mon compte</Button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+/* La frise à jalons (0.10.0) : les deux maquettes de la nouvelle offre. Les dates et les montants sont ceux de
+   l'app ; la coche d'un jalon fait est épaisse (3), comme dans la maquette. */
+const ESSAI_ONBOARDING: FriseStep[] = [
+  { state: 'current', icon: <Icon glyph={LockOpen} />, date: 'Aujourd’hui', title: 'Tout Yunary débloqué', amount: '0 €', text: 'Analyse, Script et Programmation, sans limite d’essai.' },
+  { tone: 'amber', icon: <Icon name="mail" />, date: '24/10/2026', title: 'On te prévient', text: 'Un e-mail de rappel, deux jours avant la fin de ton essai.' },
+  { tone: 'coral', icon: <Icon glyph={CreditCard} />, date: '26/10/2026', title: 'Ton abonnement démarre', amount: '19 € par mois', text: 'Sans engagement, résiliable à tout moment.' },
+];
+const ESSAI_FACTURATION: FriseStep[] = [
+  { state: 'done', icon: <Icon name="check" strokeWidth={3} />, date: '17/10', title: 'Essai commencé' },
+  { tone: 'amber', icon: <Icon name="mail" />, date: '22/10', title: 'Rappel par e-mail' },
+  { tone: 'coral', icon: <Icon glyph={CreditCard} />, date: '24/10', title: 'Premier paiement', amount: '19 €' },
+];
+const TROIS_ETATS: FriseStep[] = [
+  { state: 'done', icon: <Icon name="check" strokeWidth={3} />, date: '17/10', title: 'Essai commencé', text: 'Fait : pastille, date et trait en succès.' },
+  { state: 'current', icon: <Icon glyph={LockOpen} />, date: 'Aujourd’hui', title: 'Tout Yunary débloqué', amount: '0 €', text: 'En cours : dégradé, lueur, montant en dégradé.' },
+  { tone: 'amber', icon: <Icon name="mail" />, date: '24/10', title: 'Rappel par e-mail', text: 'À venir : le ton choisi par l’app.' },
+];
+
+function CarteEssaiOnboarding() {
+  return (
+    <Card>
+      <div className="flex flex-col gap-space-5">
+        <span className="font-display text-heading-sm font-bold">Comment se passe ton essai</span>
+        <Frise steps={ESSAI_ONBOARDING} aria-label="Comment se passe ton essai" />
+        <span className="border-t border-border pt-space-4 text-body-sm text-text-secondary">Rien n’est prélevé avant le 26/10/2026, la fin de ton essai.</span>
+      </div>
+    </Card>
+  );
+}
+
+function CarteEssaiFacturation() {
+  return (
+    <Card size="lg">
+      <div className="flex flex-col gap-space-6">
+        <div className="flex flex-wrap items-center justify-between gap-space-3">
+          <span className="flex items-center gap-space-2"><Logo variant="monogram" height="1.75rem" /><span className="font-display text-heading-sm font-bold">Yunary</span></span>
+          <Badge tone="amber" pad="dense">Essai gratuit, plus que 5 jours</Badge>
+        </div>
+        <div className="flex flex-col gap-space-2">
+          <span className="text-body-sm font-semibold text-text-muted">Premier paiement</span>
+          <span className="flex flex-wrap items-baseline gap-space-3"><span className="font-display text-heading-xl font-extrabold leading-none">19 €</span><span className="font-semibold">le 24/10/2026</span></span>
+        </div>
+        <Frise steps={ESSAI_FACTURATION} orientation="horizontal" size="sm" plaque aria-label="Ton essai" />
+        <div className="flex flex-wrap items-center justify-between gap-space-4 border-t border-border pt-space-5">
+          <span className="caption text-text-muted">Résilie avant le 24/10/2026 : rien ne sera prélevé.</span>
+          <Button variant="danger">Résilier l’essai</Button>
         </div>
       </div>
     </Card>
@@ -215,6 +269,28 @@ export function ParcoursPage() {
             </div>
           </Card>
         </Block>
+      </Section>
+
+      <Section title="Frise à jalons — Frise" note=".ds-frise (0.10.0, maquettes Onboarding Web et Facturation Web) : une pastille à icône, une date, un titre, un montant et un texte facultatifs, un trait vers le jalon suivant. Fait (succès), en cours (dégradé plein, lueur, date en --primary-readable), à venir (ton choisi) ; le trait est coloré jusqu'au jalon fait. Verticale ou horizontale (redevient verticale sous 64 rem) ; --sm, la frise compacte d'une carte ; --plaque, la plaque qui la porte.">
+        <Grid cols={2}>
+          <Block label="Onboarding : comment se passe ton essai (verticale)"><CarteEssaiOnboarding /></Block>
+          <Block label="Facturation : la frise de l'essai (horizontale, sm, plaque)"><CarteEssaiFacturation /></Block>
+        </Grid>
+        <Block label="Les trois états, horizontale" hint="Sous 64 rem, elle redevient verticale.">
+          <Card><Frise steps={TROIS_ETATS} orientation="horizontal" aria-label="Trois états" /></Card>
+        </Block>
+        <Grid cols={2}>
+          <Block label="Les trois états, verticale sm"><Card><Frise steps={TROIS_ETATS} size="sm" aria-label="Trois états, compacte" /></Card></Block>
+          <Block label="Badges de l'offre : ambre (essai, résilié) et succès">
+            <div className="flex flex-wrap gap-space-2">
+              <Badge tone="amber" pad="dense">Essai gratuit, plus que 5 jours</Badge>
+              <Badge tone="amber" pad="dense">Résilié, accès jusqu’au 24/10</Badge>
+              <Badge tone="success" pad="dense">Actif</Badge>
+              <Badge tone="amber">Essai gratuit</Badge>
+              <Badge tone="success">Actif</Badge>
+            </div>
+          </Block>
+        </Grid>
       </Section>
 
       <Section title="Prix barré : l'offre de lancement" note=".ds-price__old (0.6.3) : l'ancien prix à la taille du montant, à l'encre même en --accent, barré à 0,08 em. Écrit APRÈS le montant avec « au lieu de » masqué (.ds-price__sr) : le lecteur d'écran lit « 6 €, au lieu de 9 €, / mois à vie », order:-1 le replace devant. À côté du montant dans __line, au-dessus quand la ligne passe à la ligne ; --inline dans un badge ou une ligne de méta (le prix et son ancien prix groupés dans un parent flex). .ds-offer--wide : la colonne prix de 20 rem du site d'ouverture.">

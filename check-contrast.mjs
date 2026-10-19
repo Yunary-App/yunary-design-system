@@ -227,6 +227,23 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Texte', '.ds-steps__counter-sub — texte sur --background', g('--text-muted'), g(B), 4.5, '18 / 400');
   add('Non-texte', '.ds-tile--choice — coche --primary-readable sur --accent', g('--primary-readable'), g('--accent'), 3, 'icône');
 
+  /* v0.10.0 — la frise à jalons (maquettes Onboarding Web et Facturation Web) : la date selon l'état, sur
+     la carte et sur la plaque --background ; le glyphe de chaque ton de pastille ; le trait fait ; le glyphe
+     du jalon en cours sur le dégradé. La date du jalon en cours est --primary-readable, pas --brand-via. */
+  add('Marque-contenu', '.ds-frise__date en cours — sur --card', g('--primary-readable'), g(C), 4.5, '13 / 700');
+  add('Marque-contenu', '.ds-frise__date en cours — sur --background', g('--primary-readable'), g(B), 4.5, '13 / 700');
+  add('Marque-contenu', '.ds-frise__date faite — sur --card', g('--pill-success-fg'), g(C), 4.5, '13 / 700');
+  add('Marque-contenu', '.ds-frise__date faite — sur --background (plaque)', g('--pill-success-fg'), g(B), 4.5, '13 / 700');
+  add('Texte', '.ds-frise__date à venir — sur --card', g('--text-muted'), g(C), 4.5, '13 / 700');
+  add('Texte', '.ds-frise__date à venir — sur --background (plaque)', g('--text-muted'), g(B), 4.5, '13 / 700');
+  for (const n of ['success', 'amber', 'coral', 'neutral']) {
+    add('Pill', `.ds-frise__mark ${n} — glyphe sur --card`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, C), 3, 'icône');
+    add('Pill', `.ds-frise__mark ${n} — glyphe sur --background (plaque)`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, B), 3, 'icône');
+  }
+  add('Non-texte', '.ds-frise__line faite — trait sur --background (plaque)', g('--pill-success-fg'), g(B), 3, 'trait 2px');
+  add('Marque-aplat', '.ds-frise jalon en cours — glyphe sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 3, 'icône');
+  add('Marque-aplat', '.ds-frise__amount en cours — montant sur --brand-from (pire arrêt)', g('--brand-from'), g(C), 3, '29 / 800');
+
   for (const n of ['coral', 'amber', 'danger', 'warning', 'success', 'neutral']) {
     add('Pill', `.ds-badge--${n} sur --card`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, C), 4.5, '12 / 700');
     add('Pill', `.ds-badge--${n} sur --background`, g(`--pill-${n}-fg`), on(`--pill-${n}-bg`, B), 4.5, '12 / 700');

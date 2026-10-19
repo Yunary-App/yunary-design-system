@@ -170,7 +170,8 @@ du minimum d'accessibilité de 24 px, jamais un CTA ni un bouton de pied.
 
 **Le halo :** radial chaud (`.30/.12`), ancré en bas (hero) ou haut/centre (CTA) — jamais plein écran.
 **Le dégradé :** CTA primaire + un mot de titre. 90°/135° du socle.
-**La lueur :** `--shadow-glow*` chaude, réservée au CTA primaire. Identique dans les deux thèmes.
+**La lueur :** `--shadow-glow*` chaude, réservée au CTA primaire — et, depuis 0.10.0, à la pastille du jalon en
+cours d'une frise (`.ds-frise`, maquette Onboarding Web). Identique dans les deux thèmes.
 **L'ombre :** trois niveaux teintés de `--tone-dark`, jamais du noir pur en clair.
 **La sélection — UNE convention, partout, en CORAIL :** plaque `--accent` + texte
 `--primary` (`#e85d2f`), **même graisse** que les voisins, icône et coche en `currentColor` —
@@ -270,6 +271,7 @@ Instagram, TikTok, YouTube, Claude) : leurs couleurs vivent dans le fichier de m
 | 2026-08-31 | Marque exportée sous `./brand-yunary.css` dans package.json | sous-chemin stable de chaque surface |
 | 2026-09-11 | Élément sélectionné en corail (`--primary` sur `--accent`), écart de contraste assumé | décision de marque Julien |
 | 2026-09-11 | Titre de page à 36 px, `Card gap` sur l'échelle `--space-*` sans palier 20 | décisions Julien |
+| 2026-10-19 | 0.10.0 : la frise à jalons `.ds-frise` / `Frise` (une pastille, une date, un titre, un montant et un texte facultatifs, un trait ; fait · en cours · à venir ; verticale, horizontale qui redevient verticale sous 64 rem, compacte, sur plaque) ; la pastille du jalon en cours porte le dégradé et la lueur ; sa date est en `--primary-readable` (la maquette l'écrit en `--brand-via` : 2,51 en clair) | maquettes Onboarding Web et Facturation Web de la nouvelle offre |
 | 2026-10-17 | 0.9.0 : jeton `--container-app` (100 rem) et `max-w-app`, la colonne de contenu d'une app ; `shell` reste au site, `wide` aux pages étroites, `read` à la lecture | le hub plafonnait ses pages en `max-w-shell` : le contenu s'arrêtait dès environ 1470 px de fenêtre |
 | 2026-10-16 | 0.8.0 : le graphique d'évolution `Chart`, fait maison, sans librairie — trois couches (géométrie pure `chartGeometry`, aussi `@yunary/ds/chart-geometry` sans React ; classes `.ds-chart*` ; composant), une courbe par graphique, ligne en escalier, graduations calculées et adaptées à la largeur, jeton `--text-axis` (12) ; le DS ne formate rien | maquette Admin Web, onglet Évolution ; l'écran Métriques de mcp-ui |
 | 2026-10-16 | 0.7.0 : briques de la page Admin, génériques — la carte de chiffre `StatCard` (taille de carte `--stat` 24 / 28 puis 16 / 18, variation hausse `success` · stable `neutral` · baisse `danger`, calcul à l'app), l'en-tête triable `Th sort` contrôlé (`aria-sort`, glyphes `arrow-down` · `arrow-up` · `arrow-up-down`), `.ds-stat--lg` et `.ds-stats--bare` | maquette Admin Web ; l'écran Métriques de mcp-ui en a besoin |

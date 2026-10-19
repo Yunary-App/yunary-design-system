@@ -75,6 +75,14 @@
    v0.5.0 — le badge en dégradé plein (« À connecter », « 12 € / mois ») : texte blanc 12/700 sur
    l'arrêt jaune (2,04). Même décision de signature que le CTA ; le libellé est court et redondant
    avec son contexte (le compte à connecter, le prix écrit à côté). Maquettes du 10/10/2026. */
+/* @a11y-assume: .ds-frise jalon en cours — glyphe sur --brand-from (pire arrêt)
+   v0.10.0 — la pastille du jalon en cours de la frise porte le dégradé plein et la lueur (maquette
+   Onboarding Web, « Comment se passe ton essai ») : glyphe blanc sur l'arrêt jaune (2,04), le même
+   écart que .ds-pastille--brand-solid. Le glyphe est REDONDANT : la date, le titre en gras,
+   `aria-current="step"` et l'état lu par un lecteur d'écran disent le jalon. */
+/* @a11y-assume: .ds-frise__amount en cours — montant sur --brand-from (pire arrêt)
+   v0.10.0 — le montant du jalon en cours (« 0 € ») en dégradé clippé, face display 800 à 29 px : du
+   gros texte, le même écart que .ds-price--accent et le mot de titre. */
 /* @a11y-assume: .ds-price--accent — montant sur --brand-from (pire arrêt)
    v0.5.0 — le montant d'une offre en dégradé clippé (« 12 € »), en face display 800 à 36 px : du
    gros texte, lu 1,83 sur l'arrêt clair comme `.accent`. Décision de marque du 10/10/2026, le même

@@ -554,6 +554,73 @@ const g = chartGeometry({ points, width: 318, height: 180, formatValue: v => `${
 - États rendus : la carte Évolution (trois périodes), un point, toute à zéro, constante, une année,
   chargement ; clair et sombre, 1440 et 390.
 
+## Frise
+
+La frise à jalons (v0.10.0, maquettes Onboarding Web « Comment se passe ton essai », verticale, et
+Facturation Web, la frise de l'essai dans la carte d'abonnement, horizontale). Une suite de jalons dans
+une liste ordonnée ; chacun porte une **pastille à icône**, une **date**, un **titre**, un **montant** et
+un **texte** facultatifs, et un **trait** vers le jalon suivant.
+
+- **Trois états**, par jalon : `done` (fait : pastille, date et trait en succès), `current` (en cours :
+  pastille en dégradé plein et lueur, date en `--primary-readable`, montant en dégradé, trait du primaire
+  vers la bordure, `aria-current="step"`), `upcoming` (à venir, défaut : la pastille prend le `tone`
+  choisi par l'app, ambre, corail…, la date est en sourdine, le trait en bordure). Le trait est donc
+  coloré jusqu'au jalon fait. L'état est aussi lu par un lecteur d'écran (« Fait : », « En cours : »,
+  « À venir : », surchargeables par `stateLabels`).
+- **Deux orientations** : `vertical` (défaut) ; `horizontal`, une rangée de colonnes égales, le trait
+  couché entre les pastilles, qui **redevient verticale sous 64 rem** (la maquette Facturation à 390) :
+  rien ne défile jamais.
+- **Deux tailles** : `md`, la frise d'un parcours (pastille 48, glyphe 22, trait 3, date en capitales,
+  titre en face display, montant sur sa ligne) ; `sm`, la frise compacte d'une carte (pastille 36, glyphe
+  16, trait 2, titre en body-sm 600, **montant dans le titre** : « Premier paiement · 19 € »).
+- `plaque` : la plaque `--background` encadrée qui la porte dans une carte (`--card` dans la coque d'un
+  écran de Claude).
+- **Le DS ne formate rien** : dates et montants viennent de l'app. La coche d'un jalon fait s'écrit
+  `<Icon name="check" strokeWidth={3} />` ; un glyphe hors catalogue passe par `glyph`.
+
+**Ne pas l'utiliser** pour les étapes d'un formulaire en cours (c'est `.ds-steps--bar`), pour une liste
+d'étapes à cocher (`.ds-steps--vertical`) ni pour des tuiles d'étapes (`.ds-etapes`).
+
+```tsx
+<Frise aria-label="Comment se passe ton essai" steps={[
+  { state: 'current', icon: <Icon glyph={LockOpen} />, date: 'Aujourd’hui', title: 'Tout Yunary débloqué', amount: '0 €', text: 'Analyse, Script et Programmation, sans limite d’essai.' },
+  { tone: 'amber', icon: <Icon name="mail" />, date: '24/10/2026', title: 'On te prévient', text: 'Un e-mail de rappel, deux jours avant la fin de ton essai.' },
+  { tone: 'coral', icon: <Icon glyph={CreditCard} />, date: '26/10/2026', title: 'Ton abonnement démarre', amount: '19 € par mois' },
+]} />
+<Frise orientation="horizontal" size="sm" plaque aria-label="Ton essai" steps={[
+  { state: 'done', icon: <Icon name="check" strokeWidth={3} />, date: '17/10', title: 'Essai commencé' },
+  { tone: 'amber', icon: <Icon name="mail" />, date: '22/10', title: 'Rappel par e-mail' },
+  { tone: 'coral', icon: <Icon glyph={CreditCard} />, date: '24/10', title: 'Premier paiement', amount: '19 €' },
+]} />
+```
+
+En classes (mcp-ui) :
+
+```html
+<ol class="ds-frise ds-frise--horizontal ds-frise--sm ds-frise--plaque" aria-label="Ton essai">
+  <li class="ds-frise__step is-done">
+    <span class="ds-frise__rail" aria-hidden="true"><span class="ds-pastille ds-pastille--success ds-frise__mark"><!-- coche --></span><span class="ds-frise__line"></span></span>
+    <div class="ds-frise__body"><span class="ds-frise__sr">Fait : </span><span class="ds-frise__date">17/10</span><span class="ds-frise__title">Essai commencé</span></div>
+  </li>
+  <li class="ds-frise__step" aria-current="step"><!-- en cours : class="ds-frise__step is-current", la pastille sans ton --></li>
+  <li class="ds-frise__step">
+    <span class="ds-frise__rail" aria-hidden="true"><span class="ds-pastille ds-pastille--coral ds-frise__mark"><!-- carte --></span><span class="ds-frise__line"></span></span>
+    <div class="ds-frise__body"><span class="ds-frise__sr">À venir : </span><span class="ds-frise__date">24/10</span><span class="ds-frise__title">Premier paiement · <span class="ds-frise__amount">19 €</span></span></div>
+  </li>
+</ol>
+```
+
+- Props : `steps` (`{ date, title, icon, amount?, text?, state?, tone?, id? }[]`, types `FriseStep`,
+  `FriseState`, `FriseTone`) · `orientation` (`vertical` · `horizontal`) · `size` (`md` · `sm`) · `plaque`
+  · `stateLabels`. Les attributs HTML d'un `<ol>` passent (`aria-label`).
+- Classes : `.ds-frise` · `--horizontal` · `--sm` · `--plaque` · `__step` (`.is-done` · `.is-current`) ·
+  `__rail` · `__mark` (avec `.ds-pastille--<ton>`) · `__line` · `__body` · `__date` · `__title` · `__amount`
+  · `__text` · `__sr`. Jetons : `--frise-mark(-sm)` · `--frise-icon(-sm)` · `--frise-line(-sm)` ·
+  `--frise-line-min(-sm)` · `--frise-pad` · `--frise-plaque-pad-y` · `--frise-gap(-sm)` ·
+  `--frise-col-gap-sm` · `--tracking-frise-date` · `--leading-frise-*`.
+- États rendus : fait, en cours, à venir ; verticale, horizontale (verticale à 390), compacte, sur
+  plaque ; clair et sombre, 1440 et 390.
+
 ## StatCard
 
 La carte de chiffre (v0.7.0, maquette Admin Web ; l'écran Métriques de mcp-ui l'écrit en classes) :

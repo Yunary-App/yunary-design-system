@@ -14,6 +14,51 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.10.0 — la frise à jalons
+
+La nouvelle offre Yunary : les maquettes Onboarding Web (« Comment se passe ton essai », verticale) et
+Facturation Web (la frise de l'essai dans la carte d'abonnement, horizontale) dessinent le même motif,
+que le DS n'avait pas (`.ds-steps--bar` est une barre segmentée, `.ds-steps--vertical` une liste à
+repères, `.ds-etapes` des tuiles). Un composant nouveau (41).
+
+- **Les classes `.ds-frise*`, puis `Frise` par-dessus** (mcp-ui ne consomme que le CSS). Une liste
+  ordonnée de jalons (`__step`) : un rail (`__rail` : la pastille `__mark`, qui prend un ton de
+  `Pastille`, et le trait `__line` vers le jalon suivant) et un corps (`__body` : `__date`, `__title`,
+  `__amount` et `__text` facultatifs, `__sr` lu par un lecteur d'écran).
+- **Trois états** : `.is-done` (fait : pastille, date et trait en succès), `.is-current` (en cours :
+  pastille en dégradé plein et lueur, date en `--primary-readable`, montant en dégradé, trait du primaire
+  vers la bordure, `aria-current="step"`), à venir par défaut (pastille du ton choisi par l'app, date en
+  sourdine, trait en bordure). Le trait est coloré jusqu'au jalon fait.
+- **Deux orientations** : verticale (défaut) et `--horizontal` (colonnes égales, trait couché), qui
+  **redevient verticale sous 64 rem** — la maquette Facturation à 390 : rien ne défile.
+- **Deux tailles** : la frise d'un parcours (pastille 48, glyphe 22, trait 3, date en capitales, titre
+  en face display, montant sur sa ligne) et **`--sm`**, la frise compacte d'une carte (pastille 36,
+  glyphe 16, trait 2, titre en body-sm 600, montant dans le titre). **`--plaque`** : la plaque
+  `--background` encadrée (`--card` dans la coque d'écran).
+- **Aucune valeur en dur** : les mesures sont des jetons — `--frise-mark(-sm)`, `--frise-icon(-sm)`,
+  `--frise-line(-sm)`, `--frise-line-min(-sm)`, `--frise-pad`, `--frise-plaque-pad-y`, `--frise-gap(-sm)`,
+  `--frise-col-gap-sm` (`tokens/scales.css`), `--tracking-frise-date`, `--leading-frise-amount`,
+  `--leading-frise-title-sm`, `--leading-frise-text` (`tokens/typography.css`).
+- **Deux écarts à la maquette, pour l'accessibilité** : la date du jalon en cours est en
+  `--primary-readable` (la maquette l'écrit en `--brand-via` : 2,51 en clair, sous 4,5) ; la pastille et le
+  montant en dégradé du jalon en cours sont des écarts ASSUMÉS dans `brand-yunary.css` (glyphe blanc sur
+  l'arrêt jaune 2,04, montant clippé, les mêmes que `.ds-pastille--brand-solid` et `.ds-price--accent`).
+  La lueur, réservée au CTA, est étendue à cette pastille (la maquette ; `DESIGN.md` § 6).
+- **Ambre et succès vérifiés** dans les deux thèmes (`check-contrast.mjs`, 17 paires nouvelles) : dates
+  faites 5,57 à 8,91, dates à venir 4,91 à 7,51, glyphes ambre, corail, succès et neutre 4,69 à 8,78 sur la
+  carte et sur la plaque, badges ambre 4,82 à 8,30 et succès 4,75 à 7,14.
+- **Tests** : `tests/frise.test.mjs` (dans `npm test`) monte `Frise` en mode strict de développement :
+  balisage, états, montant dans le titre en `sm`, libellés surchargés, aucune erreur, un rendu par
+  changement. La vitrine construite en développement strict : aucune erreur.
+- **Vitrine.** « Parcours », section « Frise à jalons » : les deux cartes des maquettes, les trois états
+  en horizontale et en verticale compacte, les badges ambre (essai, résilié) et succès ; clair et sombre,
+  1440 et 390.
+- **Migration.** **Hub** : la carte « Comment se passe ton essai » de l'onboarding et la frise de la carte
+  d'abonnement de Facturation posent `Frise` au lieu de la composer. **mcp-ui** : les classes, exemple dans
+  `docs/PROMPTS.md`, section `Frise`.
+
+---
+
 ## 0.9.0 — une largeur de colonne pour les apps
 
 Le hub plafonnait ses pages en `max-w-shell` (`--container-shell`, 70 rem), une largeur faite pour le

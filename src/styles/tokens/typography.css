@@ -53,6 +53,7 @@
   --tracking-eyebrow:0.18em;
   --tracking-chip:0.14em;
   --tracking-dense:0.14em;    /* en-tête de colonne, tuile serrée. FROM APP CODE (same value as chip) */
+  --tracking-frise-date:0.04em; /* la date d'un jalon de frise, en capitales. v0.10.0 */
 
   /* Leading — unitless ratios. tight/snug/normal sont les paliers génériques ;
      display/heading/body AJOUTÉS — une display en capitales demande un interligne plus
@@ -60,6 +61,8 @@
   --leading-tight:1.1; --leading-snug:1.25; --leading-normal:1.5;
   --leading-display:1.05; --leading-heading:1.12;
   --leading-body:1.5;  /* interface body — FROM APP CODE (was 1.6) */
+  /* v0.10.0 — la frise à jalons (maquettes Onboarding Web et Facturation Web) */
+  --leading-frise-amount:1.2; --leading-frise-title-sm:1.35; --leading-frise-text:1.55;
   --leading-prose:1.7; /* colonne de lecture suivie (légal, article) — FROM APP CODE */
 
   --weight-regular:400; --weight-medium:500; --weight-semibold:600; --weight-bold:700;

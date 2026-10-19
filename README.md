@@ -1,7 +1,7 @@
 # @yunary/ds
 
 **Le design system de Yunary.** Deux couches qui ne se mélangent pas : un **socle**
-générique — structure, comportements, échelles, rail de contrôles, motion, 40 composants
+générique — structure, comportements, échelles, rail de contrôles, motion, 41 composants
 React + TypeScript, **zéro couleur** — et la **marque Yunary**, qui porte les couleurs, les
 polices, les dégradés et la lueur.
 
@@ -58,7 +58,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yunary-App/yunary-design-system#v0.9.0
+npm i github:Yunary-App/yunary-design-system#v0.10.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -260,7 +260,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > lève aucune erreur : il rend 4 px, hors barème.
 
 > **Le paquet n'est pas scanné par Tailwind.** v4 ne lit pas `node_modules`. Sans effet
-> aujourd'hui : les 40 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
+> aujourd'hui : les 41 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
 > Tailwind. C'est une précaution pour l'avenir — le jour où un composant du DS écrira une classe
 > Tailwind, l'app devra pointer le paquet :
 > ```css
@@ -279,7 +279,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 | `icons` | `Icon` — 62 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
 | `actions` | `Button` · `IconButton` — 5 variantes, `danger-soft` compris (6 pour `IconButton`, `accent` compris), 4 tailles pour `Button` (`xs` = « Copier »), jamais un pill |
 | `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` (verrouillé, libellé avant la piste) · `FormField` (action à droite du libellé) · `Calendar` · `DatePicker` · `Dropzone` (dépôt d'un fichier) |
-| `data-display` | `Card` (+ en-tête à slots, badge collé au titre, pied, palier `xl`, plaque, coque d'écran de Claude) · `Pastille` (de la coche à l'écran) · `Badge` (2 rembourrages, ton dégradé, tête, croix de retrait) · `Tooltip` · `Separator` · `Chart` (le graphique d'évolution, fait maison : grille, aire, escalier, point final, graduations ; géométrie pure `chartGeometry`, aussi en `@yunary/ds/chart-geometry` sans React) · `StatCard` (la carte de chiffre : libellé, valeur, variation en trois sens, chargement) · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables ; `Th sort` + `onSort` : l'en-tête triable, contrôlé |
+| `data-display` | `Card` (+ en-tête à slots, badge collé au titre, pied, palier `xl`, plaque, coque d'écran de Claude) · `Pastille` (de la coche à l'écran) · `Badge` (2 rembourrages, ton dégradé, tête, croix de retrait) · `Tooltip` · `Separator` · `Frise` (la frise à jalons : pastille, date, titre, montant, texte, trait ; fait · en cours · à venir ; verticale ou horizontale, compacte, sur plaque) · `Chart` (le graphique d'évolution, fait maison : grille, aire, escalier, point final, graduations ; géométrie pure `chartGeometry`, aussi en `@yunary/ds/chart-geometry` sans React) · `StatCard` (la carte de chiffre : libellé, valeur, variation en trois sens, chargement) · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables ; `Th sort` + `onSort` : l'en-tête triable, contrôlé |
 | `feedback` | `Toast` · `Banner` (+ encart dans une carte, pastille à la place de l'icône) · `EmptyState` · `StateCard` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
 | `overlays` | `Modal` (3 phases + feuille basse sous 64 rem, sous-titre, 480 / 560 / 600) |
 | `navigation` | `Navbar` · `Footer` · `Tabs` (onglets ou choix d'une valeur, barre compacte, qui défile) · `Pagination` · `AppShell` (+ barre haute mobile) · `Sidebar` |
@@ -343,7 +343,7 @@ npm install          # dépendances du paquet
 npm run build        # tsup → dist/ (ESM + CJS + .d.ts)
 npm run typecheck    # tsc --noEmit
 npm run lint         # typecheck + les tests + les quatorze gardes
-npm test             # node --test : la géométrie du graphique, et Chart monté en mode strict (happy-dom)
+npm test             # node --test : la géométrie du graphique, Chart et Frise montés en mode strict (happy-dom)
 ```
 
 `npm run lint` enchaîne le typecheck, les tests de la géométrie du graphique (`npm test`, 0.8.0) et **quatorze gardes** ; un quinzième, `check-classes.mjs`,

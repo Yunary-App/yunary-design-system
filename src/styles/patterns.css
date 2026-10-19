@@ -82,6 +82,8 @@
    ligne à 680, la maquette des écrans de Claude (0.6.2). Les crans sm, xs et lg gardent le leur. */
 .ds-card--screen .ds-card__foot .ds-btn:where(:not(.ds-btn--sm,.ds-btn--xs,.ds-btn--lg)){padding-inline:1rem}
 /* Le point final d'un graphique se détoure sur le fond de la coque, pas sur --card (0.8.0). */
+/* La plaque d'une frise se relève en --card dans la coque, comme tout bloc posé dedans (0.10.0). */
+.ds-card--screen .ds-frise--plaque{background:var(--card)}
 .ds-card--screen .ds-chart{--chart-surface:var(--background)}
 /* Les grilles serrent leur gouttière dans un écran : avantages 10 / 20, compteurs 16. */
 .ds-card--screen .ds-perks{--perks-col-gap:1.25rem}
@@ -1599,6 +1601,63 @@ a.ds-row{cursor:pointer}
 .ds-stat-card__foot>.ds-badge{flex:none}
 .ds-stat-card__skel-value{width:7rem;height:2.5rem}
 .ds-stat-card__skel-foot{width:10rem;max-width:100%;height:1.25rem}
+/* LA FRISE À JALONS — `.ds-frise`, v0.10.0 (maquettes Onboarding Web, « Comment se passe ton essai », et
+   Facturation Web, la frise de l'essai dans la carte d'abonnement). Une suite de jalons dans une liste
+   ordonnée : chaque `.ds-frise__step` porte un rail (`__rail` : la pastille `__mark` et le trait `__line`
+   vers le jalon suivant) et un corps (`__body` : `__date`, `__title`, `__amount` facultatif, `__text`
+   facultatif). TROIS ÉTATS, sur le jalon : `.is-done` (fait : pastille, date et trait en succès),
+   `.is-current` (en cours : pastille en dégradé plein et lueur, date en --primary-readable — la
+   maquette l'écrit en --brand-via, 2,51 en clair, sous le seuil —, montant en dégradé, trait du primaire
+   vers la bordure), à venir par défaut (pastille d'un ton choisi par l'app, `.ds-pastille--amber`…,
+   date en sourdine, trait --border). Le trait est donc coloré jusqu'au jalon fait.
+   DEUX ORIENTATIONS : verticale (défaut) ; `--horizontal`, une rangée de colonnes égales, le trait
+   couché entre les pastilles — et SOUS 64 rem, la frise horizontale redevient verticale (la maquette
+   Facturation à 390) : rien ne défile. DEUX TAILLES : la frise d'un parcours (pastille 48, trait 3, date
+   en capitales, titre en face display) et `--sm`, la frise compacte d'une carte (pastille 36, trait 2,
+   titre en body-sm 600, montant dans le titre). `--plaque` : la plaque --background encadrée qui la
+   porte dans une carte. L'état se lit aussi au lecteur d'écran (`__sr`, et `aria-current="step"`). */
+/* @tokenref-assume: --frise-mark-size — la taille de la pastille, posée par .ds-frise et .ds-frise--sm ci-dessous */
+/* @tokenref-assume: --frise-icon-size — la taille du glyphe, posée par .ds-frise et .ds-frise--sm ci-dessous */
+/* @tokenref-assume: --frise-line-w — l'épaisseur du trait, posée par .ds-frise et .ds-frise--sm ci-dessous */
+/* @tokenref-assume: --frise-line-len — la longueur minimale du trait, posée par .ds-frise et .ds-frise--sm ci-dessous */
+.ds-frise{--frise-mark-size:var(--frise-mark);--frise-icon-size:var(--frise-icon);--frise-line-w:var(--frise-line);--frise-line-len:var(--frise-line-min);display:flex;flex-direction:column;min-width:0;margin:0;padding:0;list-style:none}
+.ds-frise--sm{--frise-mark-size:var(--frise-mark-sm);--frise-icon-size:var(--frise-icon-sm);--frise-line-w:var(--frise-line-sm);--frise-line-len:var(--frise-line-min-sm)}
+.ds-frise--plaque{padding:var(--frise-plaque-pad-y) var(--frise-pad);box-sizing:border-box;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--background)}
+.ds-frise__step{display:grid;grid-template-columns:var(--frise-mark-size) minmax(0,1fr);column-gap:var(--space-4);min-width:0}
+.ds-frise--sm .ds-frise__step{column-gap:var(--frise-col-gap-sm)}
+.ds-frise__rail{display:flex;flex-direction:column;align-items:center;min-width:0}
+.ds-frise__mark{flex:none;width:var(--frise-mark-size);height:var(--frise-mark-size);border-radius:var(--radius-pill)}
+.ds-frise__mark svg{--ds-icon-size:var(--frise-icon-size)}
+.ds-frise__line{flex:1;width:var(--frise-line-w);min-height:var(--frise-line-len);margin:var(--space-2) 0;border-radius:var(--radius-pill);background:var(--border)}
+.ds-frise--sm .ds-frise__line{margin:var(--space-1) 0}
+.ds-frise__step:last-child .ds-frise__line{display:none}
+.ds-frise__body{display:flex;flex-direction:column;gap:var(--frise-gap);min-width:0;padding:var(--space-1) 0 var(--frise-pad)}
+.ds-frise--sm .ds-frise__body{gap:var(--frise-gap-sm);padding-bottom:var(--space-3)}
+.ds-frise__step:last-child .ds-frise__body{padding-bottom:0}
+.ds-frise__date{font-size:var(--text-caption);font-weight:var(--weight-bold);line-height:var(--leading-snug);letter-spacing:var(--tracking-frise-date);text-transform:uppercase;color:var(--text-muted)}
+.ds-frise--sm .ds-frise__date{letter-spacing:normal;text-transform:none}
+.ds-frise__title{font-family:var(--font-display);font-size:var(--text-heading-sm);font-weight:var(--weight-bold);line-height:var(--leading-snug);color:var(--foreground)}
+.ds-frise--sm .ds-frise__title{font-family:var(--font-body);font-size:var(--text-body-sm);font-weight:var(--weight-semibold);line-height:var(--leading-frise-title-sm)}
+.ds-frise__amount{font-family:var(--font-display);font-size:var(--text-subheading);font-weight:var(--weight-extrabold);line-height:var(--leading-frise-amount);color:var(--foreground)}
+.ds-frise--sm .ds-frise__amount{font:inherit;color:inherit}
+.ds-frise__text{margin:0;font-size:var(--text-body-sm);line-height:var(--leading-frise-text);color:var(--text-secondary);text-wrap:pretty}
+.ds-frise__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.ds-frise__step.is-done .ds-frise__date{color:var(--pill-success-fg)}
+.ds-frise__step.is-done .ds-frise__line{background:var(--pill-success-fg)}
+.ds-frise__step.is-current .ds-frise__mark{background:var(--brand-gradient);color:var(--primary-foreground);box-shadow:var(--shadow-glow)}
+.ds-frise__step.is-current .ds-frise__date{color:var(--primary-readable)}
+.ds-frise__step.is-current .ds-frise__line{background:linear-gradient(180deg,var(--primary),var(--border))}
+.ds-frise__step.is-current .ds-frise__amount{font-size:var(--text-heading);line-height:1;width:fit-content;background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ds-frise--sm .ds-frise__step.is-current .ds-frise__amount{font-size:inherit;line-height:inherit}
+@media (min-width:64.0625rem){
+.ds-frise--horizontal{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);column-gap:var(--space-4)}
+.ds-frise--horizontal .ds-frise__step{display:flex;flex-direction:column;gap:var(--frise-gap)}
+.ds-frise--horizontal .ds-frise__rail{flex-direction:row;margin:0 calc(-1 * var(--space-4)) var(--space-1) 0}
+.ds-frise--horizontal .ds-frise__step:last-child .ds-frise__rail{margin-right:0}
+.ds-frise--horizontal .ds-frise__line{width:auto;min-width:var(--frise-line-len);height:var(--frise-line-w);min-height:0;margin:0 var(--space-2)}
+.ds-frise--horizontal .ds-frise__step.is-current .ds-frise__line{background:linear-gradient(90deg,var(--primary),var(--border))}
+.ds-frise--horizontal .ds-frise__body{gap:var(--frise-gap);padding:0}
+}
 /* LE GRAPHIQUE D'ÉVOLUTION — `.ds-chart`, v0.8.0 (maquette Admin Web, onglet Évolution ; l'écran Métriques
    de mcp-ui). Une courbe par graphique : la grille (`__grid`, filets --border), l'aire (`__area`, la
    couleur de la courbe à 12 %), la ligne en escalier (`__line`), le point final (`__dot`, détouré à la
