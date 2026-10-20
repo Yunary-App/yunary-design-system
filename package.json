@@ -1,6 +1,6 @@
 {
   "name": "@yunary/ds",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Design system Yunary — jetons, couche Tailwind v4 et primitives React.",
   "license": "UNLICENSED",
   "private": false,
@@ -23,12 +23,6 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./chart-geometry": {
-      "types": "./dist/chart-geometry.d.ts",
-      "source": "./src/chart/geometry.ts",
-      "import": "./dist/chart-geometry.js",
-      "require": "./dist/chart-geometry.cjs"
-    },
     "./core.css": "./src/styles/core.css",
     "./brand-yunary.css": "./src/styles/brand-yunary.css",
     "./brand.template.css": "./src/styles/brand.template.css",
@@ -40,7 +34,6 @@
     "build": "tsup && npm run check:classes",
     "typecheck": "tsc --noEmit",
     "setup": "npm install && npm install --prefix demo",
-    "rebrand": "node rebrand.mjs",
     "test": "node --test tests/chart-geometry.test.mjs tests/chart-strict.test.mjs tests/frise.test.mjs",
     "lint": "npm run typecheck && npm test && node check-token-refs.mjs && node check-version.mjs && node check-contract.mjs && node check-utility-collisions.mjs && node check-dead-utilities.mjs && node check-font-px.mjs && node check-fragile-classes.mjs && node check-dark-substitution.mjs && node check-contrast.mjs && node check-surfaces.mjs && node check-catalogue.mjs && node check-coque.mjs && node check-preflight-drift.mjs && bash check-literals.sh",
     "demo": "npm --prefix demo run dev",
@@ -62,7 +55,6 @@
     }
   },
   "dependencies": {
-    "@yunary/ds": "github:Yunary-App/yunary-design-system#v0.6.0",
     "class-variance-authority": "^0.7.1"
   },
   "devDependencies": {

@@ -1,40 +1,21 @@
-import { useState } from 'react';
-import { Badge, Banner, Button, EmptyState, Icon, Pastille, Progress, Skeleton, SkeletonCard, Spinner, StateCard, Toast } from '@yunary/ds';
+import { Banner, Button, EmptyState, Icon, Pastille, Progress, Skeleton, Spinner } from '@yunary/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 export function FeedbackPage() {
-  const [closed, setClosed] = useState(false);
-
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Toast" note="Retour transitoire, en bas à droite du viewport. Toujours couleur + icône + texte.">
-        <Block label="Tons">
-          <Stack>
-            <Toast tone="success" title="Prompt copié" description="Colle-le dans Claude Code." />
-            <Toast tone="danger" title="Ça a planté, on réessaie ?" description="Le build n'a pas pu démarrer." />
-            <Toast tone="warning" title="Version de la CLI ancienne" description="Mets à jour avant de relancer." />
-            <Toast tone="info" title="Build en file d'attente" description="Ça démarre dans quelques secondes." />
-          </Stack>
-        </Block>
-        <Block label="Avec fermeture">
-          {closed
-            ? <Button variant="secondary" size="sm" onClick={() => setClosed(false)}>Réafficher le toast</Button>
-            : <Toast tone="success" title="Prompt copié" description="Colle-le dans Claude Code." onClose={() => setClosed(true)} />}
-        </Block>
-      </Section>
-
       <Section title="Banner" note="Message inline persistant, dans une page ou une card.">
         <Block label="Tons">
           <Stack>
-            <Banner tone="info" title="Nouvelle série en ligne">Trois vidéos pour construire ton premier outil interne.</Banner>
-            <Banner tone="warning" title="Ce tuto date de mars">La CLI a changé depuis — la méthode reste bonne.</Banner>
-            <Banner tone="success" title="Build terminé">Ton app tourne en local sur le port 5173.</Banner>
-            <Banner tone="danger" title="Ça a planté, on réessaie ?">La commande s'est arrêtée avant la fin.</Banner>
+            <Banner tone="info" title="Ton essai est lancé">Analyse, Script et Programmation sont ouverts pendant 7 jours.</Banner>
+            <Banner tone="warning" title="Ta carte expire ce mois-ci">Mets-la à jour pour garder Yunary après ton essai.</Banner>
+            <Banner tone="success" title="Analyse terminée">La fiche de ta vidéo est prête dans Claude.</Banner>
+            <Banner tone="danger" title="Le paiement n'est pas passé">Ta banque l'a refusé. Rien n'a été débité.</Banner>
           </Stack>
         </Block>
         <Block label="Avec action">
-          <Banner tone="warning" title="Ce tuto date de mars" action={<Button size="sm" variant="secondary">Voir la mise à jour</Button>}>
-            La CLI a changé depuis — la méthode reste bonne.
+          <Banner tone="warning" title="Ta carte expire ce mois-ci" action={<Button size="sm" variant="secondary">Mettre à jour</Button>}>
+            Mets-la à jour pour garder Yunary après ton essai.
           </Banner>
         </Block>
       </Section>
@@ -43,9 +24,9 @@ export function FeedbackPage() {
         <Grid cols={2}>
           <Block label="Complet">
             <EmptyState
-              icon={<Icon name="folder" />}
-              title="Aucun build ici"
-              description="Choisis une série pour voir les vidéos correspondantes."
+              icon={<Icon name="video" />}
+              title="Aucune analyse ici"
+              description="Demande à Claude d'analyser une vidéo : elle apparaîtra ici."
               action={<Button variant="secondary">Voir tout</Button>}
             />
           </Block>
@@ -56,46 +37,12 @@ export function FeedbackPage() {
               description="Essaie un autre mot-clé, ou repars de la liste complète."
             />
           </Block>
-          <Block label="Tuile composée" hint="tile remplace la Pastille par défaut (panneau brand outlined) quand elle ne convient pas — icon est alors ignoré.">
+          <Block label="Tuile composée" hint="tile remplace la Pastille par défaut (panneau brand outlined) quand elle ne convient pas : icon est alors ignoré.">
             <EmptyState
               tile={<Pastille size="dialogue" tone="neutral"><Icon name="search" /></Pastille>}
               title="Aucun résultat"
               description="Essaie un autre mot-clé."
             />
-          </Block>
-        </Grid>
-      </Section>
-
-      <Section title="StateCard" note="La carte d'état héros : l'attente, l'indisponible, l'erreur, le cas limite. Une carte PLEINE qui explique — pastille héros outlined et carrée, titre subheading, corps muted, appoint, action. Ce n'est pas l'EmptyState (un emplacement vide en pointillés).">
-        <Grid cols={2}>
-          <Block label="brand · avec appoint" hint="role=status. L'appoint (children) va entre le corps et l'action : ici une barre de progression.">
-            <StateCard
-              icon={<Icon name="clock" />}
-              title="Encore un peu de matière, et on te dit tout"
-              description="Ton compte a 2 publications récentes, il en faut au moins 3 pour un bilan qui veuille dire quelque chose. Continue de publier."
-            >
-              <div className="flex w-full max-w-narrow flex-col gap-space-2 text-left">
-                <Progress value={2} max={3} label="2 publications sur 3" />
-              </div>
-            </StateCard>
-          </Block>
-          <Block label="danger · avec action" hint="role=alert. « C'est nous, pas toi » : la pastille passe au ton danger, outlined comme l'autre.">
-            <StateCard
-              tone="danger"
-              icon={<Icon name="circle-x" />}
-              title="La génération a échoué"
-              description="Rien ne t'a été débité. Réessaie dans un instant — si ça se reproduit, écris-nous."
-              action={<><Button variant="secondary">Retour</Button><Button variant="primary">Réessayer</Button></>}
-            />
-          </Block>
-          <Block label="brand · attente" hint="Le spinner en glyphe : l'audit qui tourne, la vidéo qui s'analyse.">
-            <StateCard
-              icon={<Spinner size="1.625rem" />}
-              title="Audit en cours"
-              description="On lit tes dernières publications. Une minute, pas plus."
-            >
-              <Badge tone="accent">Étape 3 sur 5</Badge>
-            </StateCard>
           </Block>
         </Grid>
       </Section>
@@ -108,7 +55,7 @@ export function FeedbackPage() {
             <Spinner size="lg" />
             <Spinner size="2.5rem" />
           </Row>
-          <Row label="couleur — suit currentColor">
+          <Row label="couleur, suit currentColor">
             <span style={{ color: 'var(--primary)' }}><Spinner size="lg" /></span>
             <span style={{ color: 'var(--text-muted)' }}><Spinner size="lg" /></span>
             <span style={{ color: 'var(--destructive)' }}><Spinner size="lg" /></span>
@@ -128,16 +75,16 @@ export function FeedbackPage() {
         <Block label="Valeurs">
           <Stack>
             <Progress value={0} label="Aucune progression" />
-            <Progress value={35} label="Build en cours" />
-            <Progress value={72} label="Build en cours" />
-            <Progress value={100} label="Build terminé" />
+            <Progress value={35} label="Analyse en cours" />
+            <Progress value={72} label="Analyse en cours" />
+            <Progress value={100} label="Analyse terminée" />
           </Stack>
         </Block>
         <Block label="Indéterminé" hint="Quand la durée est inconnue.">
-          <Progress indeterminate label="Analyse du projet" />
+          <Progress indeterminate label="Transcription de la vidéo" />
         </Block>
         <Block label="Échelle personnalisée" hint="value et max.">
-          <Progress value={3} max={5} label="Étape 3 sur 5" />
+          <Progress value={12} max={30} label="12 analyses sur 30" />
         </Block>
       </Section>
 
@@ -149,13 +96,6 @@ export function FeedbackPage() {
             <Skeleton height="9rem" radius="var(--radius-lg)" />
             <Skeleton width="5.5rem" height="1.125rem" radius="var(--radius-pill)" />
           </Stack>
-        </Block>
-        <Block label="SkeletonCard" hint="Une par emplacement de grille pendant le chargement.">
-          <Grid cols={3}>
-            <SkeletonCard />
-            <SkeletonCard lines={3} />
-            <SkeletonCard media={false} lines={4} />
-          </Grid>
         </Block>
       </Section>
     </div>

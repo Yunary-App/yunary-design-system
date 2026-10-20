@@ -7,8 +7,8 @@ import type { ChartPoint } from '../../chart/geometry';
 /**
  * Le graphique d'évolution — v0.8.0, maquette Admin Web (onglet Évolution), fait maison, sans
  * librairie. Une courbe par graphique : grille, aire, ligne en escalier, point final, graduations en
- * valeurs à gauche et en dates en bas. La géométrie vient de `chartGeometry` (pure, exportée seule
- * par `@yunary/ds/chart-geometry`) ; l'apparence, des classes `.ds-chart*`.
+ * valeurs à gauche et en dates en bas. La géométrie vient de `chartGeometry` (pure, exportée par
+ * l'index) ; l'apparence, des classes `.ds-chart*`.
  *
  * LA LARGEUR est celle du conteneur : le composant l'observe (ResizeObserver) et se redessine quand
  * elle change. La hauteur est une taille (`md` 260 / 180, `sm` 150 / 120 sous 64 rem). Il MESURE ses

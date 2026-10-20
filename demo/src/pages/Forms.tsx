@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { InputHTMLAttributes, ReactNode } from 'react';
 import { IDENTITY } from '../identity';
-import { Badge, Calendar, Checkbox, DatePicker, FormField, Icon, Input, Radio, Select, Switch, Textarea, cn } from '@yunary/ds';
+import { Badge, Calendar, Checkbox, DatePicker, FormField, Icon, Input, Select, Switch, Textarea, cn } from '@yunary/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
 /* Une vignette IMAGE de recette : un SVG en data-URI (aucun fichier, aucune requête), au format
@@ -39,17 +39,30 @@ function Tuile({ radio = false, title, description, meta, media, start = false, 
   );
 }
 
-const SERIES = [
-  { value: 'build', label: 'Build' },
-  { value: 'tuto', label: 'Tuto' },
-  { value: 'coulisses', label: 'Coulisses' },
+/* LE ROND, EN CLASSES. Pas de composant React : `.ds-choice` + `.ds-choice__box--radio`, toujours dans
+   un groupe nommé. */
+type RondProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & { label: ReactNode; etat?: string };
+function Rond({ label, etat, disabled, ...rest }: RondProps) {
+  return (
+    <label className={cn('ds-choice', disabled && 'is-disabled', etat)}>
+      <input type="radio" disabled={disabled} {...rest} />
+      <span className="ds-choice__box ds-choice__box--radio" aria-hidden="true"><span className="ds-choice__dot" /></span>
+      <span>{label}</span>
+    </label>
+  );
+}
+
+const RESEAUX = [
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'tiktok', label: 'TikTok' },
+  { value: 'youtube', label: 'YouTube' },
 ];
 
 export function FormsPage() {
   const [checked, setChecked] = useState(true);
   const [niveau, setNiveau] = useState('debutant');
-  const [formule, setFormule] = useState<'solo' | 'equipe' | 'both'>('both');
-  const [domaine, setDomaine] = useState('produit');
+  const [reseau, setReseau] = useState<'instagram' | 'tiktok' | 'youtube'>('instagram');
+  const [niche, setNiche] = useState('food');
   const [themes, setThemes] = useState<string[]>(['Voyage', 'Écriture']);
   const basculer = (v: string) => setThemes(l => (l.includes(v) ? l.filter(x => x !== v) : [...l, v]));
   const [sombre, setSombre] = useState(true);
@@ -103,7 +116,7 @@ export function FormsPage() {
       <Section title="Textarea" note="Hauteur automatique — jamais de min-height. Redimensionnement vertical uniquement. Même règle de surface que l'Input.">
         <Block label="Repos, focus, erreur, désactivé">
           <Stack>
-            <Textarea rows={3} placeholder="Décris ton idée d'app en deux phrases." />
+            <Textarea rows={3} placeholder="Décris ta vidéo en deux phrases." />
             <Textarea rows={2} className="is-focus" defaultValue="Focus" />
             <Textarea rows={2} invalid defaultValue="Trop court" />
             <Textarea rows={2} disabled defaultValue="Indisponible" />
@@ -115,20 +128,20 @@ export function FormsPage() {
       <Section title="Select" note="Select natif sur le rail 3rem, avec un chevron Lucide.">
         <Block label="Repos, focus, erreur, désactivé">
           <Stack>
-            <Select options={SERIES} defaultValue="build" />
-            <Select options={SERIES} className="is-focus" defaultValue="tuto" />
-            <Select options={SERIES} invalid defaultValue="build" />
-            <Select options={SERIES} disabled defaultValue="build" />
-            <Select options={SERIES} surface="card" defaultValue="coulisses" />
+            <Select options={RESEAUX} defaultValue="instagram" />
+            <Select options={RESEAUX} className="is-focus" defaultValue="tiktok" />
+            <Select options={RESEAUX} invalid defaultValue="instagram" />
+            <Select options={RESEAUX} disabled defaultValue="instagram" />
+            <Select options={RESEAUX} surface="card" defaultValue="youtube" />
           </Stack>
         </Block>
       </Section>
 
-      <Section title="Checkbox, Radio, Switch" note="Case 1.25rem, radio 1.25rem à point 0.625rem, switch 2.75 × 1.625rem à knob 1.25rem.">
+      <Section title="Checkbox, rond, Switch" note="Case 1.25rem, rond 1.25rem à point 0.625rem (classes .ds-choice, sans composant), switch 2.75 × 1.625rem à knob 1.25rem.">
         <Grid cols={3}>
           <Block label="Checkbox">
             <Stack>
-              <Checkbox label="Je veux recevoir le prompt du build" checked={checked} onChange={e => setChecked(e.target.checked)} />
+              <Checkbox label="Je veux recevoir les actualités de Yunary" checked={checked} onChange={e => setChecked(e.target.checked)} />
               <Checkbox label="Non coché" defaultChecked={false} />
               <Checkbox label="Indéterminée — sélection partielle" indeterminate />
               <Checkbox label="Hover" className="is-hover" />
@@ -137,13 +150,13 @@ export function FormsPage() {
               <Checkbox label="Cochée et désactivée" disabled defaultChecked />
             </Stack>
           </Block>
-          <Block label="Radio" hint="Toujours dans un groupe nommé.">
+          <Block label="Rond — classes .ds-choice" hint="Toujours dans un groupe nommé. Le hub l'écrit dans ses tuiles de choix.">
             <Stack>
-              <Radio name="niveau" value="debutant" label="Je débute" checked={niveau === 'debutant'} onChange={() => setNiveau('debutant')} />
-              <Radio name="niveau" value="avance" label="Je code déjà" checked={niveau === 'avance'} onChange={() => setNiveau('avance')} />
-              <Radio name="niveau-demo" value="hover" label="Hover" className="is-hover" />
-              <Radio name="niveau-demo" value="focus" label="Focus" className="is-focus" defaultChecked />
-              <Radio name="niveau-off" value="off" label="Indisponible" disabled />
+              <Rond name="niveau" value="debutant" label="Je débute" checked={niveau === 'debutant'} onChange={() => setNiveau('debutant')} />
+              <Rond name="niveau" value="avance" label="Je publie déjà chaque semaine" checked={niveau === 'avance'} onChange={() => setNiveau('avance')} />
+              <Rond name="niveau-demo" value="hover" label="Hover" etat="is-hover" />
+              <Rond name="niveau-demo" value="focus" label="Focus" etat="is-focus" defaultChecked />
+              <Rond name="niveau-off" value="off" label="Indisponible" disabled />
             </Stack>
           </Block>
           <Block label="Switch" hint="Bascule instantanée — pas de bouton Enregistrer.">
@@ -162,47 +175,47 @@ export function FormsPage() {
       <Section title="Tuile cochable — classes .ds-tile" note="UNE anatomie pour tous les choix en tuile, sans composant React : le balisage s'écrit dans l'app. Fond --background, radius md, filet 1,5 px ; cochée : filet --primary + plaque --accent, le titre reste en encre à sa graisse. La tuile est le label : toute sa surface coche, clavier et formulaire sont ceux de l'input natif, le contrôle .ds-choice rend dedans.">
         <Grid cols={2}>
           <Block label="Choix unique — input radio" hint="Dans un role=radiogroup, même name. La méta en fin de ligne (.ds-tile__meta).">
-            <div role="radiogroup" aria-label="Quelle formule ?" className="flex flex-col gap-space-3">
-              <Tuile radio name="formule" value="solo" checked={formule === 'solo'} onChange={() => setFormule('solo')}
-                title="Solo" meta="1 projet"
-                description="Un espace, un projet, tout ce qu'il faut pour livrer ton premier outil." />
-              <Tuile radio name="formule" value="equipe" checked={formule === 'equipe'} onChange={() => setFormule('equipe')}
-                title="Équipe" meta="5 projets"
-                description="Plusieurs projets en parallèle, partagés avec ton équipe." />
-              <Tuile radio name="formule" value="both" checked={formule === 'both'} onChange={() => setFormule('both')}
-                title="Sur mesure" meta="Illimité"
-                description="Autant de projets que nécessaire, avec un accompagnement." />
+            <div role="radiogroup" aria-label="Ton réseau principal" className="flex flex-col gap-space-3">
+              <Tuile radio name="reseau" value="instagram" checked={reseau === 'instagram'} onChange={() => setReseau('instagram')}
+                title="Instagram" meta="12,4 k"
+                description="Tes Reels, programmés et décrits depuis Claude." />
+              <Tuile radio name="reseau" value="tiktok" checked={reseau === 'tiktok'} onChange={() => setReseau('tiktok')}
+                title="TikTok" meta="8 k"
+                description="Tes vidéos, avec la miniature choisie dans la vidéo." />
+              <Tuile radio name="reseau" value="youtube" checked={reseau === 'youtube'} onChange={() => setReseau('youtube')}
+                title="YouTube" meta="1,2 k"
+                description="Tes Shorts, avec un titre et une description pour la recherche." />
             </div>
           </Block>
           <Block label="Choix multiple, avec média — .ds-tile--media" hint="La vignette (.ds-tile__media) est collée aux bords haut, bas et gauche : la tuile perd son padding vertical, la zone de contenu le reprend (1 rem), la vignette s'étire à la hauteur de la rangée (au moins 6,5 rem) et le rognage de la tuile lui donne le rayon. Le titre tient sur une ligne, en ellipse. Vignette dégradé, vignette image (<img> en cover), puis cochée / non cochée / désactivée.">
             <div className="flex flex-col gap-space-3">
-              <Tuile name="modele" value="api" defaultChecked title="Gabarit API"
-                description="Un service prêt à déployer, avec ses tests."
+              <Tuile name="video" value="retention" defaultChecked title="Trois erreurs qui tuent ta rétention"
+                description="42 s, prête à programmer."
                 media={<span className="flex-1 bg-brand-gradient" />}
-                meta={<Badge tone="amber">Officiel</Badge>} />
-              <Tuile name="modele" value="dash" title="Tableau de bord interne — un titre de gabarit assez long pour dépasser la largeur de la tuile et finir en ellipse"
-                description="Une vue de pilotage branchée sur ta base."
+                meta={<Badge tone="amber">Programmée</Badge>} />
+              <Tuile name="video" value="routine" title="Ma routine de montage en 20 minutes, un titre assez long pour dépasser la largeur de la tuile et finir en ellipse"
+                description="1 min 12 s, déposée hier."
                 media={<img src={VIGNETTE} alt="" />}
-                meta={<Badge tone="accent">Importé</Badge>}>
-                <span className="inline-flex items-center gap-space-2 text-caption font-semibold text-primary-readable"><Icon name="video" size="0.875rem" />Issu de « Le déploiement »</span>
+                meta={<Badge tone="accent">Nouvelle</Badge>}>
+                <span className="inline-flex items-center gap-space-2 text-caption font-semibold text-primary-readable"><Icon name="video" size="0.875rem" />Issue de « Ma routine »</span>
               </Tuile>
-              <Tuile name="modele" value="off" disabled title="Plafond atteint"
-                description="Décoche un gabarit pour en choisir un autre."
+              <Tuile name="video" value="off" disabled title="Plafond atteint"
+                description="Décoche une vidéo pour en choisir une autre."
                 media={<span className="flex-1 bg-tone-dark-soft" />}
-                meta={<Badge tone="neutral">Bientôt</Badge>} />
+                meta={<Badge tone="neutral">Brouillon</Badge>} />
             </div>
           </Block>
           <Block label=".ds-tile--start — la case sur la première ligne" hint="Un texte de deux à quatre lignes sans titre distinct : la case s'aligne sur la PREMIÈRE ligne (align-items:start, 3 px pour la centrer sur la ligne). Sans la classe, le contrôle est centré (titre + description, ou une ligne seule). Sans effet avec un média.">
             <div className="grid grid-cols-1 gap-space-3 md:grid-cols-2">
               <Tuile name="titre" value="t1" start defaultChecked
-                title={<span className="font-display text-body-lg font-bold leading-snug tracking-heading-sm">Ton outil interne tourne en local et personne ne s'en sert ? Ce n'est pas le code, c'est le déploiement.</span>}
+                title={<span className="font-display text-body-lg font-bold leading-snug tracking-heading-sm">Tes vidéos ne sont pas trop longues ? Elles sont trop lentes à démarrer, et ça se corrige en trois secondes.</span>}
                 description="Ouvre sur la douleur et retourne la cause." />
               <Tuile name="titre" value="t2" start
-                title={<span className="font-display text-body-lg font-bold leading-snug tracking-heading-sm">Trois erreurs qui cassent un déploiement avant la première requête.</span>}
+                title={<span className="font-display text-body-lg font-bold leading-snug tracking-heading-sm">Trois erreurs qui tuent ta rétention avant la troisième seconde.</span>}
                 description="Le chiffre annonce une liste courte." />
-              <Tuile radio name="align-demo" value="a" title="Solo" meta="1 projet"
+              <Tuile radio name="align-demo" value="a" title="Instagram" meta="12,4 k"
                 description="Centré (défaut) : le rond au milieu du titre et de la description." />
-              <Tuile radio name="align-demo" value="b" start title="Solo" meta="1 projet"
+              <Tuile radio name="align-demo" value="b" start title="Instagram" meta="12,4 k"
                 description=".ds-tile--start sur le même contenu : le rond monte sur la ligne du titre." />
             </div>
           </Block>
@@ -221,16 +234,16 @@ export function FormsPage() {
       <Section title="Tuile compacte et pastille de choix — .ds-tile--compact, .ds-tile--chip" note="La même tuile pour une LISTE de choix : une ligne, un glyphe de tête optionnel (.ds-tile__lead). --compact garde la case (choix simple : une valeur parmi une dizaine). --compact + --chip en fait une pastille en pilule dont la case est masquée visuellement — l'input reste focusable et annoncé — et la coche .ds-tile__check apparaît en tête une fois cochée. La limite max d'un choix multiple reste à l'app.">
         <Grid cols={2}>
           <Block label="--compact — choix simple, input radio" hint="Libellé --text-control/500, --text-secondary au repos, encre une fois coché. Grille auto-fill à composer par l'app.">
-            <div role="radiogroup" aria-label="Ton domaine" className="grid grid-cols-1 gap-space-3 md:grid-cols-2">
-              {['Produit', 'Design', 'Données', 'Infrastructure', 'Marketing', 'Autre'].map(d => (
-                <Tuile key={d} compact radio name="domaine" value={d.toLowerCase()} title={d}
-                  checked={domaine === d.toLowerCase()} onChange={() => setDomaine(d.toLowerCase())} />
+            <div role="radiogroup" aria-label="Ta niche" className="grid grid-cols-1 gap-space-3 md:grid-cols-2">
+              {['Food', 'Beauté', 'Sport', 'Voyage', 'Tech', 'Autre'].map(d => (
+                <Tuile key={d} compact radio name="niche" value={d.toLowerCase()} title={d}
+                  checked={niche === d.toLowerCase()} onChange={() => setNiche(d.toLowerCase())} />
               ))}
             </div>
           </Block>
           <Block label="--compact --chip — choix multiple, glyphe de tête" hint="Pastille en pilule, case masquée, coche en tête une fois cochée. Le glyphe de tête est une Icon, ou un emoji quand l'emoji EST la donnée (ici « Écriture »), jamais une icône d'interface.">
             <div className="flex flex-wrap gap-space-2">
-              {([['Voyage', <Icon key="i" name="rocket" />], ['Écriture', '✍️'], ['Lecture', <Icon key="i" name="book-open" />], ['Musique', null], ['Sport', <Icon key="i" name="dumbbell" />], ['Cinéma', <Icon key="i" name="video" />], ['Les coulisses de mon métier de créateur, racontées sans filtre', <Icon key="i" name="video" />]] as const).map(([v, g]) => (
+              {([['Voyage', null], ['Écriture', '✍️'], ['Lecture', <Icon key="i" name="book-open" />], ['Musique', null], ['Sport', null], ['Cinéma', <Icon key="i" name="video" />], ['Les coulisses de mon métier de créateur, racontées sans filtre', <Icon key="i" name="video" />]] as const).map(([v, g]) => (
                 <Tuile key={v} chip name="themes" value={v} title={v} lead={g}
                   checked={themes.includes(v)} onChange={() => basculer(v)} />
               ))}
@@ -315,7 +328,7 @@ export function FormsPage() {
       <Section title="FormField" note="Une erreur remplace le texte d'aide et porte toujours couleur + icône + texte.">
         <Grid cols={2}>
           <Block label="Aide">
-            <FormField label="Ton email" htmlFor="mail-help" help="Un build décortiqué par semaine. Zéro spam.">
+            <FormField label="Ton email" htmlFor="mail-help" help="Une astuce de création par semaine. Zéro spam.">
               <Input id="mail-help" placeholder="ton@email.com" />
             </FormField>
           </Block>
@@ -330,14 +343,14 @@ export function FormsPage() {
             </FormField>
           </Block>
           <Block label="Composé">
-            <FormField label="Ta série" htmlFor="serie" help="Tu peux changer d'avis à tout moment.">
-              <Select id="serie" options={SERIES} defaultValue="build" />
+            <FormField label="Ton réseau" htmlFor="reseau" help="Tu peux changer d'avis à tout moment.">
+              <Select id="reseau" options={RESEAUX} defaultValue="instagram" />
             </FormField>
           </Block>
         </Grid>
         <Row label="rail partagé — bouton md, input et select s'alignent à 3rem">
           <Input placeholder="ton@email.com" />
-          <Select options={SERIES} defaultValue="build" />
+          <Select options={RESEAUX} defaultValue="instagram" />
         </Row>
       </Section>
     </div>

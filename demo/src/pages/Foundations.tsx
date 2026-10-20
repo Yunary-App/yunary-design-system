@@ -50,24 +50,24 @@ export function Foundations() {
 
       <Section title="Typographie" note="--font-display sur tous les titres, avec la casse et la graisse de --heading-transform / --heading-weight. --font-body pour le corps et l'UI. --font-mono pour le code et les métadonnées techniques.">
         <Block label="Affiche et titres">
-          <Spec token="--text-display-xl · affiche"><span className="display-xl">On build une app</span></Spec>
-          <Spec token="--text-display · hero du site"><span className="display">On build une app</span></Spec>
-          <Spec token="--text-heading-xl · h1"><h1>Le résultat, pas l'outil</h1></Spec>
-          <Spec token="--text-heading · h2"><h2>La simplicité, pas la technique</h2></Spec>
-          <Spec token="--text-subheading · h3"><h3>Cadre ton idée</h3></Spec>
-          <Spec token="--text-heading-sm · h4"><h4>Une phrase, un utilisateur</h4></Spec>
+          <Spec token="--text-display-xl · affiche"><span className="display-xl">Crée avec méthode</span></Spec>
+          <Spec token="--text-display · hero du site"><span className="display">Crée avec méthode</span></Spec>
+          <Spec token="--text-heading-xl · h1"><h1>Tes vidéos, analysées</h1></Spec>
+          <Spec token="--text-heading · h2"><h2>La méthode, pas la chance</h2></Spec>
+          <Spec token="--text-subheading · h3"><h3>Écris ton hook</h3></Spec>
+          <Spec token="--text-heading-sm · h4"><h4>Trois secondes pour accrocher</h4></Spec>
         </Block>
         <Block label="Mot en dégradé" hint="Un seul mot par titre, jamais deux.">
-          <h2>J'ai construit cette <span className="accent">app</span> en un week-end</h2>
+          <h2>Ta prochaine vidéo, <span className="accent">analysée</span> en deux minutes</h2>
         </Block>
         <Block label="Corps, contrôles et méta">
-          <Spec token="--text-body-lg"><p className="text-body-lg">Transforme ton idée en vraie application — simplement, sans coder ni galère technique.</p></Spec>
-          <Spec token="--text-body"><p>Zéro ligne de code écrite à la main — juste la bonne méthode.</p></Spec>
-          <Spec token="--text-control · boutons, champs, chips, onglets"><span className="text-control font-semibold">Voir la chaîne</span></Spec>
+          <Spec token="--text-body-lg"><p className="text-body-lg">Analyse tes vidéos, écris tes scripts et programme tes posts, sans quitter Claude.</p></Spec>
+          <Spec token="--text-body"><p>Une méthode pas à pas, la même à chaque vidéo.</p></Spec>
+          <Spec token="--text-control · boutons, champs, chips, onglets"><span className="text-control font-semibold">Voir l'offre</span></Spec>
           <Spec token="--text-caption"><span className="caption">il y a 3 j · 18,2 k vues</span></Spec>
           <Spec token="--text-eyebrow"><span className="eyebrow">Méthode · 03</span></Spec>
-          <Spec token="--text-chip"><span className="chip text-text-muted">Build</span></Spec>
-          <Spec token="--font-mono"><span className="mono text-caption">npm create vite@latest app</span></Spec>
+          <Spec token="--text-chip"><span className="chip text-text-muted">Analyse</span></Spec>
+          <Spec token="--font-mono"><span className="mono text-caption">00:04 · 1080 × 1920</span></Spec>
         </Block>
         <Block label="Interlignes" hint="Interface 1.5 · lecture suivie 1.7 (classe .prose).">
           <p className="max-w-read">Interface — 1.5. Le ton d'écriture appartient au projet ; ce qui appartient au système, c'est l'interligne : 1.5 en interface, 1.7 en colonne de lecture suivie.</p>
@@ -147,7 +147,7 @@ export function Foundations() {
               <span className="caption">
                 {t === '--shadow-sm' ? 'Card au repos'
                   : t === '--shadow-md' ? 'Flottant, hover de card'
-                    : t === '--shadow-lg' ? 'Modale, dropdown, toast'
+                    : t === '--shadow-lg' ? 'Modale, dropdown, popover'
                       : 'Marque — CTA primaire'}
               </span>
             </Card>

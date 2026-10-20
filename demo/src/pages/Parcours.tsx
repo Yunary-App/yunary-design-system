@@ -25,40 +25,6 @@ function Etapes({ courante }: { courante: number }) {
   );
 }
 
-/* L'ancien prix s'écrit APRÈS le montant, avec « au lieu de » masqué : order:-1 le replace devant. */
-function Ancien({ prix, inline = false }: { prix: string; inline?: boolean }) {
-  return <s className={inline ? 'ds-price__old ds-price__old--inline' : 'ds-price__old'}><span className="ds-price__sr"> au lieu de </span>{prix}</s>;
-}
-
-const LANCEMENT = [
-  { nom: 'Script', ancien: '9 €', prix: 'Gratuit', periode: 'à vie', note: "Offert pendant le lancement à tous ceux qui s'inscrivent avant le 18 octobre.", points: ['Un générateur de hooks qui arrêtent le scroll', 'Un générateur de structures qui captivent', 'Des scripts avec ta voix'] },
-  { nom: 'Analyse', ancien: '9 €', prix: '6 €', periode: '/ mois à vie', note: '50 analyses et 2 audits par mois', points: ['Hook et structure décortiqués', 'Comparée à ce qui marche chez toi', 'Depuis Claude, en une phrase', 'Hooks et structures réutilisables'] },
-  { nom: 'Programmation', ancien: '12 €', prix: '8 €', periode: '/ mois à vie', note: 'Instagram, TikTok et YouTube', points: ['Connecter Instagram, TikTok et YouTube', 'Transcription et sous-titres', 'Descriptions pour chaque réseau', 'Programmée en un message'] },
-];
-
-function CarteLancement({ o }: { o: (typeof LANCEMENT)[number] }) {
-  return (
-    <Card size="xl" icon={<Logo variant="monogram" height="2.75rem" />} title={<>Yunary <span className="accent">{o.nom}</span></>} titleSize="lg">
-      <div className="ds-offer ds-offer--wide">
-        <div className="ds-offer__main">
-          <ul className="ds-perks">{o.points.map(p => <Perk key={p}>{p}</Perk>)}</ul>
-        </div>
-        <div className="ds-offer__aside">
-          <div className="ds-price ds-price--end ds-price--accent">
-            <span className="ds-price__line">
-              <span className="ds-price__amount">{o.prix}</span>
-              <Ancien prix={o.ancien} />
-              <span className="ds-price__period">{o.periode}</span>
-            </span>
-            <span className="ds-price__note">{o.note}</span>
-          </div>
-          <Button>Créer mon compte</Button>
-        </div>
-      </div>
-    </Card>
-  );
-}
-
 /* La frise à jalons (0.10.0) : les deux maquettes de la nouvelle offre. Les dates et les montants sont ceux de
    l'app ; la coche d'un jalon fait est épaisse (3), comme dans la maquette. */
 const ESSAI_ONBOARDING: FriseStep[] = [
@@ -125,12 +91,12 @@ function Offre() {
     <Card gap={4} style={{ maxWidth: '40rem' }}>
       <div className="flex flex-wrap items-start justify-between gap-space-4">
         <div className="flex min-w-0 flex-col gap-space-1">
-          <span className="font-display text-subheading font-bold">Active l'outil</span>
-          <span className="text-body-sm text-text-muted">Ce que l'outil fait pour toi, en une phrase.</span>
+          <span className="font-display text-subheading font-bold">Compris dans Yunary</span>
+          <span className="text-body-sm text-text-muted">Analyse, Script et Programmation, dans une seule offre.</span>
         </div>
         <div className="ds-price ds-price--end ds-price--accent">
-          <span className="ds-price__line"><span className="ds-price__amount">12 €</span><span className="ds-price__period">/ mois</span></span>
-          <span className="ds-price__note">Sans engagement</span>
+          <span className="ds-price__line"><span className="ds-price__amount">19 €</span><span className="ds-price__period">/ mois</span></span>
+          <span className="ds-price__note">Après 7 jours gratuits</span>
         </div>
       </div>
       <ul className="ds-perks">
@@ -139,7 +105,7 @@ function Offre() {
         <Perk>Transcription et sous-titres</Perk>
         <Perk>Un texte pour chaque réseau</Perk>
       </ul>
-      <Button variant="primary" fullWidth>Activer l'outil</Button>
+      <Button variant="primary" fullWidth>Démarrer mes 7 jours</Button>
     </Card>
   );
 }
@@ -247,7 +213,7 @@ export function ParcoursPage() {
         </Stack>
       </Section>
 
-      <Section title="Le voile d'un outil non activé" note=".ds-veil : le contenu reste visible, estompé et inerte (inert + aria-hidden), la carte d'offre posée dessus. --below empile pour un écran de Claude.">
+      <Section title="Le voile d'un contenu réservé" note=".ds-veil : le contenu reste visible, estompé et inerte (inert + aria-hidden), la carte de l'offre posée dessus. --below empile pour un écran de Claude.">
         <Block label="Recouvre (une page du hub)">
           <div className="ds-veil">
             <div className="ds-veil__content" {...INERTE}>
@@ -293,50 +259,18 @@ export function ParcoursPage() {
         </Grid>
       </Section>
 
-      <Section title="Prix barré : l'offre de lancement" note=".ds-price__old (0.6.3) : l'ancien prix à la taille du montant, à l'encre même en --accent, barré à 0,08 em. Écrit APRÈS le montant avec « au lieu de » masqué (.ds-price__sr) : le lecteur d'écran lit « 6 €, au lieu de 9 €, / mois à vie », order:-1 le replace devant. À côté du montant dans __line, au-dessus quand la ligne passe à la ligne ; --inline dans un badge ou une ligne de méta (le prix et son ancien prix groupés dans un parent flex). .ds-offer--wide : la colonne prix de 20 rem du site d'ouverture.">
-        <div className="ds-offers" style={{ maxWidth: '65rem' }}>
-          {LANCEMENT.map(o => <CarteLancement key={o.nom} o={o} />)}
-        </div>
+      <Section title="Prix et avantages" note=".ds-price (montant, période, note ; le montant vient du serveur ; --accent le met en dégradé, --end l'aligne à droite) et .ds-perks (une Pastille coche + un libellé), deux colonnes tant que chacune a sa place, une en dessous.">
         <Grid cols={2}>
-          <Block label="--row (la plaque)">
-            <div className="ds-price ds-price--row ds-price--accent">
-              <span className="ds-price__amount">8 €</span>
-              <Ancien prix="12 €" />
-              <span className="ds-price__aside"><span className="ds-price__period">/ mois à vie</span><span className="ds-price__note">Offre de lancement jusqu'au 18 octobre</span></span>
-            </div>
-          </Block>
-          <Block label="--sm, et au-dessus (posé dans .ds-price)">
-            <Stack>
-              <div className="ds-price ds-price--sm ds-price--accent">
-                <span className="ds-price__line"><span className="ds-price__amount">6 €</span><Ancien prix="9 €" /><span className="ds-price__period">/ mois à vie</span></span>
-              </div>
-              <div className="ds-price">
-                <span className="ds-price__line"><span className="ds-price__amount">Gratuit</span><span className="ds-price__period">à vie</span></span>
-                <Ancien prix="9 €" />
-              </div>
-            </Stack>
-          </Block>
-          <Block label="--inline : un badge, une ligne de méta">
-            <Stack>
-              <div><Badge tone="brand" pad="dense">6 € / mois à vie<Ancien prix="9 €" inline /></Badge></div>
-              <p className="flex flex-wrap items-baseline gap-space-1 text-body-sm text-text-muted">Programmation ·<span className="ds-price__line">8 € / mois à vie<Ancien prix="12 €" inline /></span></p>
-            </Stack>
-          </Block>
-        </Grid>
-      </Section>
-
-      <Section title="Prix et avantages" note=".ds-price (montant, période, note ; le montant vient du serveur ; --accent le met en dégradé) et .ds-perks (une Pastille coche + un libellé), deux colonnes tant que chacune a sa place, une en dessous.">
-        <Grid cols={2}>
-          <Block label="Colonne prix">
+          <Block label="Le prix de l'offre">
             <div className="ds-price ds-price--accent">
-              <span className="ds-price__line"><span className="ds-price__amount">9 €</span><span className="ds-price__period">/ mois</span></span>
-              <span className="ds-price__note">50 analyses par mois</span>
+              <span className="ds-price__line"><span className="ds-price__amount">19 €</span><span className="ds-price__period">/ mois</span></span>
+              <span className="ds-price__note">Après 7 jours gratuits, sans engagement</span>
             </div>
           </Block>
-          <Block label="--sm (écran de Claude)">
-            <div className="ds-price ds-price--sm">
-              <span className="ds-price__line"><span className="ds-price__amount">Gratuit</span></span>
-              <span className="ds-price__note">Inclus pour tout le monde</span>
+          <Block label="--end (la colonne d'une carte)">
+            <div className="ds-price ds-price--end">
+              <span className="ds-price__line"><span className="ds-price__amount">19 €</span><span className="ds-price__period">/ mois</span></span>
+              <span className="ds-price__note">Tout Yunary</span>
             </div>
           </Block>
         </Grid>

@@ -3,13 +3,13 @@ import { Block, Section, Spec } from '../ui';
 
 const NAMES: IconName[] = [
   'check', 'x', 'chevron-down', 'chevron-right', 'chevron-left', 'arrow-right',
-  'arrow-up-right', 'arrow-down', 'play', 'eye', 'clock', 'calendar', 'copy',
+  'arrow-up-right', 'arrow-down', 'arrow-up', 'arrow-up-down', 'play', 'clock', 'calendar', 'copy',
   'search', 'menu', 'mail', 'triangle-alert', 'info', 'circle-check',
-  'circle-alert', 'circle-x', 'terminal', 'code', 'zap', 'plus', 'minus', 'trash-2',
-  'external-link', 'loader-circle', 'github', 'folder',
-  'trending-up', 'user', 'book-open', 'message-square', 'quote', 'rocket', 'file-text',
-  'chevrons-left', 'chevrons-right', 'ellipsis', 'panel-left', 'sliders-horizontal',
-  'layout-dashboard', 'house', 'video', 'dumbbell', 'settings', 'lock',
+  'circle-alert', 'circle-x', 'code', 'zap', 'plus', 'minus', 'trash-2',
+  'external-link', 'trending-up', 'user', 'book-open', 'message-square', 'file-text',
+  'chevrons-left', 'chevrons-right', 'ellipsis', 'panel-left',
+  'layout-dashboard', 'video', 'settings', 'lock',
+  'upload', 'download', 'pause', 'video-off', 'list', 'pencil', 'users',
 ];
 
 export function IconsPage() {
@@ -22,7 +22,7 @@ export function IconsPage() {
           <Spec token="size=&quot;1.5rem&quot;"><Icon name="circle-check" size="1.5rem" /></Spec>
         </Block>
 
-        <Block label="Graisses" hint="2 standard · 2.5 dans les pills et les toasts · 3 pour le check.">
+        <Block label="Graisses" hint="2 standard · 2.5 dans les pills · 3 pour le check.">
           <Spec token="strokeWidth={2}"><Icon name="check" size="1.5rem" strokeWidth={2} /></Spec>
           <Spec token="strokeWidth={2.5}"><Icon name="check" size="1.5rem" strokeWidth={2.5} /></Spec>
           <Spec token="strokeWidth={3}"><Icon name="check" size="1.5rem" strokeWidth={3} /></Spec>

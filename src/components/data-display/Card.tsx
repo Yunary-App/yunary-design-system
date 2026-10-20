@@ -20,8 +20,6 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   size?: 'md' | 'lg' | 'xl';
   /** Removes padding and clips children — for cards with a full-bleed media top. */
   flush?: boolean;
-  /** À venir (v0.5.0) : la carte s'estompe (.7) et perd son ombre — l'outil annoncé. */
-  upcoming?: boolean;
   /** Header slot — gradient caps line above the title. */
   eyebrow?: ReactNode;
   /** Header slot — pass a <Pastille size="carte">. */
@@ -60,19 +58,18 @@ const card = cva('ds-card', {
     },
     size: { md: '', lg: 'ds-card--lg', xl: 'ds-card--xl' },
     flush: { true: 'ds-card--flush', false: '' },
-    upcoming: { true: 'is-upcoming', false: '' },
   },
-  defaultVariants: { variant: 'default', size: 'md', flush: false, upcoming: false },
+  defaultVariants: { variant: 'default', size: 'md', flush: false },
 });
 
 export function Card({
-  variant = 'default', size = 'md', as, flush = false, upcoming = false, gap,
+  variant = 'default', size = 'md', as, flush = false, gap,
   eyebrow, icon, title, badge, subtitle, action, titleSize = 'sm', headerGap = 'normal', foot,
   className = '', children, ...rest
 }: CardProps): JSX.Element {
   const Tag = (as ?? 'div') as ElementType;
   const cls = [
-    card({ variant, size, flush, upcoming }),
+    card({ variant, size, flush }),
     gap ? `ds-card--stack ds-card--gap-${gap}` : '',
     className,
   ].filter(Boolean).join(' ');

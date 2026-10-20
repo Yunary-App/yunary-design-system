@@ -10,8 +10,8 @@
  */
 
 /* icons */
-/* L'identité textuelle — les défauts que lisent Logo, Navbar et Avatar. Exportée pour
-   qu'une app puisse les relire ; `npm run rebrand` les réécrit. */
+/* L'identité textuelle — les défauts que lisent Logo, Sidebar et Avatar. Exportée pour
+   qu'une app puisse les relire. */
 export { BRAND_NAME, BRAND_MONOGRAM, BRAND_WORDMARK_LINES } from './brand';
 
 export { Icon } from './components/icons/Icon';
@@ -36,8 +36,6 @@ export { DatePicker } from './components/forms/DatePicker';
 export type { DatePickerProps, DatePickerTriggerApi } from './components/forms/DatePicker';
 export { Checkbox } from './components/forms/Checkbox';
 export type { CheckboxProps } from './components/forms/Checkbox';
-export { Radio } from './components/forms/Radio';
-export type { RadioProps } from './components/forms/Radio';
 export { Switch } from './components/forms/Switch';
 export type { SwitchProps } from './components/forms/Switch';
 export { FormField } from './components/forms/FormField';
@@ -52,8 +50,6 @@ export { Badge } from './components/data-display/Badge';
 export type { BadgeProps } from './components/data-display/Badge';
 export { Pastille } from './components/data-display/Pastille';
 export type { PastilleProps } from './components/data-display/Pastille';
-export { Tooltip } from './components/data-display/Tooltip';
-export type { TooltipProps } from './components/data-display/Tooltip';
 export { Separator } from './components/data-display/Separator';
 export type { SeparatorProps } from './components/data-display/Separator';
 export { Table, THead, TBody, Tr, Th, Td } from './components/data-display/Table';
@@ -68,18 +64,12 @@ export type { ChartPoint, ChartGeometry, ChartGeometryInput, ChartPadding, Chart
 export type { StatCardProps, StatTrend } from './components/data-display/StatCard';
 
 /* feedback */
-export { Toast } from './components/feedback/Toast';
-export type { ToastProps } from './components/feedback/Toast';
 export { Banner } from './components/feedback/Banner';
 export type { BannerProps } from './components/feedback/Banner';
 export { EmptyState } from './components/feedback/EmptyState';
 export type { EmptyStateProps } from './components/feedback/EmptyState';
-export { StateCard } from './components/feedback/StateCard';
-export type { StateCardProps } from './components/feedback/StateCard';
 export { Skeleton } from './components/feedback/Skeleton';
 export type { SkeletonProps } from './components/feedback/Skeleton';
-export { SkeletonCard } from './components/feedback/SkeletonCard';
-export type { SkeletonCardProps } from './components/feedback/SkeletonCard';
 export { Spinner } from './components/feedback/Spinner';
 export type { SpinnerProps } from './components/feedback/Spinner';
 export { Progress } from './components/feedback/Progress';
@@ -90,10 +80,6 @@ export { Modal } from './components/overlays/Modal';
 export type { ModalProps, ModalResult } from './components/overlays/Modal';
 
 /* navigation */
-export { Navbar } from './components/navigation/Navbar';
-export type { NavbarProps, NavLink } from './components/navigation/Navbar';
-export { Footer } from './components/navigation/Footer';
-export type { FooterProps, FooterColumn } from './components/navigation/Footer';
 export { Tabs } from './components/navigation/Tabs';
 export type { TabsProps, TabItem } from './components/navigation/Tabs';
 export { Pagination } from './components/navigation/Pagination';
@@ -114,5 +100,5 @@ export { Reseau } from './components/brand/Reseau';
 export type { ReseauProps, ReseauName } from './components/brand/Reseau';
 
 /* utilitaire de composition de classes */
-export { cn, makeCn, PALIERS_TYPO } from './lib/cn';
+export { cn } from './lib/cn';
 export type { ClassValue } from './lib/cn';

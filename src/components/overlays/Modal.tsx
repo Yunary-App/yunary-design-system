@@ -55,7 +55,7 @@ export interface ModalProps {
   inline?: boolean;
   /**
    * md (défaut) = --modal-w, 380 : la confirmation, le résultat. Les trois largeurs des maquettes
-   * (v0.6.0) : lg = 480 (l'activation d'un outil), xl = 560 (le choix d'un nouveau contenu), 2xl = 600
+   * (v0.6.0) : lg = 480 (une modale à contenu court), xl = 560 (le choix d'un nouveau contenu), 2xl = 600
    * (la fenêtre à formulaire ou à contenu riche). Sans effet sous 64 rem, où toutes sont une feuille en
    * pleine largeur.
    */

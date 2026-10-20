@@ -1,39 +1,35 @@
 import type { CSSProperties, JSX } from 'react';
 import {
-  ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, ArrowUpRight, BookOpen, Bookmark, Calendar, Check, ChevronDown,
+  ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, ArrowUpRight, BookOpen, Calendar, Check, ChevronDown,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck,
-  CircleX, Clock, Code, Copy, Dumbbell, Ellipsis, ExternalLink, Eye, FileText, Folder, Heart,
-  Download, Info, LayoutDashboard, List, LoaderCircle, Lock, LogOut, Mail, Menu, MessageSquare, Minus,
-  PanelLeft, Pause, Pencil, Play, Plus, Quote, Rocket, Search, Settings, Share, SlidersHorizontal,
-  Terminal, Trash2, TrendingUp, TriangleAlert, Upload, User, Users, Video, VideoOff, X, Zap,
+  CircleX, Clock, Code, Copy, Ellipsis, ExternalLink, FileText,
+  Download, Info, LayoutDashboard, List, Lock, Mail, Menu, MessageSquare, Minus,
+  PanelLeft, Pause, Pencil, Play, Plus, Search, Settings,
+  Trash2, TrendingUp, TriangleAlert, Upload, User, Users, Video, VideoOff, X, Zap,
   type LucideIcon,
 } from 'lucide-react';
-import { Github } from './brand-glyphs';
-/* `house` est dessinée dans le socle, pas importée : son nom lucide n'est pas stable sur
-   toute la plage du peer (`House` après renommage, `Home` avant). Voir compat-glyphs.ts. */
-import { House } from './compat-glyphs';
 
 /**
  * Lucide icon renderer — the ONLY icon system in this design system.
  * BANNED: `sparkles` — the AI-slop star. Never reintroduce it, in the set or in an app.
- * Aucune icône de plateforme sociale (YouTube, Instagram…) : ce sont des logos, pas des
- * icônes d'interface. `github` est la seule marque du set : c'est une plateforme de
- * développement, présente dans à peu près tout produit technique.
+ * Aucune marque dans le set : les réseaux et Claude sont des logos, dessinés par `Reseau`.
+ * Le catalogue ne porte que les glyphes que les couches emploient (0.11.0) ; un tracé hors
+ * catalogue passe par `glyph`.
  * Sizes are CSS lengths in rem (1rem / 1.25rem / 1.5rem); the 24x24 viewBox stays unitless.
- * stroke-width 2 by default, 2.5 inside pills and toasts, 3 for the check.
+ * stroke-width 2 by default, 2.5 inside pills, 3 for the check.
  */
 export type IconName =
   | 'check' | 'x' | 'chevron-down' | 'chevron-right' | 'chevron-left'
-  | 'arrow-right' | 'arrow-up-right' | 'arrow-down' | 'arrow-up' | 'arrow-up-down' | 'play' | 'eye' | 'clock'
+  | 'arrow-right' | 'arrow-up-right' | 'arrow-down' | 'arrow-up' | 'arrow-up-down' | 'play' | 'clock'
   | 'calendar' | 'copy' | 'search' | 'menu' | 'mail' | 'triangle-alert' | 'info'
-  | 'circle-check' | 'circle-alert' | 'circle-x' | 'terminal' | 'code' | 'zap'
-  | 'plus' | 'minus' | 'trash-2' | 'external-link' | 'loader-circle'
-  | 'github' | 'folder' | 'trending-up' | 'user' | 'book-open'
-  | 'message-square' | 'quote' | 'rocket' | 'file-text'
+  | 'circle-check' | 'circle-alert' | 'circle-x' | 'code' | 'zap'
+  | 'plus' | 'minus' | 'trash-2' | 'external-link'
+  | 'trending-up' | 'user' | 'book-open'
+  | 'message-square' | 'file-text'
   | 'chevrons-left' | 'chevrons-right' | 'ellipsis' | 'panel-left'
-  | 'sliders-horizontal' | 'layout-dashboard' | 'house' | 'video' | 'dumbbell' | 'settings' | 'lock'
-  | 'upload' | 'download' | 'pause' | 'video-off' | 'list' | 'pencil' | 'log-out'
-  | 'users' | 'heart' | 'share' | 'bookmark';
+  | 'layout-dashboard' | 'video' | 'settings' | 'lock'
+  | 'upload' | 'download' | 'pause' | 'video-off' | 'list' | 'pencil'
+  | 'users';
 
 /** Ce que tout rendu d'icône partage, quelle que soit la provenance du tracé. */
 export interface IconBaseProps {
@@ -44,7 +40,7 @@ export interface IconBaseProps {
    * le créneau : c'est la surcharge optique au site d'appel, et elle doit le rester.
    */
   size?: string;
-  /** SVG stroke width in px (2 · 2.5 in pills/toasts · 3 for check). Default 2. */
+  /** SVG stroke width in px (2 · 2.5 in pills · 3 for check). Default 2. */
   strokeWidth?: number;
   className?: string;
   style?: CSSProperties;
@@ -97,7 +93,6 @@ const ICONS: Record<IconName, LucideIcon> = {
   'arrow-up': ArrowUp,
   'arrow-up-down': ArrowUpDown,
   'play': Play,
-  'eye': Eye,
   'clock': Clock,
   'calendar': Calendar,
   'copy': Copy,
@@ -109,49 +104,36 @@ const ICONS: Record<IconName, LucideIcon> = {
   'circle-check': CircleCheck,
   'circle-alert': CircleAlert,
   'circle-x': CircleX,
-  'terminal': Terminal,
   'code': Code,
   'zap': Zap,
   'trash-2': Trash2,
   'plus': Plus,
   'minus': Minus,
   'external-link': ExternalLink,
-  'loader-circle': LoaderCircle,
-  'github': Github,
-  'folder': Folder,
   'trending-up': TrendingUp,
   'user': User,
   'book-open': BookOpen,
   'message-square': MessageSquare,
-  'quote': Quote,
-  'rocket': Rocket,
   'file-text': FileText,
   'chevrons-left': ChevronsLeft,
   'chevrons-right': ChevronsRight,
   'ellipsis': Ellipsis,
   'panel-left': PanelLeft,
-  'sliders-horizontal': SlidersHorizontal,
-  /* L'ENTRÉE D'ACCUEIL PORTE `house`. `layout-dashboard` — les quatre tuiles — annonce une
-     GRILLE DE WIDGETS, pas la destination d'accueil d'une app : elle reste au catalogue, pour
-     un vrai tableau de bord. La maison est la convention la plus ancienne de la navigation et
-     ne demande aucun apprentissage. */
+  /* `layout-dashboard` — les quatre tuiles — annonce une GRILLE DE WIDGETS : un vrai tableau de bord. */
   'layout-dashboard': LayoutDashboard,
-  'house': House,
   'video': Video,
-  'dumbbell': Dumbbell,
   'settings': Settings,
   /* Le cadenas d'un champ verrouillé (`Input iconEnd`) — une valeur qui se lit sans se changer. */
   'lock': Lock,
-  /* v0.4.0 — le dépôt et l'envoi d'un fichier, la vidéo absente, la vue en liste, modifier, se déconnecter :
-     attestés dans le hub ET dans les écrans de Claude (maquettes Script et Programmation). */
+  /* v0.4.0 — le dépôt et l'envoi d'un fichier, la vidéo absente, la vue en liste, modifier : attestés
+     dans le hub ET dans les écrans de Claude (maquettes Script et Programmation). */
   'upload': Upload,
   'download': Download,
   'pause': Pause,
   'video-off': VideoOff,
   'list': List,
   'pencil': Pencil,
-  'log-out': LogOut,
-  users: Users, heart: Heart, share: Share, bookmark: Bookmark,
+  'users': Users,
 };
 
 export function Icon({
@@ -168,9 +150,8 @@ export function Icon({
 }
 
 /**
- * Le RENDU nu, pour un tracé lucide quelconque. Interne au paquet : c'est ce qui permet à
- * l'extension métier de rendre ses icônes de plateforme avec exactement les mêmes règles
- * de taille et d'épaisseur, sans dupliquer huit lignes ni rouvrir le socle.
+ * Le RENDU nu, pour un tracé lucide quelconque. Interne au paquet : `name` et `glyph`
+ * passent tous deux par lui, avec exactement les mêmes règles de taille et d'épaisseur.
  */
 /* ⚠️ Étend `IconBaseProps`, PAS `Omit<IconProps, 'name'>` : depuis qu'`IconProps` est une
    union, un `Omit` dessus ne garderait que les clés COMMUNES aux deux branches et

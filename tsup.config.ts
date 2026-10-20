@@ -1,8 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  /* `chart-geometry` : la géométrie du graphique, seule, sans React (mcp-ui, Preact). v0.8.0 */
-  entry: { index: 'src/index.ts', 'chart-geometry': 'src/chart/geometry.ts' },
+  entry: { index: 'src/index.ts' },
   format: ['esm', 'cjs'],
   dts: true,
   clean: true,

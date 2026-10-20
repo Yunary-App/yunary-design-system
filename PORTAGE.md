@@ -3,8 +3,8 @@
 Ce dépôt est un **squelette de design system React**. Il apporte trois choses, et
 seulement trois :
 
-1. **L'inventaire** — 41 composants d'interface, leur nom, leur emplacement, leur API.
-2. **La vitrine** — 9 pages qui les montrent tous, prête à ouvrir.
+1. **L'inventaire** — 34 composants d'interface, leur nom, leur emplacement, leur API.
+2. **La vitrine** — 12 pages qui les montrent tous, prête à ouvrir.
 3. **Le comportement** — focus, clavier, ARIA, cibles tactiles. La partie qu'on ne voit
    pas sur une maquette et qu'on re-casse à chaque régénération.
 
@@ -17,8 +17,8 @@ Tout le reste — couleurs, typographie, formes, ombres, traitements — **est �
 | | Pourquoi |
 |---|---|
 | La **structure des fichiers** | `src/components/<famille>/<Nom>.tsx`. Le point d'entrée et la vitrine importent par ces chemins. |
-| La **liste des 41 composants** | C'est l'inventaire. On n'en retire pas, on n'en ajoute pas au portage. |
-| La **structure de la vitrine** | 9 pages — une par famille, plus Fondations. On remplace ce qu'elles montrent, pas leur découpage. |
+| La **liste des 34 composants** | C'est l'inventaire. On n'en retire pas, on n'en ajoute pas au portage. |
+| La **structure de la vitrine** | 12 pages — une par famille, plus Fondations et trois pages transverses. On remplace ce qu'elles montrent, pas leur découpage. |
 | Le **comportement et l'accessibilité** | Piège de focus, touche Échap, verrou de défilement, restitution du focus, `focus-visible`, rôles ARIA, cibles tactiles 44 px. Invisible sur une maquette, indispensable dans une app. |
 
 ## Ce que TU REMPLIS
@@ -34,7 +34,7 @@ dans ce seul fichier : le socle ne porte aucune couleur. **C'est elle que tu rem
 Deux endroits :
 
 - `src/styles/brand-<projet>.css` — **les valeurs.** Copie `brand-yunary.css` sous ce nom
-  et repeins chaque valeur — la copie donne les 55 emplacements dans le bon ordre, et comme
+  et repeins chaque valeur — la copie donne les 63 emplacements dans le bon ordre, et comme
   tout est remplacé, rien n'est hérité. Garde le contrat annoté
   `src/styles/brand.template.css` ouvert à côté : il liste chaque jeton et dit ce qu'il
   tient. Puis repointe l'import de `demo/brand-yunary-entry.css` sur ton fichier.
@@ -43,7 +43,7 @@ Deux endroits :
 
 ---
 
-## L'inventaire — 41 composants
+## L'inventaire — 34 composants
 
 Chemin : `src/components/<famille>/<Nom>.tsx` · classes CSS : `src/styles/patterns.css`
 
@@ -51,16 +51,18 @@ Chemin : `src/components/<famille>/<Nom>.tsx` · classes CSS : `src/styles/patte
 |---|---|
 | `actions` | Button · IconButton |
 | `brand` | Avatar · Halo · Logo · Reseau |
-| `data-display` | Badge · Card · Chart · Frise · Pastille · Separator · StatCard · Table · Tooltip |
-| `feedback` | Banner · EmptyState · Progress · Skeleton · SkeletonCard · Spinner · StateCard · Toast |
-| `forms` | Calendar · Checkbox · DatePicker · Dropzone · FormField · Input · Radio · Select · Switch · Textarea |
+| `data-display` | Badge · Card · Chart · Frise · Pastille · Separator · StatCard · Table |
+| `feedback` | Banner · EmptyState · Progress · Skeleton · Spinner |
+| `forms` | Calendar · Checkbox · DatePicker · Dropzone · FormField · Input · Select · Switch · Textarea |
 | `icons` | Icon |
-| `navigation` | AppShell · Footer · Navbar · Pagination · Sidebar · Tabs |
+| `navigation` | AppShell · Pagination · Sidebar · Tabs |
 | `overlays` | Modal *(+ `useModalSurface`, le hook partagé)* |
 
-**Classes sans composant** — la tuile cochable (`.ds-tile`), l'encart de valeur (`.ds-inset`), le
-panneau d'écran (`.ds-panel`), le menu déroulant (`.ds-dropdown`), les motifs des parcours
-(`.ds-steps`, `.ds-veil`, `.ds-price`, `.ds-perks`, `.ds-meter`, `.ds-offer`, `.ds-file`,
+**Classes sans composant** — la tuile cochable (`.ds-tile`), le rond (`.ds-choice__box--radio`),
+l'encart de valeur (`.ds-inset`), le panneau d'écran (`.ds-panel`), le menu déroulant
+(`.ds-dropdown`), la barre de navigation et le pied du site (`.ds-navbar`, `.ds-navlink`,
+`.ds-footer`), les motifs des parcours (`.ds-steps`, `.ds-veil`, `.ds-price`, `.ds-perks`,
+`.ds-meter`, `.ds-file`,
 `.ds-upload`, `.ds-media`, `.ds-frames`, `.ds-agenda`, `.ds-week`, `.ds-mark`, `.ds-snippet`,
 `.ds-cues`, `.ds-dl`, `.ds-diff`) et ceux des fiches (`.ds-row`, `.ds-setting`, `.ds-card__band`,
 `.ds-topbar`, `.ds-etapes`, `.ds-stat`, `.ds-note`, `.ds-sidebar__account`, `.ds-appbar`) : des
@@ -98,13 +100,11 @@ jetons de forme, eux, retombent sur la valeur du socle si tu les omets.
 **3 · Dépose les polices** dans `src/styles/assets/fonts/` et nomme les trois familles
 (`--font-display`, `--font-body`, `--font-mono`) avec un repli système à la fin.
 
-**4 · Renomme le paquet et l'identité textuelle :**
-
-```bash
-npm run rebrand -- "@client/ds" "Nom du Client"
-```
-
-Il réécrit `package.json`, `src/brand.ts` (nom, monogramme, mot-marque) et les imports.
+**4 · Renomme le paquet et l'identité textuelle**, à la main (plus de script depuis la 0.11.0) :
+toutes les références au nom du paquet (`@yunary/ds` : `package.json`, la vitrine, le CSS, la
+prose), `src/brand.ts` (nom, monogramme, lignes du mot-marque), la description de
+`package.json`, le titre de la vitrine (`demo/index.html`), la version (repartir de 0.1.0) et la
+ligne d'installation du README. Le préfixe de classes `ds-` ne change pas.
 
 **5 · Change les traitements, si besoin.** Un badge en contour plutôt que plein, une carte
 bordée plutôt qu'ombrée : c'est `src/styles/patterns.css`. Change les règles, **pas** les
@@ -113,11 +113,11 @@ noms de classes ni la structure du DOM — la vitrine et les composants les lise
 **6 · Vérifie.** Trois commandes, trente secondes :
 
 ```bash
-npm run lint          # types + les treize gardes (jetons, version, contrat, utilitaires,
-                      # classes mortes, tailles en px, classes fragiles, substitution,
-                      # contraste, surfaces, catalogue, preflight, littéraux)
+npm run lint          # types + les tests + les quatorze gardes (jetons, version, contrat,
+                      # utilitaires, classes mortes, tailles en px, classes fragiles,
+                      # substitution, contraste, surfaces, catalogue, coque, preflight, littéraux)
 node check-contract.mjs   # aucun jeton du contrat oublié
-npm run check:classes     # le quatorzième, hors de `lint` : aucune classe écrite qui ne rend rien
+npm run check:classes     # le quinzième, hors de `lint` : aucune classe écrite qui ne rend rien
 npm run demo          # et on regarde
 ```
 
@@ -171,7 +171,6 @@ C'est volontaire : une régression casse visiblement au lieu de dériver en sile
 
 ## Ce que le dépôt contient d'autre
 
-`GETTING-STARTED.md` — la même chose en checklist minutée, pour un humain.
 `docs/DESIGN.md` — la charte à remplir avant de toucher au CSS.
 `docs/accessibilite.md` — ce qui est garanti, et ce qui ne l'est pas.
-`README.md` — l'API des 41 composants.
+`README.md` — l'API des 34 composants.

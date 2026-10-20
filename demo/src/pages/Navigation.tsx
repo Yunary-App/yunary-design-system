@@ -1,18 +1,64 @@
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { IDENTITY } from '../identity';
-import { AppShell, Avatar, Button, Footer, Icon, IconButton, Navbar, Pagination, Sidebar, Tabs, Logo } from '@yunary/ds';
+import { AppShell, Avatar, Button, Icon, IconButton, Pagination, Sidebar, Tabs, Logo } from '@yunary/ds';
 import { Block, Row, Section } from '../ui';
 
-const LINKS = [{ label: 'Vidéos', active: true }, { label: 'Séries' }, { label: 'À propos' }];
-const SERIES = [
-  { value: 'all', label: 'Tout' },
-  { value: 'build', label: 'Build' },
-  { value: 'tuto', label: 'Tuto' },
-  { value: 'coulisses', label: 'Coulisses' },
+const STATUTS = [
+  { value: 'tous', label: 'Tous' },
+  { value: 'brouillon', label: 'Brouillon' },
+  { value: 'programme', label: 'Programmé' },
+  { value: 'publie', label: 'Publié' },
 ];
 
+/* LA BARRE DE NAVIGATION, EN CLASSES (0.11.0) : plus de composant React, le site l'écrit en HTML.
+   `.is-scrolled` est posé par l'app au défilement. */
+function Barre({ scrolled = false }: { scrolled?: boolean }) {
+  return (
+    <header className={scrolled ? 'ds-navbar is-scrolled' : 'ds-navbar'}>
+      <div className="page ds-navbar__inner">
+        <a href="#navigation" aria-label={`${IDENTITY.personne}, accueil`}><Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" /></a>
+        <nav className="ds-navbar__links">
+          <a href="#navigation" className="ds-navlink is-active">Les outils</a>
+          <a href="#navigation" className="ds-navlink">L'offre</a>
+          <a href="#navigation" className="ds-navlink">Se connecter</a>
+        </nav>
+        <div className="ds-navbar__cta"><Button size="sm">Essayer gratuitement</Button></div>
+      </div>
+    </header>
+  );
+}
+
+/* LE PIED DE PAGE, EN CLASSES (0.11.0) : même régime que la barre. */
+function Pied({ social }: { social?: ReactNode }) {
+  const colonnes = [
+    { titre: 'Outils', liens: ['Yunary Analyse', 'Yunary Script', 'Yunary Programmation'] },
+    { titre: 'Yunary', liens: ["L'offre", 'Se connecter'] },
+    { titre: 'Légal', liens: ['CGV', 'Confidentialité', 'Mentions légales'] },
+  ];
+  return (
+    <footer className="ds-footer">
+      <div className="page ds-footer__inner">
+        <div className="ds-footer__brand">
+          <Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.25rem" />
+          <p className="ds-footer__note">{IDENTITY.lieu}</p>
+        </div>
+        <div className="ds-footer__cols">
+          {colonnes.map(c => (
+            <div key={c.titre} className="ds-footer__col">
+              <span className="eyebrow">{c.titre}</span>
+              {c.liens.map(l => <a key={l} href="#navigation" className="ds-footer__link">{l}</a>)}
+            </div>
+          ))}
+        </div>
+      </div>
+      {social ? <div className="page ds-footer__social">{social}</div> : null}
+    </footer>
+  );
+}
+
 export function NavigationPage() {
-  const [tab, setTab] = useState('build');
+  const [tab, setTab] = useState('programme');
   const [ton, setTon] = useState('naturel');
   const [rythme, setRythme] = useState('pose');
   const [page, setPage] = useState(4);
@@ -20,50 +66,40 @@ export function NavigationPage() {
 
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Navbar" note="Posée sur --secondary avec une bordure basse en permanence — c'est un contrôle détaché du layout, jamais transparent. Au scroll elle se teinte, prend un blur(10px) et une ombre. Seul endroit du système qui utilise backdrop-filter.">
+      <Section title="Barre de navigation — classes .ds-navbar" note="Sans composant React depuis la 0.11.0 : le site l'écrit en HTML. Posée sur --secondary avec une bordure basse en permanence, jamais transparente. Au défilement, l'app pose .is-scrolled : la barre se teinte, prend un blur(10px) et une ombre. Seul endroit du système qui utilise backdrop-filter. Liens .ds-navlink, l'actif en --primary.">
         <Block label="Au repos">
-          <div className="overflow-x-auto rounded-xl border border-border">
-            <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />} scrolled={false} links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
-          </div>
+          <div className="overflow-x-auto rounded-xl border border-border"><Barre /></div>
         </Block>
-        <Block label="État scrollé" hint="Teinte color-mix sur --secondary + blur + ombre.">
-          <div className="overflow-x-auto rounded-xl border border-border bg-card">
-            <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />} scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
-          </div>
+        <Block label="État défilé (.is-scrolled)" hint="Teinte color-mix sur --secondary + blur + ombre.">
+          <div className="overflow-x-auto rounded-xl border border-border bg-card"><Barre scrolled /></div>
         </Block>
-        <Block label="Tons du logo" hint="Sans la prop letters, les lettres suivent --foreground : sur une surface sombre elles s'éclaircissent toutes seules. letters ne sert qu'à forcer.">
-          <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
-            <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.375rem" />} scrolled links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
-          </div>
-          <div className="dark overflow-x-auto rounded-xl border border-border bg-background">
-            <Navbar homeLabel={`${IDENTITY.personne} — accueil`} brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} letters="dark" height="1.375rem" />} scrolled letters="dark" links={LINKS} cta={<Button size="sm">La newsletter</Button>} />
-          </div>
-          <p className="caption">Le premier suit la surface ; le second force letters=&quot;dark&quot; sur fond sombre, pour montrer ce que fait la prop.</p>
+        <Block label="Sur une section sombre" hint="Le logo suit --foreground : sur une surface sombre, il s'éclaircit tout seul.">
+          <div className="dark overflow-x-auto rounded-xl border border-border bg-background"><Barre scrolled /></div>
         </Block>
       </Section>
 
       <Section title="Tabs" note="Groupe d'onglets sur --secondary. L'onglet actif porte LA convention de l'élément sélectionné du socle : plaque --accent, texte --primary (le corail, écart de contraste assumé dans la marque), même graisse que ses voisins — celle de l'entrée de Sidebar, de la page courante, de l'item de menu coché. Jamais noir gras.">
         <Block label="Interactif">
-          <Row><Tabs items={SERIES} value={tab} onChange={setTab} /></Row>
-          <p className="caption">Onglet actif : {SERIES.find(s => s.value === tab)?.label}</p>
+          <Row><Tabs items={STATUTS} value={tab} onChange={setTab} /></Row>
+          <p className="caption">Onglet actif : {STATUTS.find(s => s.value === tab)?.label}</p>
         </Block>
         <Block label="onCard" hint="La barre contraste avec sa surface porteuse ET l'onglet actif contraste avec la barre : il descend d'un cran de surface, jamais au niveau de la barre. Sur la page : barre --secondary, actif --background. Sur une card : barre --background, actif --card. Vérifie les deux en clair ET en sombre — en sombre, --card et --secondary valent tous les deux #2b2a28, un actif en --card y serait invisible.">
-          <Row label="sur la page (défaut)"><Tabs items={SERIES} value="build" onChange={() => undefined} /></Row>
+          <Row label="sur la page (défaut)"><Tabs items={STATUTS} value="programme" onChange={() => undefined} /></Row>
           <Row label="sur une card — onCard">
-            <span className="inline-flex rounded-lg border border-border bg-card p-space-4">
-              <Tabs onCard items={SERIES} value="build" onChange={() => undefined} />
+            <span className="inline-flex max-w-full rounded-lg border border-border bg-card p-space-4">
+              <Tabs onCard items={STATUTS} value="programme" onChange={() => undefined} />
             </span>
           </Row>
         </Block>
         <Block label="États">
           <Row label="sélection sur chaque item">
-            <Tabs items={SERIES} value="all" onChange={() => undefined} />
+            <Tabs items={STATUTS} value="tous" onChange={() => undefined} />
           </Row>
           <Row label="survol forcé sur le deuxième item">
             <div className="ds-tabs">
-              <button type="button" className="ds-tab" aria-selected="true">Tout</button>
-              <button type="button" className="ds-tab is-hover">Build</button>
-              <button type="button" className="ds-tab">Tuto</button>
+              <button type="button" className="ds-tab" aria-selected="true">Tous</button>
+              <button type="button" className="ds-tab is-hover">Brouillon</button>
+              <button type="button" className="ds-tab">Programmé</button>
             </div>
           </Row>
         </Block>
@@ -109,7 +145,7 @@ export function NavigationPage() {
         </Block>
       </Section>
 
-      <Section title="AppShell et Sidebar" note="Le squelette des outils internes : grille [barre latérale | contenu]. La barre est sur --secondary, repliable en icônes seules, et l'état est persisté en localStorage. L'entrée active : plaque --accent, libellé --primary (corail), graisse inchangée, icône en currentColor — jamais surface-alt + gras.">
+      <Section title="AppShell et Sidebar" note="Le squelette d'une app (le hub) : grille [barre latérale | contenu]. La barre est sur --secondary, repliable en icônes seules, et l'état est persisté en localStorage. L'entrée active : plaque --accent, libellé --primary (corail), graisse inchangée, icône en currentColor — jamais surface-alt + gras.">
         <Block label="Complet" hint="responsive={false} et staticLayout épinglent la mise en page à deux colonnes pour la vitrine. Chaque section est un groupe : 16px les séparent, avec ou sans titre — le dernier groupe, sans titre, ne se colle plus au précédent.">
           <div className="overflow-hidden rounded-xl border border-border">
             <AppShell
@@ -121,16 +157,16 @@ export function NavigationPage() {
                   staticLayout
                   storageKey="ds-demo-sidebar"
                   sections={[
-                    { title: 'Pilotage', items: [
-                      { label: 'Accueil', icon: <Icon name="house" />, active: true },
-                      { label: 'Vidéos', icon: <Icon name="video" /> },
-                      { label: 'Séries', icon: <Icon name="folder" /> },
+                    { title: 'Yunary', items: [
+                      { label: 'Mes outils', icon: <Icon name="layout-dashboard" />, active: true },
+                      { label: 'Mes contenus', icon: <Icon name="video" /> },
+                      { label: 'Historique', icon: <Icon name="clock" /> },
                     ] },
-                    { title: 'Perso', items: [
-                      { label: 'Sport', icon: <Icon name="dumbbell" /> },
+                    { title: 'Compte', items: [
+                      { label: 'Facturation', icon: <Icon name="file-text" /> },
                     ] },
                     { items: [
-                      { label: 'Réglages', icon: <Icon name="settings" /> },
+                      { label: 'Paramètres', icon: <Icon name="settings" /> },
                     ] },
                   ]}
                   footer={
@@ -146,9 +182,9 @@ export function NavigationPage() {
               }
             >
               <div className="flex flex-col gap-space-4 p-space-5">
-                <h3>Accueil</h3>
-                <p className="caption">Le contenu de l'outil vit ici. Replie la barre avec le bouton en tête pour voir le mode icônes seules — l'état est retenu.</p>
-                <Row><Button size="sm" icon={<Icon name="plus" />}>Nouveau build</Button></Row>
+                <h3>Mes outils</h3>
+                <p className="caption">Le contenu de la page vit ici. Replie la barre avec le bouton en tête pour voir le mode icônes seules : l'état est retenu.</p>
+                <Row><Button size="sm" icon={<Icon name="plus" />}>Nouveau contenu</Button></Row>
               </div>
             </AppShell>
           </div>
@@ -166,9 +202,9 @@ export function NavigationPage() {
                   collapsible={false}
                   storageKey="ds-demo-sidebar-collapsed"
                   sections={[{ items: [
-                    { label: 'Accueil', icon: <Icon name="house" />, active: true },
-                    { label: 'Vidéos', icon: <Icon name="video" /> },
-                    { label: 'Réglages', icon: <Icon name="settings" /> },
+                    { label: 'Mes outils', icon: <Icon name="layout-dashboard" />, active: true },
+                    { label: 'Mes contenus', icon: <Icon name="video" /> },
+                    { label: 'Paramètres', icon: <Icon name="settings" /> },
                   ] }]}
                 />
               }
@@ -179,22 +215,10 @@ export function NavigationPage() {
         </Block>
       </Section>
 
-      <Section title="Footer" note={`La ligne de localisation utilise le point médian : ${IDENTITY.lieu}. Elle n'a plus de valeur par défaut : le socle en portait une, codée en dur, et un projet ne pouvait pas la retirer.`}>
-        <Block label="Complet" hint="Comme la Navbar, le logo suit --foreground sans tone.">
+      <Section title="Pied de page — classes .ds-footer" note={`Sans composant React depuis la 0.11.0 : le site l'écrit en HTML. La marque et sa ligne de localisation (le point médian : ${IDENTITY.lieu}), des colonnes de liens titrées en eyebrow, une rangée sociale facultative.`}>
+        <Block label="Complet" hint="Comme la barre de navigation, le logo suit --foreground.">
           <div className="overflow-x-auto rounded-xl border border-border">
-            <Footer
-              brand={<Logo variant="wordmark" wordmark={IDENTITY.wordmark} height="1.25rem" />}
-              note={IDENTITY.lieu}
-              columns={[
-                { title: 'Séries', links: [{ label: 'Build' }, { label: 'Tuto' }, { label: 'Coulisses' }] },
-                { title: 'Ressources', links: [{ label: 'La newsletter' }, { label: 'Les prompts' }] },
-                { title: 'Marque', links: [{ label: 'À propos' }, { label: 'Contact' }] },
-              ]}
-              social={<>
-                <IconButton label="Écrire"><Icon name="mail" /></IconButton>
-                <IconButton label="GitHub"><Icon name="github" /></IconButton>
-              </>}
-            />
+            <Pied social={<IconButton label="Écrire"><Icon name="mail" /></IconButton>} />
           </div>
         </Block>
       </Section>

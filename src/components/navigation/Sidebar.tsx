@@ -15,9 +15,9 @@ export interface SidebarItem {
   href?: string;
   active?: boolean;
   onClick?: MouseEventHandler;
-  /** Entrée annoncée mais pas encore ouverte : grisée, non cliquable (`aria-disabled`). ADDED v0.1.2 */
+  /** Entrée désactivée : grisée, non cliquable (`aria-disabled`). ADDED v0.1.2 */
   disabled?: boolean;
-  /** Appoint à droite du libellé — un `Badge` « Bientôt », un compteur. Masqué en replié. ADDED v0.1.2 */
+  /** Appoint à droite du libellé — un `Badge`, un compteur. Masqué en replié. ADDED v0.1.2 */
   badge?: ReactNode;
 }
 

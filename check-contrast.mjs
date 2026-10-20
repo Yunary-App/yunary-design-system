@@ -144,8 +144,6 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Texte', '--text-secondary sur --card', g('--text-secondary'), g(C), 4.5, '16 / 400');
   add('Texte', '.caption — --text-muted sur --card', g('--text-muted'), g(C), 4.5, '13 / 500');
   add('Texte', '.ds-input::placeholder', g('--text-muted'), g('--secondary'), 4.5, '15 / 400');
-  add('Texte', '.ds-tooltip__bubble', theme === 'light' ? g('--text-inverted') : g('--tone-dark'),
-                                      theme === 'light' ? g('--tone-dark') : g('--tone-light-alt'), 4.5, '13 / 600');
 
   add('Lien', 'a{} au repos sur --background', g('--primary-readable'), g(B), 4.5, '16 / 400');
   add('Lien', 'a{} au repos sur --card', g('--primary-readable'), g(C), 4.5, '16 / 400');

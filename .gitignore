@@ -3,5 +3,4 @@ dist/
 demo/dist/
 .DS_Store
 *.log
-_v3-ancien/
 .vite/

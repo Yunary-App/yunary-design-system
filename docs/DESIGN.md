@@ -100,7 +100,7 @@ sont assumées par écrit dans le fichier de marque.
 2. un mot par titre (dégradé clippé, un seul)
 3. le sur-titre (eyebrow)
 4. le CTA primaire, avec sa lueur — **plusieurs par vue quand la vue propose plusieurs
-   choix équivalents** (cinq hooks, trois structures, deux outils à activer) ; un seul quand
+   choix équivalents** (cinq hooks, trois structures, deux créneaux) ; un seul quand
    une action domine
 5. le halo (hero et section CTA uniquement)
 6. les tuiles/icônes de marque (pastille `--pill-coral-bg` + icône `--primary`)
@@ -186,20 +186,19 @@ cochée garde son titre en encre. **Recommandée sans être choisie** (`.is-reco
 `--primary` et l'ombre douce, pas de plaque. Dans un écran de Claude, la tuile choisie redescend sur
 `--background` avec son filet, les autres restent relevées sur `--card`.
 Les contrôles cochés (case, switch, jour choisi) ne suivent pas : ils portent le dégradé plein.
-L'interrupteur verrouillé (`Switch locked`) garde sa piste pleine : il n'est pas désactivé.
-Les toasts et bandeaux centrent leur icône verticalement (`Banner align="start"` l'aligne en
+Les bandeaux centrent leur icône verticalement (`Banner align="start"` l'aligne en
 haut quand le texte fait plusieurs lignes).
 **Le danger doux porte un filet** de 1,5 px à 30 % de `--destructive` (10/10/2026, livré en
 0.6.0) ; la corbeille nue (`IconButton ghost-danger`) est sa forme de 390.
 **Le champ invalide porte un anneau** rouge doux en plus de sa bordure (0.6.0) ; le focus reste
 une bordure seule.
-**La pastille de marque est outlined**, carrée — `Pastille tone="brand" outlined` : carte
-d'état héros, en-tête de carte, étape numérotée d'une feature. **L'état vide, lui, porte une
+**La pastille de marque est outlined**, carrée — `Pastille tone="brand" outlined` : en-tête de
+carte, étape numérotée d'une feature, tuile de choix. **L'état vide, lui, porte une
 pastille RONDE et NEUTRE** (`EmptyState`, 10/10/2026 : la maquette fait foi), et le panneau
 d'état compact une pastille pleine danger ou neutre.
 **L'espacement interne d'une carte** reste à 24 px (`--card-pad`), et sa pile sur l'échelle
 `--space-*` (`Card gap={3|4|5|6}`) — pas de palier 20 (décision Julien, 11/09/2026). Les cartes
-d'outil et d'offre sont au palier `xl` (28 / 32) et s'empilent à 16 (`.ds-offers`).
+d'outil et d'offre sont au palier `xl` (28 / 32) et s'empilent à 16.
 **Les avantages d'une offre** sont une liste nue à deux colonnes (`.ds-perks`, même à 390), chaque
 ligne une `Pastille size="coche"` (24 px) et un libellé en body-sm à l'encre.
 
@@ -271,6 +270,7 @@ Instagram, TikTok, YouTube, Claude) : leurs couleurs vivent dans le fichier de m
 | 2026-08-31 | Marque exportée sous `./brand-yunary.css` dans package.json | sous-chemin stable de chaque surface |
 | 2026-09-11 | Élément sélectionné en corail (`--primary` sur `--accent`), écart de contraste assumé | décision de marque Julien |
 | 2026-09-11 | Titre de page à 36 px, `Card gap` sur l'échelle `--space-*` sans palier 20 | décisions Julien |
+| 2026-10-20 | 0.11.0 : le ménage de l'offre unique — retrait des motifs de l'ancienne offre (prix barré, plaque « Offert », carte « Bientôt », panneau « À activer », interrupteur « Toujours actif », paire de jauges, jauge centrée, barre segmentée enveloppée, grille de tuiles, carte d'outil à colonne prix, prix d'écran), de sept composants React sans consommateur (les classes de la barre de navigation et du pied restent au site), du sous-chemin `chart-geometry`, de `makeCn`, de quatorze glyphes et de l'outillage `rebrand` | une offre unique depuis le 19/10 : le paquet ne porte que ce que les couches emploient (la règle de la 0.2.0) |
 | 2026-10-19 | 0.10.0 : la frise à jalons `.ds-frise` / `Frise` (une pastille, une date, un titre, un montant et un texte facultatifs, un trait ; fait · en cours · à venir ; verticale, horizontale qui redevient verticale sous 64 rem, compacte, sur plaque) ; la pastille du jalon en cours porte le dégradé et la lueur ; sa date est en `--primary-readable` (la maquette l'écrit en `--brand-via` : 2,51 en clair) | maquettes Onboarding Web et Facturation Web de la nouvelle offre |
 | 2026-10-17 | 0.9.0 : jeton `--container-app` (100 rem) et `max-w-app`, la colonne de contenu d'une app ; `shell` reste au site, `wide` aux pages étroites, `read` à la lecture | le hub plafonnait ses pages en `max-w-shell` : le contenu s'arrêtait dès environ 1470 px de fenêtre |
 | 2026-10-16 | 0.8.0 : le graphique d'évolution `Chart`, fait maison, sans librairie — trois couches (géométrie pure `chartGeometry`, aussi `@yunary/ds/chart-geometry` sans React ; classes `.ds-chart*` ; composant), une courbe par graphique, ligne en escalier, graduations calculées et adaptées à la largeur, jeton `--text-axis` (12) ; le DS ne formate rien | maquette Admin Web, onglet Évolution ; l'écran Métriques de mcp-ui |

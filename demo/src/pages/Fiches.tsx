@@ -318,13 +318,13 @@ export function FichesPage() {
           <Block label="Modales : trois largeurs">
             <Card gap={3}>
               <div className="flex flex-wrap gap-space-2">
-                <Button variant="secondary" size="sm" surface="card" onClick={() => setModale('lg')}>480 · Activer</Button>
+                <Button variant="secondary" size="sm" surface="card" onClick={() => setModale('lg')}>480 · Confirmer</Button>
                 <Button variant="secondary" size="sm" surface="card" onClick={() => setModale('xl')}>560 · Nouveau contenu</Button>
                 <Button variant="secondary" size="sm" surface="card" onClick={() => setModale('2xl')}>600 · Formulaire</Button>
               </div>
-              <Modal inline size="lg" title="Activer Programmation" subtitle="12 € / mois, sans engagement." onClose={() => {}}
-                footer={<><Button variant="ghost" size="sm">Annuler</Button><Button size="sm">Activer Programmation</Button></>}>
-                <p className="text-body-sm">Ta carte Visa •••• 4242 sera débitée aujourd'hui.</p>
+              <Modal inline size="lg" title="Programmer ta vidéo ?" subtitle="Mardi 13 octobre à 18:00." onClose={() => {}}
+                footer={<><Button variant="ghost" size="sm">Annuler</Button><Button size="sm">Programmer</Button></>}>
+                <p className="text-body-sm">Elle partira sur Instagram et TikTok, avec les textes enregistrés.</p>
               </Modal>
             </Card>
             {modale ? (
@@ -337,7 +337,7 @@ export function FichesPage() {
         </Grid>
       </Section>
 
-      <Section title="Avatars, chiffres, champs, réseaux" note="Avatar (tailles des pastilles ; muted, neutral, brand ; ring ; badge) ; .ds-stats / .ds-stat ; Pastille tone=accent ; Input prefix, champ invalide à anneau, .ds-error et .ds-note ; .ds-meter--center ; Reseau (Instagram, TikTok, YouTube, Claude, cinq tailles, jumeaux sombres) ; .ds-sidebar__account ; .ds-appbar.">
+      <Section title="Avatars, chiffres, champs, réseaux" note="Avatar (tailles des pastilles ; muted, neutral, brand ; ring ; badge) ; .ds-stats / .ds-stat ; Pastille tone=accent ; Input prefix, champ invalide à anneau, .ds-error et .ds-note ; .ds-meter et sa valeur ; Reseau (Instagram, TikTok, YouTube, Claude, cinq tailles, jumeaux sombres) ; .ds-sidebar__account ; .ds-appbar.">
         <Grid cols={2}>
           <Block label="Avatars">
             <Card gap={4}>
@@ -356,10 +356,10 @@ export function FichesPage() {
                 <div className="ds-stat"><span className="ds-stat__value">4,2 %</span><span className="ds-stat__label">engagement</span></div>
               </div>
               <div className="flex flex-wrap gap-space-2">
-                <Pastille size="puce" shape="round" tone="accent"><Icon name="eye" /></Pastille>
-                <Pastille size="puce" shape="round" tone="amber"><Icon name="heart" /></Pastille>
-                <Pastille size="puce" shape="round" tone="success"><Icon name="share" /></Pastille>
-                <Pastille size="puce" shape="round" tone="neutral"><Icon name="bookmark" /></Pastille>
+                <Pastille size="puce" shape="round" tone="accent"><Icon name="play" /></Pastille>
+                <Pastille size="puce" shape="round" tone="amber"><Icon name="message-square" /></Pastille>
+                <Pastille size="puce" shape="round" tone="success"><Icon name="trending-up" /></Pastille>
+                <Pastille size="puce" shape="round" tone="neutral"><Icon name="user" /></Pastille>
                 <Pastille size="puce" shape="round" tone="coral"><Icon name="users" /></Pastille>
               </div>
             </Card>
@@ -373,10 +373,9 @@ export function FichesPage() {
                 <Input id="handle-ko" prefix="@" defaultValue="julien.craa" invalid />
               </FormField>
               <span className="ds-note"><Icon name="clock" />TikTok à 20:00 · même légende</span>
-              <div className="ds-meter ds-meter--center">
-                <div className="ds-meter__head"><span className="ds-meter__label">5 publications récentes sur 8</span></div>
-                <Progress value={5} max={8} label="Publications récentes" />
-                <span className="ds-meter__note">Encore 3 et on te dit tout.</span>
+              <div className="ds-meter">
+                <div className="ds-meter__head"><span className="ds-meter__label">Tes analyses du mois</span><span><span className="ds-meter__value">12</span> <span className="ds-meter__of">sur 30 utilisées</span></span></div>
+                <Progress value={12} max={30} label="Analyses du mois" />
               </div>
             </Card>
           </Block>
@@ -402,7 +401,7 @@ export function FichesPage() {
               <div className="ds-sidebar" style={{ width: '16rem', padding: 'var(--space-3)' }}>
                 <a className="ds-sidebar__account" href="#fiches" onClick={e => e.preventDefault()}>
                   <Avatar size="carte" initials="JF" tone="brand" alt="Julien Fernandes" />
-                  <span className="ds-sidebar__account-main"><span className="ds-sidebar__account-name">Julien Fernandes</span><span className="ds-sidebar__account-caption">1 abonnement · 2 outils</span></span>
+                  <span className="ds-sidebar__account-main"><span className="ds-sidebar__account-name">Julien Fernandes</span><span className="ds-sidebar__account-caption">Essai · plus que 5 jours</span></span>
                 </a>
               </div>
               <header className="ds-appbar" style={{ display: 'flex', position: 'static' }}>
@@ -416,10 +415,10 @@ export function FichesPage() {
 
       <Section title="Encarts en ton doux" note="Banner tone=soft : la plaque crème rosée et le texte à l'encre, l'icône en sourdine. info reste le message de marque (texte corail), amber la contrainte, warning l'orange de ce qui risque d'échouer.">
         <Card gap={3} style={{ maxWidth: '40rem' }}>
-          <Banner inset tone="soft" title="Pas d'audit, pas de souci.">Tu pourras le lancer plus tard, depuis Claude ou depuis Mes outils.</Banner>
-          <Banner inset tone="amber">Certains comptes prennent un peu plus de temps, on y est presque.</Banner>
+          <Banner inset tone="soft" title="Pas de vidéo sous la main ?">Tu pourras en déposer une plus tard, depuis Claude ou depuis Mes contenus.</Banner>
+          <Banner inset tone="amber">Les longues vidéos prennent un peu plus de temps, on y est presque.</Banner>
           <Banner inset tone="info">Ces hooks sont génériques : avec ton profil créateur, ils seraient à ta voix.</Banner>
-          <Banner tone="soft" title="Tes 20 dernières vidéos ont aussi été analysées." icon={<Pastille size="carte" tone="success"><Icon name="check" strokeWidth={3} /></Pastille>} action={<Button variant="secondary" size="sm" surface="card">Voir</Button>} />
+          <Banner tone="soft" title="Ta transcription est prête, relue et corrigée." icon={<Pastille size="carte" tone="success"><Icon name="check" strokeWidth={3} /></Pastille>} action={<Button variant="secondary" size="sm" surface="card">Voir</Button>} />
         </Card>
       </Section>
     </div>

@@ -181,10 +181,9 @@ le palier nommé du socle quand il existe, il porte déjà son interligne et son
 ## 5 · Il n'y a pas de portail — un flottant vit dans le flux
 
 **Ce qui casse.** Aucun composant du système ne monte dans un portail (`createPortal` n'est
-utilisé nulle part). Les trois flottants — le menu déroulant
-(`.ds-dropdown--floating`), le popover de `DatePicker` (`.ds-datepicker__pop`) et la bulle
-de `Tooltip` (`.ds-tooltip__bubble`) — sont en `position: absolute` **dans le flux du
-parent**.
+utilisé nulle part). Les deux flottants — le menu déroulant
+(`.ds-dropdown--floating`) et le popover de `DatePicker` (`.ds-datepicker__pop`) — sont en
+`position: absolute` **dans le flux du parent**.
 
 Or `.ds-card--flush` pose `overflow: hidden` (c'est ce qui fait tenir un tableau à ras dans
 le rayon de la carte). Un menu déroulant ouvert dans une `Card flush` est donc **coupé au

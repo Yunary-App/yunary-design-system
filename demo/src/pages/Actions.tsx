@@ -11,8 +11,8 @@ export function ActionsPage() {
       <Section title="Button" note="Rayon toujours --radius-md. Jamais un pill. Un seul bouton primaire par vue.">
         <Block label="Variantes" hint="primary porte seul le glow de marque ; secondary, ghost, danger et danger-soft n'en ont aucun. danger-soft = l'action destructrice secondaire (retirer, se déconnecter), la recette de l'IconButton du même nom ; danger reste l'action destructrice unique.">
           <Row>
-            <Button variant="primary">On build une app</Button>
-            <Button variant="secondary">Voir la chaîne</Button>
+            <Button variant="primary">Démarrer mes 7 jours</Button>
+            <Button variant="secondary">Voir l'offre</Button>
             <Button variant="ghost">Annuler</Button>
             <Button variant="danger">Supprimer</Button>
             <Button variant="danger-soft" icon={<Icon name="trash-2" />}>Retirer</Button>
@@ -44,7 +44,7 @@ export function ActionsPage() {
 
         <Block label="Icônes" hint="icon en tête, iconRight en fin. L'icône du chargement remplace celle de tête.">
           <Row>
-            <Button variant="primary" size="lg" iconRight={<Icon name="arrow-right" />}>On build une app</Button>
+            <Button variant="primary" size="lg" iconRight={<Icon name="arrow-right" />}>Démarrer mes 7 jours</Button>
             <Button variant="secondary" icon={<Icon name="external-link" />}>Voir la page</Button>
             <Button variant="ghost" size="sm" icon={<Icon name="copy" />}>Copier</Button>
             <Button variant="danger" icon={<Icon name="triangle-alert" />}>Supprimer</Button>
@@ -61,7 +61,7 @@ export function ActionsPage() {
         </Block>
 
         <Block label="Pleine largeur et lien">
-          <Button variant="primary" fullWidth iconRight={<Icon name="arrow-right" />}>Recevoir le prompt du build</Button>
+          <Button variant="primary" fullWidth iconRight={<Icon name="arrow-right" />}>Brancher Yunary dans Claude</Button>
           <Button as="a" variant="secondary" href="#actions" icon={<Icon name="external-link" />}>Rendu en balise a</Button>
         </Block>
       </Section>
@@ -80,7 +80,7 @@ export function ActionsPage() {
         <Block label="Lien-icône" hint="as=a + href : clic-milieu, ouvrir dans un onglet, annonce de lien au lecteur d'écran. La variante accent remplace le détournement d'is-active + style inline.">
           <Row>
             <IconButton label="Boutique" variant="accent" as="a" href="#actions"><Icon name="external-link" /></IconButton>
-            <IconButton label="GitHub" variant="secondary" as="a" href="#actions"><Icon name="github" /></IconButton>
+            <IconButton label="Écrire" variant="secondary" as="a" href="#actions"><Icon name="mail" /></IconButton>
           </Row>
         </Block>
 

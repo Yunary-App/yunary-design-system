@@ -14,6 +14,81 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.11.0 — le ménage de l'offre unique
+
+Retraits décidés par Julien le 20/10/2026, après l'audit de ménage. Depuis le 19/10, Yunary n'a qu'une
+offre (19 € par mois, 7 jours d'essai avec carte) : plus d'audit de compte, de pack, d'achat d'outil à
+l'unité, d'offre de lancement ni de « Bientôt ». Chaque retrait est prouvé, juste avant, par une
+recherche vide dans le hub, mcp-ui et le site (0 / 0 / 0), et inscrit dans `RETIRES`
+(`check-catalogue.mjs`, point 6 : composants, fichiers, entrées de `package.json`, classes, jetons et,
+nouveau, glyphes) et dans `RETIREES` (`check-classes.mjs`) : un portage qui les réintroduirait fait
+tomber la garde. La règle est celle de la 0.2.0 : le paquet ne porte que ce que les couches emploient.
+
+**⚠ Ruptures** — aucune pour les consommateurs actuels, qui n'importent ni n'écrivent rien de ce qui part :
+
+- **Les motifs de l'ancienne offre** (classes et règles) : le prix barré de l'offre de lancement
+  (`.ds-price__old`, `--inline`, `.ds-price__sr`), la plaque « Offert avec un outil payant »
+  (`.ds-price--row`, `__aside`), le prix d'écran `.ds-price--sm`, la carte d'outil à colonne prix
+  (`.ds-offers`, `.ds-offer`, `__main`, `__aside`, `--wide`), la carte « Bientôt » (`.ds-card.is-upcoming`),
+  le panneau « À activer » (`.ds-panel.is-locked`), l'interrupteur « Toujours actif »
+  (`.ds-switch.is-locked`, `.ds-switch__lock`), la paire de jauges « analyses + audits » (`.ds-meters`,
+  `.ds-meter__note`) et la jauge centrée de l'audit (`.ds-meter--center`), l'enveloppe de la barre
+  segmentée (`.ds-steps--bar` : `__track`, `__seg` et `__counter` restent, le hub les pose lui-même), la
+  grille des tuiles de l'ancien onboarding (`.ds-tiles`, `.ds-tile--span`).
+- **Deux props** : `Card upcoming` et `Switch locked`. `Switch labelPosition` reste.
+- **Sept composants React sans consommateur** : `Toast`, `Tooltip`, `StateCard`, `SkeletonCard`, `Radio`,
+  `Navbar`, `Footer`, avec leurs types. 34 composants au lieu de 41. Leurs classes partent avec eux
+  (`.ds-toast*`, `.ds-tooltip*`, `.ds-state-card*`), **sauf** celles qu'une couche écrit :
+  `.ds-navbar*`, `.ds-navlink` et `.ds-footer*` (le site) et le rond `.ds-choice__box--radio` (le hub),
+  documentés dans « Classes sans composant » et montrés en balisage nu dans la vitrine.
+- **Trois exports** : le sous-chemin `@yunary/ds/chart-geometry` (fait pour mcp-ui, jamais adopté ;
+  `chartGeometry`, `niceStep` et `CHART_PADDING` restent exportés par l'index), `makeCn` et `PALIERS_TYPO`
+  (la liste reste interne à `cn`). Les constantes `BRAND_*` restent.
+- **Quatorze glyphes sans usage** : `eye`, `terminal`, `loader-circle`, `github`, `folder`, `quote`,
+  `rocket`, `sliders-horizontal`, `house`, `dumbbell`, `log-out`, `heart`, `share`, `bookmark`. 48 au lieu
+  de 62 ; un tracé hors catalogue passe par `glyph`. `brand-glyphs.ts` (le tracé de GitHub) et
+  `compat-glyphs.ts` (celui de la maison) partent avec eux.
+- **Trois jetons** : `--tiles-col-min`, `--toast-w-min`, `--toast-w-max` (socle et gabarit : 33 jetons de
+  forme au lieu de 35).
+- **L'outillage de gabarit** : `rebrand.mjs`, `npm run rebrand` et `GETTING-STARTED.md`. `PORTAGE.md`
+  décrit le renommage à la main ; `brand.template.css` et `check-contract.mjs` restent.
+
+**Hygiène** — le paquet ne dépend plus de lui-même : `dependencies` portait `@yunary/ds#v0.6.0` depuis
+la 0.6.1 (une copie de la 0.6.0 dans `node_modules`, une ligne héritée par les lockfiles du hub et de
+mcp-ui) ; `package-lock.json` régénéré (il annonçait encore 0.8.0). `.gitignore` perd `_v3-ancien/`,
+un dossier qui n'a jamais existé. `demo/package.json` déclare `lucide-react` et `tailwind-merge`, que la
+vitrine trouvait par chance dans le `node_modules` parent.
+
+**Contrôles** — la paire de contraste du tooltip part : 108 paires × 2 thèmes, 74 conformes, 34 écarts
+assumés. `docs/accessibilite.md` est régénéré (il était resté à 92 paires et 32 écarts). Le contrat :
+63 jetons obligatoires (36 en `.dark`), 33 facultatifs.
+
+**Docs** — README (comptes, la phrase fantôme sur `.ds-metric*`, retirées en 0.2.0, le paragraphe
+`makeCn`, la ligne d'installation), PORTAGE (34 composants, 12 pages, les quinze gardes, le renommage),
+GOVERNANCE (treize gardes au premier passage, `check-classes` le quinzième, pas de CI, les consommateurs
+hub, mcp-ui et site), PROMPTS (sept sections retirées ; le rond, la barre de navigation et le pied en
+classes ; exemples sur l'offre unique), DESIGN, PIEGES (deux flottants au lieu de trois), BACKLOG (la ligne
+des keyframes, sans objet : l'écran de retour de paiement du hub n'existe plus). Commentaires des
+composants et de `patterns.css` sans « Bientôt » ni « À activer ».
+
+**Vitrine** — réécrite autour de l'offre unique : les cartes d'outil sans prix et une seule jauge,
+l'offre en plaque à 19 €, la barre segmentée du parcours en trois étapes, le voile d'un contenu
+réservé ; plus de prix barré, de panneau verrouillé ni d'interrupteur « Toujours actif ». Les spécimens
+hérités du gabarit (build, déploiement, outil interne, sport) passent au vocabulaire de Yunary.
+
+**Montée** :
+- **hub** : aucun code à changer (aucun import, aucune prop, aucun glyphe ni aucune classe retirés n'y
+  sont écrits). `npm i github:Yunary-App/yunary-design-system#v0.11.0`, vider `node_modules/.vite`,
+  typecheck, recette ; le lockfile perd la ligne `@yunary/ds#v0.6.0` héritée. Reste à lui la ligne
+  « Rôle de colonne à 560 px » du BACKLOG (`column="form"` d'`OnboardShell`, sans appel).
+- **mcp-ui** (depuis 0.9.0) : aucun code à changer, aucune classe retirée n'y est écrite ; la montée
+  apporte aussi la frise de la 0.10.0. Rebuild, `sync-screens.sh`, redéploiement de `mcp`, au prochain lot.
+- **site** : rien d'obligatoire. Sa copie de `src/styles/ds/` (21/09) garde des règles désormais
+  retirées, sans effet ; s'il la recopie, `.ds-navbar`, `.ds-navlink`, `.ds-footer`, `.ds-dropdown`,
+  `.ds-switch` et `.ds-tile*` y sont toujours.
+
+---
+
 ## 0.10.0 — la frise à jalons
 
 La nouvelle offre Yunary : les maquettes Onboarding Web (« Comment se passe ton essai », verticale) et

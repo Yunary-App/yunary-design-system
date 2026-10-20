@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Button, Card, Chart, EmptyState, Icon, IconButton, Input, Logo, Pastille, Progress, Separator, StatCard, Table, TBody, Tabs, Td, Th, THead, Tooltip, Tr } from '@yunary/ds';
+import { Badge, Button, Card, Chart, EmptyState, Icon, IconButton, Input, Logo, Pastille, Progress, Separator, StatCard, Table, TBody, Tabs, Td, Th, THead, Tr } from '@yunary/ds';
 import type { ThSort } from '@yunary/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
 
@@ -80,7 +80,7 @@ function CarteEvolution() {
 export function DataDisplayPage() {
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Graphique d'évolution — Chart" note="Chart (0.8.0, maquette Admin Web, onglet Évolution), sans librairie : grille, aire, ligne en escalier, point final, graduations en valeurs et en dates (--text-axis, 12). La géométrie vient de chartGeometry (@yunary/ds/chart-geometry, sans React) ; la largeur est celle du conteneur, la hauteur md 260 / 180 ou sm 150 / 120 sous 64 rem. tone=primary (aire, trait 2,5) ou ink (trait 2). Le format et le résumé lu par un lecteur d'écran viennent de l'app. L'assemblage de la carte (titres, période) reste à l'app.">
+      <Section title="Graphique d'évolution — Chart" note="Chart (0.8.0, maquette Admin Web, onglet Évolution), sans librairie : grille, aire, ligne en escalier, point final, graduations en valeurs et en dates (--text-axis, 12). La géométrie vient de chartGeometry (pure, exportée par l'index) ; la largeur est celle du conteneur, la hauteur md 260 / 180 ou sm 150 / 120 sous 64 rem. tone=primary (aire, trait 2,5) ou ink (trait 2). Le format et le résumé lu par un lecteur d'écran viennent de l'app. L'assemblage de la carte (titres, période) reste à l'app.">
         <Block label="La carte Évolution de la maquette, assemblée par l'app" hint="Change la période : 30 jours, 90 jours, depuis le lancement.">
           <CarteEvolution />
         </Block>
@@ -140,7 +140,7 @@ export function DataDisplayPage() {
                 <div className="ds-stat ds-stat--lg"><span className="ds-stat__value">43 %</span><span className="ds-stat__label">Part du MRR</span></div>
               </div>
               <Progress value={43} max={100} label="Part du MRR" />
-              <span className="caption text-text-muted">Prix de lancement : 6 € / mois à vie, au lieu de 9 €</span>
+              <span className="caption text-text-muted">30 analyses par mois, comprises dans l'offre Yunary</span>
             </div>
           </Card>
           <Card>
@@ -218,17 +218,17 @@ export function DataDisplayPage() {
         <Block label="En-tête à slots" hint="eyebrow · icon · title · subtitle · action, tous optionnels. Aucun slot passé = AUCUN noeud d'en-tête émis. L'ALIGNEMENT est décidé par le socle, jamais par une prop : titre simple = rangée centrée ; titre + sous-titre = flex-start, l'action s'aligne sur le titre au lieu de flotter entre les deux lignes.">
           <Grid cols={2}>
             <Card
-              icon={<Pastille size="carte" tone="brand"><Icon name="terminal" /></Pastille>}
+              icon={<Pastille size="carte" tone="brand"><Icon name="video" /></Pastille>}
               title="Titre simple — rangée centrée"
               action={<IconButton size="sm" label="Actions"><Icon name="ellipsis" /></IconButton>}
             >
               <p className="caption">Le cas majoritaire : icône, titre et action partagent un axe.</p>
             </Card>
             <Card
-              eyebrow="Build"
-              icon={<Pastille size="carte" tone="brand"><Icon name="rocket" /></Pastille>}
-              title="Premier outil interne"
-              subtitle="Créé il y a deux jours"
+              eyebrow="Analyse"
+              icon={<Pastille size="carte" tone="brand"><Icon name="zap" /></Pastille>}
+              title="Trois erreurs qui tuent ta rétention"
+              subtitle="Analysée il y a deux jours"
               action={<IconButton size="sm" label="Actions"><Icon name="ellipsis" /></IconButton>}
             >
               <p className="caption">Avec un sous-titre : flex-start — l'action tient la ligne du haut.</p>
@@ -237,9 +237,9 @@ export function DataDisplayPage() {
               size="lg"
               titleSize="lg"
               headerGap="airy"
-              eyebrow="Série"
-              title="Trois vidéos, un outil"
-              subtitle="Du zéro au premier déploiement"
+              eyebrow="Script"
+              title="Ton script de la semaine"
+              subtitle="Hook, structure, script"
             >
               <Stack>
                 <p className="caption">titleSize=&quot;lg&quot; passe le titre en --text-subheading.</p>
@@ -254,7 +254,7 @@ export function DataDisplayPage() {
         <Card title="Dans une carte">
           <div className="flex flex-col gap-space-4">
             <Row label="bordé — une valeur remplie">
-              <p className="ds-inset w-full"><span className="ds-inset__value">Développeuse indépendante, je construis des outils internes pour des équipes de dix personnes.</span></p>
+              <p className="ds-inset w-full"><span className="ds-inset__value">Créatrice food, je publie trois recettes rapides par semaine sur Instagram et TikTok.</span></p>
             </Row>
             <Row label="--dashed — un champ vide, avec action">
               <div className="ds-inset ds-inset--dashed w-full">
@@ -268,7 +268,7 @@ export function DataDisplayPage() {
             </Row>
             <Row label="action en bouton">
               <div className="ds-inset w-full">
-                <span className="ds-inset__value">Un tableau de bord par équipe.</span>
+                <span className="ds-inset__value">Trois recettes en moins de 15 minutes.</span>
                 <span className="ds-inset__action"><Button variant="ghost" size="sm" icon={<Icon name="copy" />}>Copier</Button></span>
               </div>
             </Row>
@@ -287,7 +287,7 @@ export function DataDisplayPage() {
           <Row>
             {TAILLES.map(t => (
               <div key={t} className="flex flex-col items-center gap-space-2">
-                <Pastille size={t}><Icon name="rocket" size="1.25rem" /></Pastille>
+                <Pastille size={t}><Icon name="zap" size="1.25rem" /></Pastille>
                 <span className="mono text-caption text-text-muted">{t}</span>
               </div>
             ))}
@@ -297,7 +297,7 @@ export function DataDisplayPage() {
           </Row>
         </Block>
 
-        <Block label="Tons" hint="brand (--grad-soft) + les 6 paires sémantiques + inverse. Les mêmes paires que Badge, Banner et Toast — une seule source.">
+        <Block label="Tons" hint="brand (--grad-soft) + les 6 paires sémantiques + inverse. Les mêmes paires que Badge et Banner, une seule source.">
           <Row>
             {TONS_PASTILLE.map(t => (
               <div key={t} className="flex flex-col items-center gap-space-2">
@@ -319,8 +319,8 @@ export function DataDisplayPage() {
             <Badge tone="danger" icon={<Icon name="circle-alert" size="0.875rem" strokeWidth={2.5} />}>Échec</Badge>
             <Badge tone="warning" icon={<Icon name="triangle-alert" size="0.875rem" strokeWidth={2.5} />}>À vérifier</Badge>
             <Badge tone="coral" icon={<Icon name="zap" size="0.875rem" strokeWidth={2.5} />}>Nouveau</Badge>
-            <Badge tone="amber" icon={<Icon name="clock" size="0.875rem" strokeWidth={2.5} />}>Bientôt</Badge>
-            <Badge tone="accent" icon={<Icon name="rocket" size="0.875rem" strokeWidth={2.5} />}>Mis en avant</Badge>
+            <Badge tone="amber" icon={<Icon name="clock" size="0.875rem" strokeWidth={2.5} />}>Programmé</Badge>
+            <Badge tone="accent" icon={<Icon name="trending-up" size="0.875rem" strokeWidth={2.5} />}>Mis en avant</Badge>
             <Badge tone="neutral">Brouillon</Badge>
             <Badge tone="outline">Archivé</Badge>
           </Row>
@@ -352,11 +352,11 @@ export function DataDisplayPage() {
           </Stack>
           <Row label="vertical">
             <span className="flex h-space-6 items-center gap-space-4">
-              <span className="caption">Build</span>
+              <span className="caption">Analyse</span>
               <Separator orientation="vertical" />
-              <span className="caption">Tuto</span>
+              <span className="caption">Script</span>
               <Separator orientation="vertical" />
-              <span className="caption">Coulisses</span>
+              <span className="caption">Programmation</span>
             </span>
           </Row>
         </Block>
@@ -366,13 +366,13 @@ export function DataDisplayPage() {
         <Block label="Simple, rayée, survolable">
           <Table hoverable striped>
             <THead>
-              <Tr><Th>Vidéo</Th><Th>Série</Th><Th>Publiée</Th><Th>Statut</Th></Tr>
+              <Tr><Th>Vidéo</Th><Th>Réseau</Th><Th>Publiée</Th><Th>Statut</Th></Tr>
             </THead>
             <TBody>
-              <Tr><Td>Construire une app en un week-end</Td><Td>Build</Td><Td>il y a 3 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
-              <Tr><Td>Cadrer une idée en une phrase</Td><Td>Tuto</Td><Td>il y a 9 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
-              <Tr><Td>Le prompt que j'utilise tous les jours</Td><Td>Build</Td><Td>il y a 16 j</Td><Td><Badge tone="neutral">Brouillon</Badge></Td></Tr>
-              <Tr><Td>Ce que Claude Code ne sait pas faire</Td><Td>Coulisses</Td><Td>il y a 24 j</Td><Td><Badge tone="warning" icon={<Icon name="triangle-alert" size="0.875rem" strokeWidth={2.5} />}>À revoir</Badge></Td></Tr>
+              <Tr><Td>Trois erreurs qui tuent ta rétention</Td><Td>Instagram</Td><Td>il y a 3 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
+              <Tr><Td>Ma routine de montage en 20 minutes</Td><Td>TikTok</Td><Td>il y a 9 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
+              <Tr><Td>Mon preset de montage</Td><Td>Instagram</Td><Td>il y a 16 j</Td><Td><Badge tone="neutral">Brouillon</Badge></Td></Tr>
+              <Tr><Td>Le micro que j'utilise tous les jours</Td><Td>YouTube</Td><Td>il y a 24 j</Td><Td><Badge tone="warning" icon={<Icon name="triangle-alert" size="0.875rem" strokeWidth={2.5} />}>À revoir</Badge></Td></Tr>
             </TBody>
           </Table>
         </Block>
@@ -387,66 +387,41 @@ export function DataDisplayPage() {
         </Block>
         <Block label="framed" hint="Contour autonome : bordure 1px --border, rayon lg, fond --card, en-tête sur --background. Plus besoin de l'envelopper dans une Card flush.">
           <Table framed>
-            <THead><Tr><Th>Série</Th><Th>Vidéos</Th><Th>Dernière</Th></Tr></THead>
+            <THead><Tr><Th>Réseau</Th><Th>Publications</Th><Th>Dernière</Th></Tr></THead>
             <TBody>
-              <Tr><Td>Build</Td><Td>14</Td><Td>il y a 3 j</Td></Tr>
-              <Tr><Td>Tuto</Td><Td>9</Td><Td>il y a 9 j</Td></Tr>
-              <Tr><Td>Coulisses</Td><Td>4</Td><Td>il y a 24 j</Td></Tr>
+              <Tr><Td>Instagram</Td><Td>14</Td><Td>il y a 3 j</Td></Tr>
+              <Tr><Td>TikTok</Td><Td>9</Td><Td>il y a 9 j</Td></Tr>
+              <Tr><Td>YouTube</Td><Td>4</Td><Td>il y a 24 j</Td></Tr>
             </TBody>
           </Table>
         </Block>
         <Block label="framed columns" hint="Les séparateurs verticaux rendent la structure des colonnes lisible.">
           <Table framed columns>
-            <THead><Tr><Th>Série</Th><Th>Vidéos</Th><Th>Dernière</Th></Tr></THead>
+            <THead><Tr><Th>Réseau</Th><Th>Publications</Th><Th>Dernière</Th></Tr></THead>
             <TBody>
-              <Tr><Td>Build</Td><Td>14</Td><Td>il y a 3 j</Td></Tr>
-              <Tr><Td>Tuto</Td><Td>9</Td><Td>il y a 9 j</Td></Tr>
-              <Tr><Td>Coulisses</Td><Td>4</Td><Td>il y a 24 j</Td></Tr>
+              <Tr><Td>Instagram</Td><Td>14</Td><Td>il y a 3 j</Td></Tr>
+              <Tr><Td>TikTok</Td><Td>9</Td><Td>il y a 9 j</Td></Tr>
+              <Tr><Td>YouTube</Td><Td>4</Td><Td>il y a 24 j</Td></Tr>
             </TBody>
           </Table>
         </Block>
         <Block label="framed columns striped hoverable" hint="Les quatre options se composent librement.">
           <Table framed columns striped hoverable>
-            <THead><Tr><Th>Vidéo</Th><Th>Série</Th><Th>Publiée</Th><Th>Statut</Th></Tr></THead>
+            <THead><Tr><Th>Vidéo</Th><Th>Réseau</Th><Th>Publiée</Th><Th>Statut</Th></Tr></THead>
             <TBody>
-              <Tr><Td>Construire une app en un week-end</Td><Td>Build</Td><Td>il y a 3 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
-              <Tr><Td>Cadrer une idée en une phrase</Td><Td>Tuto</Td><Td>il y a 9 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
-              <Tr><Td>Le prompt que j'utilise tous les jours</Td><Td>Build</Td><Td>il y a 16 j</Td><Td><Badge tone="neutral">Brouillon</Badge></Td></Tr>
-              <Tr><Td>Ce que Claude Code ne sait pas faire</Td><Td>Coulisses</Td><Td>il y a 24 j</Td><Td><Badge tone="warning" icon={<Icon name="triangle-alert" size="0.875rem" strokeWidth={2.5} />}>À revoir</Badge></Td></Tr>
+              <Tr><Td>Trois erreurs qui tuent ta rétention</Td><Td>Instagram</Td><Td>il y a 3 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
+              <Tr><Td>Ma routine de montage en 20 minutes</Td><Td>TikTok</Td><Td>il y a 9 j</Td><Td><Badge tone="success" icon={<Icon name="circle-check" size="0.875rem" strokeWidth={2.5} />}>En ligne</Badge></Td></Tr>
+              <Tr><Td>Mon preset de montage</Td><Td>Instagram</Td><Td>il y a 16 j</Td><Td><Badge tone="neutral">Brouillon</Badge></Td></Tr>
+              <Tr><Td>Le micro que j'utilise tous les jours</Td><Td>YouTube</Td><Td>il y a 24 j</Td><Td><Badge tone="warning" icon={<Icon name="triangle-alert" size="0.875rem" strokeWidth={2.5} />}>À revoir</Badge></Td></Tr>
             </TBody>
           </Table>
         </Block>
         <Block label="État vide" hint="La table disparaît, l'EmptyState prend sa place.">
           <EmptyState
-            icon={<Icon name="folder" size="1.5rem" />}
+            icon={<Icon name="video" size="1.5rem" />}
             title="Aucune vidéo"
-            description="Publie ton premier build pour voir la liste se remplir."
+            description="Programme ta première vidéo pour voir la liste se remplir."
           />
-        </Block>
-      </Section>
-
-      <Section title="Tooltip" note="Bulle --tone-dark au survol et au focus ; elle s'inverse en --tone-light-alt en thème sombre. Libellé court uniquement.">
-        <Block label="Placement et ouverture forcée">
-          <Row>
-            <Tooltip content="Copier le prompt">
-              <IconButton label="Copier"><Icon name="copy" /></IconButton>
-            </Tooltip>
-            <Tooltip content="Ouvrir la vidéo" placement="bottom">
-              <IconButton label="Lire"><Icon name="play" /></IconButton>
-            </Tooltip>
-          </Row>
-          <Row label="open — pour la recette">
-            <span className="inline-flex pt-space-6">
-              <Tooltip content="Copier le prompt" open>
-                <IconButton label="Copier" variant="secondary"><Icon name="copy" /></IconButton>
-              </Tooltip>
-            </span>
-            <span className="inline-flex pb-space-6">
-              <Tooltip content="Ouvrir la vidéo" placement="bottom" open>
-                <IconButton label="Lire" variant="secondary"><Icon name="play" /></IconButton>
-              </Tooltip>
-            </span>
-          </Row>
         </Block>
       </Section>
     </div>

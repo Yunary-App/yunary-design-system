@@ -4,9 +4,9 @@
  * Une fonction PURE : ni React, ni DOM, ni format. Elle reçoit une série de points espacés
  * régulièrement (un par jour, par exemple), la taille du cadre en pixels CSS et deux fonctions de
  * format fournies par l'app ; elle rend les tracés SVG (grille, aire, ligne en ESCALIER), le point
- * final et la position des graduations. Le composant `Chart` la dessine ; un écran de mcp-ui
- * (Preact, HTML autonome) peut l'importer seule par `@yunary/ds/chart-geometry` et poser les
- * classes `.ds-chart*` sur son propre SVG.
+ * final et la position des graduations. Le composant `Chart` la dessine ; elle est aussi exportée
+ * par l'index, pour un écran qui pose les classes `.ds-chart*` sur son propre SVG. (Le sous-chemin
+ * sans React de la 0.8.0, `@yunary/ds/chart-geometry`, est retiré en 0.11.0 : aucun consommateur.)
  *
  * L'ESCALIER : une valeur tient jusqu'au point suivant, puis la ligne monte ou descend à la verticale
  * (« H x V y ») — un MRR ou un nombre de clients change par marches, il ne glisse pas. Les

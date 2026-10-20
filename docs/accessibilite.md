@@ -10,9 +10,9 @@
 > translucides — pilules, plaques de marque — sont **composités sur leur surface porteuse**
 > avant mesure : c'est la couleur que l'œil reçoit, pas celle qui est écrite.
 >
-> **92 paires × 2 thèmes. 60 conformes, 32 écarts assumés.** Un écart assumé n'est pas un
+> **108 paires × 2 thèmes. 74 conformes, 34 écarts assumés.** Un écart assumé n'est pas un
 > oubli : c'est une décision écrite, déclarée dans `src/styles/brand-yunary.css` par un bloc
-> `@a11y-assume:` avec sa raison. Le build tombe si une **trente-troisième** apparaît.
+> `@a11y-assume:` avec sa raison. Le build tombe si une **trente-cinquième** apparaît.
 
 ---
 
@@ -69,7 +69,6 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 | `--text-secondary sur --card` | 16 / 400 | 4,5 | 10,31 | 9,22 |
 | `.caption — --text-muted sur --card` | 13 / 500 | 4,5 | 5,12 | 6,47 |
 | `.ds-input::placeholder` | 15 / 400 | 4,5 | 5,17 | 6,47 |
-| `.ds-tooltip__bubble` | 13 / 600 | 4,5 | 14,52 | 15,59 |
 | `a{} au repos sur --background` | 16 / 400 | 4,5 | 5,36 | 7,11 |
 | `a{} au repos sur --card` | 16 / 400 | 4,5 | 5,59 | 6,12 |
 | `a:hover — dérivé vers --foreground` | 16 / 400 | 4,5 | 6,76 | 8,21 |
@@ -104,6 +103,21 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 | `.ds-meter__of — texte sur --background` | 14 / 400 | 4,5 | 4,91 | 7,51 |
 | `.ds-steps__counter-sub — texte sur --background` | 18 / 400 | 4,5 | 4,91 | 7,51 |
 | `.ds-tile--choice — coche --primary-readable sur --accent` | icône | 3 | 5,16 | 5,85 |
+| `.ds-frise__date en cours — sur --card` | 13 / 700 | 4,5 | 5,59 | 6,12 |
+| `.ds-frise__date en cours — sur --background` | 13 / 700 | 4,5 | 5,36 | 7,11 |
+| `.ds-frise__date faite — sur --card` | 13 / 700 | 4,5 | 5,81 | 7,67 |
+| `.ds-frise__date faite — sur --background (plaque)` | 13 / 700 | 4,5 | 5,57 | 8,91 |
+| `.ds-frise__date à venir — sur --card` | 13 / 700 | 4,5 | 5,12 | 6,47 |
+| `.ds-frise__date à venir — sur --background (plaque)` | 13 / 700 | 4,5 | 4,91 | 7,51 |
+| `.ds-frise__mark success — glyphe sur --card` | icône | 3 | 4,94 | 6,17 |
+| `.ds-frise__mark success — glyphe sur --background (plaque)` | icône | 3 | 4,75 | 7,14 |
+| `.ds-frise__mark amber — glyphe sur --card` | icône | 3 | 4,99 | 7,13 |
+| `.ds-frise__mark amber — glyphe sur --background (plaque)` | icône | 3 | 4,82 | 8,30 |
+| `.ds-frise__mark coral — glyphe sur --card` | icône | 3 | 4,90 | 5,73 |
+| `.ds-frise__mark coral — glyphe sur --background (plaque)` | icône | 3 | 4,69 | 6,62 |
+| `.ds-frise__mark neutral — glyphe sur --card` | icône | 3 | 5,20 | 7,46 |
+| `.ds-frise__mark neutral — glyphe sur --background (plaque)` | icône | 3 | 5,00 | 8,78 |
+| `.ds-frise__line faite — trait sur --background (plaque)` | trait 2px | 3 | 5,57 | 8,91 |
 | `.ds-badge--coral sur --card` | 12 / 700 | 4,5 | 4,90 | 5,73 |
 | `.ds-badge--coral sur --background` | 12 / 700 | 4,5 | 4,69 | 6,62 |
 | `.ds-badge--amber sur --card` | 12 / 700 | 4,5 | 4,99 | 7,13 |
@@ -129,7 +143,7 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 
 ## 3. Les écarts assumés
 
-32 paires, en six familles. Chacune est déclarée dans `src/styles/brand-yunary.css` par un
+34 paires, en six familles. Chacune est déclarée dans `src/styles/brand-yunary.css` par un
 bloc `@a11y-assume:`. Le script porte la mécanique, **la marque porte ses renoncements** : une
 autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dérogation.
 
@@ -154,6 +168,8 @@ autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dér
 | `.ds-media__play — glyphe sur le disque` | icône | 3 | 2,79 ✗ | 2,79 ✗ |
 | `.ds-badge--brand — texte sur --brand-from (pire arrêt)` | 12 / 700 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-price--accent — montant sur --brand-from (pire arrêt)` | 36 / 800 | 3 | 1,91 ✗ | 7,03 |
+| `.ds-frise jalon en cours — glyphe sur --brand-from (pire arrêt)` | icône | 3 | 2,04 ✗ | 2,04 ✗ |
+| `.ds-frise__amount en cours — montant sur --brand-from (pire arrêt)` | 29 / 800 | 3 | 1,91 ✗ | 7,03 |
 | `.ds-btn--primary — label sur --primary à plat` | 15 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.ds-btn--primary — label sur --brand-from (pire arrêt)` | 15 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-btn--primary — label sur --brand-via` | 15 / 600 | 4,5 | 2,68 ✗ | 2,68 ✗ |
@@ -168,15 +184,16 @@ autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dér
 | `.ds-card — bordure --border vs page` | contour 1px | 3 | 1,17 ✗ | 1,44 ✗ |
 | `.ds-sep — filet --border sur --card` | filet 1px | 3 | 1,22 ✗ | 1,24 ✗ |
 
-### 3.1 · La signature CTA — le label blanc sur le dégradé chaud · 15 paires
+### 3.1 · La signature CTA — le label blanc sur le dégradé chaud · 17 paires
 
 **L'écart.** Le CTA primaire porte `--brand-gradient`, ambre → orange → corail. Le label blanc
 mesure **2,04** sur l'arrêt jaune, **2,68** sur l'orange, **3,80** sur le corail, **3,48** sur
 l'aplat `--primary`. La pastille pleine, le jour sélectionné du calendrier, le repère de l'étape en cours et le
 numéro du jour d'aujourd'hui dans l'agenda (v0.4.0), le badge de marque (« À connecter ») et le
 montant d'une offre en dégradé clippé (v0.5.0), le numéro du jour de l'agenda semaine et sa plaque
-d'aujourd'hui, la vignette d'un contenu sans vidéo (v0.6.0, la maquette fait foi) portent le même
-dégradé, le bouton danger le même corail. Le chiffre d'une étape ou d'un jour est redondant : la place, le libellé en
+d'aujourd'hui, la vignette d'un contenu sans vidéo (v0.6.0, la maquette fait foi), la pastille et
+le montant du jalon en cours d'une frise (v0.10.0) portent le même dégradé, le bouton danger le
+même corail. Le chiffre d'une étape ou d'un jour est redondant : la place, le libellé en
 gras et `aria-current` disent l'état.
 
 **Pourquoi il est assumé.** C'est la signature de la marque, et l'alternative a été mesurée :

@@ -20,7 +20,8 @@
  *      du type IconName. Le point 3 vérifiait que chaque icône CITÉE existe, jamais le
  *      COMPTE : trois lignes ont annoncé 47 pour 48 glyphes pendant deux versions, dans
  *      les deux dépôts. Une liste dont on annonce la taille doit voir sa taille vérifiée.
- *   6. aucun élément RETIRÉ ne revient — composant, sous-chemin, jeton ou classe. Un portage
+ *   6. aucun élément RETIRÉ ne revient — composant, fichier, sous-chemin, script, jeton, classe ou
+ *      glyphe (retraits de la 0.2.0 et de la 0.11.0). Un portage
  *      depuis une maquette ou un autre gabarit les réintroduit sans bruit : ils compilent,
  *      ils rendent, et plus personne ne sait qu'ils avaient été retirés exprès ;
  *   7. chaque classe `.ds-*` citée dans « Classes sans composant » (docs/PROMPTS.md) existe
@@ -109,29 +110,53 @@ for (const f of ['README.md', 'docs/PROMPTS.md']) {
 
 /* ── 6 · rien de ce qui a été retiré ne revient ──────────────────────────────── */
 /* La liste fait autorité : un élément n'en sort que sur décision de Julien, écrite au
-   CHANGELOG. `.ds-tile*`, `.ds-choice*` et `.ds-dropdown*` NE SONT PAS dedans : seuls leurs
-   composants React sont retirés, les classes restent (le site les emploie). */
+   CHANGELOG. `.ds-tile*`, `.ds-choice*`, `.ds-dropdown*` (0.2.0) et `.ds-navbar*`, `.ds-navlink`,
+   `.ds-footer*` (0.11.0) NE SONT PAS dedans : seuls leurs composants React sont retirés, les
+   classes restent (le site les emploie).
+   0.11.0 — le ménage de l'offre unique : les motifs de l'ancienne offre (prix barré, plaque
+   « Offert », carte « Bientôt », panneau « À activer », interrupteur « Toujours actif », paire de
+   jauges, jauge centrée, barre segmentée enveloppée, grille de tuiles, carte d'outil à colonne
+   prix), les composants React sans consommateur, le sous-chemin `chart-geometry`, `makeCn`,
+   les glyphes sans usage et l'outillage de gabarit (`rebrand`). */
 const RETIRES = {
-  composants: ['ChoiceTile', 'CheckTile', 'RadioTile', 'ActionSheet', 'Dropdown', 'HaloHot', 'ContentIcon'],
+  composants: ['ChoiceTile', 'CheckTile', 'RadioTile', 'ActionSheet', 'Dropdown', 'HaloHot', 'ContentIcon',
+               'Toast', 'Tooltip', 'StateCard', 'SkeletonCard', 'Radio', 'Navbar', 'Footer', 'makeCn', 'PALIERS_TYPO'],
   fichiers: ['src/brand-content.tsx', 'src/styles/brand-content.css', 'src/components/forms/ChoiceTile.tsx',
-             'src/components/overlays/ActionSheet.tsx', 'src/components/overlays/Dropdown.tsx'],
+             'src/components/overlays/ActionSheet.tsx', 'src/components/overlays/Dropdown.tsx',
+             'src/components/feedback/Toast.tsx', 'src/components/data-display/Tooltip.tsx',
+             'src/components/feedback/StateCard.tsx', 'src/components/feedback/SkeletonCard.tsx',
+             'src/components/forms/Radio.tsx', 'src/components/navigation/Navbar.tsx',
+             'src/components/navigation/Footer.tsx', 'src/components/icons/brand-glyphs.ts',
+             'src/components/icons/compat-glyphs.ts', 'GETTING-STARTED.md', 'rebrand.mjs'],
+  /* sous-chemins et scripts de package.json */
+  paquet: [/brand-content/, /"\.\/chart-geometry"/, /"rebrand"\s*:/],
   /* motifs cherchés dans le CSS du paquet, commentaires retirés */
   css: [/--tone-deep\b/, /--gradient-thumbnail\b/, /--shadow-accent-hot\b/, /\.accent-hot\b/, /\bbg-thumbnail\b/,
         /--container-tile\b/, /--aspect-video-portrait\b/, /\.ds-actionsheet/, /--actionsheet-/, /\.ds-scrim--sheet\b/,
         /* 0.5.0 — la languette de coin de 0.4.0, retirée : « Recommandé » est revenu en fin de rangée. */
-        /\.ds-badge--corner\b/],
+        /\.ds-badge--corner\b/,
+        /* 0.11.0 */
+        /\.ds-offer/, /\.ds-price__old/, /\.ds-price__sr\b/, /\.ds-price--row\b/, /\.ds-price__aside\b/,
+        /\.ds-price--sm\b/, /\.is-upcoming\b/, /\.is-locked\b/, /\.ds-switch__lock\b/, /\.ds-meters\b/,
+        /\.ds-meter__note\b/, /\.ds-meter--center\b/, /\.ds-steps--bar\b/, /\.ds-tiles\b/, /\.ds-tile--span\b/,
+        /--tiles-col-min\b/, /\.ds-toast/, /--toast-w-/, /\.ds-tooltip/, /\.ds-state-card/],
+  /* 0.11.0 — glyphes retirés du type IconName */
+  glyphes: ['eye', 'terminal', 'loader-circle', 'github', 'folder', 'quote', 'rocket', 'sliders-horizontal',
+            'house', 'dumbbell', 'log-out', 'heart', 'share', 'bookmark'],
 };
 for (const c of RETIRES.composants) {
   if (new RegExp(`\\b${c}\\b`).test(index)) erreurs.push(
-    `« ${c} » est de nouveau exporté par src/index.ts — il a été RETIRÉ en 0.2.0 (voir CHANGELOG).\n`
+    `« ${c} » est de nouveau exporté par src/index.ts — il a été RETIRÉ (voir CHANGELOG, 0.2.0 ou 0.11.0).\n`
     + `      Un composant retiré ne revient que sur décision explicite : retire l'export.`);
 }
 for (const f of RETIRES.fichiers) {
   if (fs.existsSync(f)) erreurs.push(
-    `${f} existe de nouveau — il a été RETIRÉ en 0.2.0 (voir CHANGELOG). Supprime-le.`);
+    `${f} existe de nouveau — il a été RETIRÉ (voir CHANGELOG, 0.2.0 ou 0.11.0). Supprime-le.`);
 }
-if (/brand-content/.test(lire('package.json'))) erreurs.push(
-  `package.json expose de nouveau le sous-chemin brand-content — retiré en 0.2.0. Retire l'entrée d'exports.`);
+for (const motif of RETIRES.paquet) if (motif.test(lire('package.json'))) erreurs.push(
+  `package.json porte de nouveau ${motif.source.replace(/\\s\*/g, ' ').replace(/\\/g, '')} — retiré (voir CHANGELOG). Retire l'entrée.`);
+for (const g of RETIRES.glyphes) if (noms.has(g)) erreurs.push(
+  `le glyphe « ${g} » est de nouveau dans IconName — retiré en 0.11.0 (voir CHANGELOG). Une app passe par \`glyph\`.`);
 (function scanCss(dir) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, e.name);
@@ -139,7 +164,7 @@ if (/brand-content/.test(lire('package.json'))) erreurs.push(
     if (!e.name.endsWith('.css')) continue;
     const src = lire(full).replace(/\/\*[\s\S]*?\*\//g, '');
     for (const motif of RETIRES.css) if (motif.test(src)) erreurs.push(
-      `${full} déclare de nouveau ${motif.source.replace(/\\b/g, '').replace(/\\/g, '')} — retiré en 0.2.0 (voir CHANGELOG).`);
+      `${full} déclare de nouveau ${motif.source.replace(/\\b/g, '').replace(/\\/g, '')} — retiré (voir CHANGELOG, 0.2.0 ou 0.11.0).`);
   }
 })('src/styles');
 

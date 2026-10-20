@@ -1,7 +1,7 @@
 # @yunary/ds
 
 **Le design system de Yunary.** Deux couches qui ne se mélangent pas : un **socle**
-générique — structure, comportements, échelles, rail de contrôles, motion, 41 composants
+générique — structure, comportements, échelles, rail de contrôles, motion, 34 composants
 React + TypeScript, **zéro couleur** — et la **marque Yunary**, qui porte les couleurs, les
 polices, les dégradés et la lueur.
 
@@ -29,20 +29,18 @@ import '@yunary/ds/brand-yunary.css';  // la marque Yunary
 | **vous touchez à la marque** | **[`docs/DESIGN.md`](docs/DESIGN.md)** — la charte, et la liste fermée de l'accent |
 
 **La marque Yunary**, `src/styles/brand-yunary.css` : encre et crème, dégradé ambre →
-orange → corail, Onest en titrage et DM Sans en texte. Elle porte les 55 jetons du contrat
-et déclare ses 26 écarts d'accessibilité assumés, chacun avec sa raison. Le socle, lui, ne porte **aucune couleur** — c'est ce qui permet de la faire évoluer
+orange → corail, Onest en titrage et DM Sans en texte. Elle porte les 63 jetons obligatoires du
+contrat et déclare ses 34 écarts d'accessibilité assumés, chacun avec sa raison. Le socle, lui, ne porte **aucune couleur** — c'est ce qui permet de la faire évoluer
 sans toucher aux composants.
 
-> **Ce paquet est bâti sur un gabarit**, dont [`PORTAGE.md`](PORTAGE.md) et
-> [`GETTING-STARTED.md`](GETTING-STARTED.md) décrivent la procédure. Ils parlent de fabriquer
-> un design system à partir de celui-ci, pas de s'en servir : pour Yunary, vous n'avez pas à
-> les dérouler.
+> **Ce paquet est bâti sur un gabarit**, dont [`PORTAGE.md`](PORTAGE.md) décrit la procédure.
+> Il parle de fabriquer un design system à partir de celui-ci, pas de s'en servir : pour Yunary,
+> vous n'avez pas à le dérouler.
 
 ### Les documents
 
 | Pour | Va voir |
 |---|---|
-| démarrer un design system, de zéro | [`GETTING-STARTED.md`](GETTING-STARTED.md) |
 | la charte à remplir avant le CSS | [`docs/DESIGN.md`](docs/DESIGN.md) |
 | ce qui entre dans le système, et la procédure de version | [`GOVERNANCE.md`](GOVERNANCE.md) |
 | ce qui a changé, version par version | [`CHANGELOG.md`](CHANGELOG.md) |
@@ -58,7 +56,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yunary-App/yunary-design-system#v0.10.0
+npm i github:Yunary-App/yunary-design-system#v0.11.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -167,9 +165,9 @@ aucune valeur.
 import { Button, Card, Icon } from '@yunary/ds';
 
 <Card variant="feature" size="lg">
-  <h2>J'ai construit cette <span className="accent">app</span> en un week-end</h2>
+  <h2>Ta prochaine vidéo, <span className="accent">analysée</span> en deux minutes</h2>
   <Button variant="primary" size="lg" iconRight={<Icon name="arrow-right" />}>
-    On build une app
+    Démarrer mes 7 jours
   </Button>
 </Card>
 ```
@@ -184,7 +182,7 @@ largeurs, sans barre de défilement horizontale :
 ```ts
 import '@yunary/ds/core.css';
 import '@yunary/ds/brand-yunary.css';
-import '@yunary/ds/app-scale.css';   // les apps web (le hub, les outils internes) — jamais le site public
+import '@yunary/ds/app-scale.css';   // les apps web (le hub) — jamais le site public
 ```
 
 Les paliers sont en **%** : ils multiplient la préférence de taille de texte du navigateur au lieu
@@ -243,16 +241,9 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > sont plus générables : seuls les paliers sémantiques du DS existent. Une régression casse
 > visiblement au lieu de dériver en silence.
 >
-> Si ton app ajoute ses propres paliers, ne reconstruis pas la configuration `tailwind-merge` à
-> côté : appelle `makeCn`. Les paliers du DS y sont déjà, tu ne donnes que les tiens — sans le
-> préfixe `text-`. Sans ça, `text-control` repasse **couleur** et disparaît du DOM au premier
-> conflit avec `text-foreground`.
-> ```ts
-> import { makeCn } from '@yunary/ds';
-> export const cn = makeCn(['tab', 'hero']);   // + text-tab, text-hero
-> ```
-> `cn` reste le raccourci quand il n'y a aucun palier à ajouter, et `PALIERS_TYPO` reste exporté
-> pour les cas où tu veux la liste brute.
+> Compose tes classes avec le `cn` du DS : il connaît ces paliers. Un `twMerge` nu prendrait
+> `text-control` pour une **couleur** et le retirerait du DOM au premier conflit avec
+> `text-foreground`.
 
 > **`rounded` nu n'est pas au barème.** En Tailwind v4 c'est un utilitaire **statique**, câblé sur
 > `0.25rem`, qu'aucun token ne peut reprendre : un `@utility rounded` fusionnerait avec lui au lieu
@@ -260,7 +251,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > lève aucune erreur : il rend 4 px, hors barème.
 
 > **Le paquet n'est pas scanné par Tailwind.** v4 ne lit pas `node_modules`. Sans effet
-> aujourd'hui : les 41 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
+> aujourd'hui : les 34 composants s'habillent en classes `.ds-*` et n'écrivent aucun utilitaire
 > Tailwind. C'est une précaution pour l'avenir — le jour où un composant du DS écrira une classe
 > Tailwind, l'app devra pointer le paquet :
 > ```css
@@ -276,13 +267,13 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 
 | Famille | Composants |
 |---|---|
-| `icons` | `Icon` — 62 glyphes Lucide ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
+| `icons` | `Icon` — 48 glyphes Lucide (les autres tracés passent par `glyph`) ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
 | `actions` | `Button` · `IconButton` — 5 variantes, `danger-soft` compris (6 pour `IconButton`, `accent` compris), 4 tailles pour `Button` (`xs` = « Copier »), jamais un pill |
-| `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` · `Checkbox` · `Radio` · `Switch` (verrouillé, libellé avant la piste) · `FormField` (action à droite du libellé) · `Calendar` · `DatePicker` · `Dropzone` (dépôt d'un fichier) |
-| `data-display` | `Card` (+ en-tête à slots, badge collé au titre, pied, palier `xl`, plaque, coque d'écran de Claude) · `Pastille` (de la coche à l'écran) · `Badge` (2 rembourrages, ton dégradé, tête, croix de retrait) · `Tooltip` · `Separator` · `Frise` (la frise à jalons : pastille, date, titre, montant, texte, trait ; fait · en cours · à venir ; verticale ou horizontale, compacte, sur plaque) · `Chart` (le graphique d'évolution, fait maison : grille, aire, escalier, point final, graduations ; géométrie pure `chartGeometry`, aussi en `@yunary/ds/chart-geometry` sans React) · `StatCard` (la carte de chiffre : libellé, valeur, variation en trois sens, chargement) · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables ; `Th sort` + `onSort` : l'en-tête triable, contrôlé |
-| `feedback` | `Toast` · `Banner` (+ encart dans une carte, pastille à la place de l'icône) · `EmptyState` · `StateCard` · `Skeleton` · `SkeletonCard` · `Spinner` · `Progress` |
+| `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` · `Checkbox` · `Switch` (libellé avant la piste) · `FormField` (action à droite du libellé) · `Calendar` · `DatePicker` · `Dropzone` (dépôt d'un fichier) |
+| `data-display` | `Card` (+ en-tête à slots, badge collé au titre, pied, palier `xl`, plaque, coque d'écran de Claude) · `Pastille` (de la coche à l'écran) · `Badge` (2 rembourrages, ton dégradé, tête, croix de retrait) · `Separator` · `Frise` (la frise à jalons : pastille, date, titre, montant, texte, trait ; fait · en cours · à venir ; verticale ou horizontale, compacte, sur plaque) · `Chart` (le graphique d'évolution, fait maison : grille, aire, escalier, point final, graduations ; géométrie pure `chartGeometry`) · `StatCard` (la carte de chiffre : libellé, valeur, variation en trois sens, chargement) · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables ; `Th sort` + `onSort` : l'en-tête triable, contrôlé |
+| `feedback` | `Banner` (+ encart dans une carte, pastille à la place de l'icône) · `EmptyState` · `Skeleton` · `Spinner` · `Progress` |
 | `overlays` | `Modal` (3 phases + feuille basse sous 64 rem, sous-titre, 480 / 560 / 600) |
-| `navigation` | `Navbar` · `Footer` · `Tabs` (onglets ou choix d'une valeur, barre compacte, qui défile) · `Pagination` · `AppShell` (+ barre haute mobile) · `Sidebar` |
+| `navigation` | `Tabs` (onglets ou choix d'une valeur, barre compacte, qui défile) · `Pagination` · `AppShell` (+ barre haute mobile) · `Sidebar` |
 | `brand` | `Logo` · `Halo` · `Avatar` (tailles des pastilles, tons, anneau, pastille de réseau) · `Reseau` (Instagram, TikTok, YouTube, Claude) |
 
 Tous sont exportés en nommé depuis la racine, avec leurs types :
@@ -294,20 +285,19 @@ import { Button, type ButtonProps } from '@yunary/ds';
 Les règles d'usage composant par composant sont dans [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
 > **Classes sans composant.** La tuile cochable (`.ds-tile`, avec ses formes compacte, pastille,
-> panneau et choix), l'encart de valeur (`.ds-inset`, simple ou en pile), le panneau d'écran
-> (`.ds-panel`), le menu déroulant (`.ds-dropdown`) et les motifs des parcours — la barre d'étapes
-> (`.ds-steps`, segmentée ou verticale), le voile d'un outil non activé (`.ds-veil`), le prix, les
-> avantages et le compteur à jauge (`.ds-price`, `.ds-perks`, `.ds-meter`), la carte d'outil
-> (`.ds-offer`), le fichier et l'envoi (`.ds-file`, `.ds-upload`), le média 9:16 et la bande
+> panneau et choix), le rond (`.ds-choice__box--radio`), l'encart de valeur (`.ds-inset`, simple ou
+> en pile), le panneau d'écran (`.ds-panel`), le menu déroulant (`.ds-dropdown`), la barre de
+> navigation et le pied du site (`.ds-navbar`, `.ds-navlink`, `.ds-footer`) et les motifs des
+> parcours — la barre d'étapes (`.ds-steps`, segmentée ou verticale), le voile d'un contenu réservé
+> (`.ds-veil`), le prix, les avantages et le compteur à jauge (`.ds-price`, `.ds-perks`,
+> `.ds-meter`), le fichier et l'envoi (`.ds-file`, `.ds-upload`), le média 9:16 et la bande
 > d'images (`.ds-media`, `.ds-frames`), l'agenda (`.ds-agenda`, `.ds-week`), les marques de texte
 > (`.ds-mark`, `.ds-snippet`, `.ds-cues`, `.ds-dl`, `.ds-diff`) — n'ont pas de composant React :
 > leurs classes sont stables, l'app écrit le balisage (React, Preact ou HTML). Voir la fin de
 > [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
-> **Hors périmètre** — les composants métier (blocs de code, cartes d'étape, pills de
-> métrique…) vivent dans l'app qui en a besoin. Les classes `.ds-metric*` sont dans
-> `patterns.css` : une app peut composer sa propre pill de métrique sans réinventer une
-> valeur.
+> **Hors périmètre** — les composants métier (cartes d'outil, pills de métrique…) vivent dans
+> l'app qui en a besoin, composés avec les briques ci-dessus.
 
 ---
 
@@ -413,8 +403,8 @@ invisible (0.8.1).
 Les gabarits de production (landing, visuels, slides, e-mails) vivent dans les projets
 consommateurs.
 
-Semver + tags git. Une évolution = PR sur ce repo, bump, tag, puis mise à jour de la dépendance
-dans chaque app. Le projet Claude Design reste l'atelier de conception ; tout changement validé y
+Semver + tags git. Une évolution = un commit sur `main`, bump, tag annoté, puis mise à jour de la
+dépendance dans chaque app. Le projet Claude Design reste l'atelier de conception ; tout changement validé y
 est reporté, puis porté ici.
 
 ---

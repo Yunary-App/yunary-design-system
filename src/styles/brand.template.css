@@ -7,8 +7,8 @@
 
    ÉCRIRE UNE MARQUE, EN TROIS GESTES
 
-     1. `npm run rebrand -- "@vous/ds" "Votre Marque"` — renomme le paquet et l'identité
-        textuelle (`src/brand.ts`). Il ne crée AUCUN fichier de marque.
+     1. Renommez le paquet (`package.json`) et l'identité textuelle (`src/brand.ts` : le nom, le
+        monogramme, le mot-marque). Aucun fichier de marque n'est encore créé.
      2. Copiez `src/styles/brand-yunary.css` (la marque livrée) en
         `src/styles/brand-<vous>.css` et repeignez chaque valeur : partir d'une marque complète
         donne tous les emplacements dans le bon ordre avec leurs commentaires, et comme on
@@ -43,12 +43,11 @@
    pas la sienne, soit un fichier de marque doit répéter quarante mesures qui ne le regardent
    pas. Les deux régimes tiennent ensemble, pas séparément.
 
-   COMBIEN : 54 jetons OBLIGATOIRES en `:root`, dont AU MOINS 32 à redéclarer en `.dark` —
-   davantage si votre marque éclaircit ses remplissages en thème sombre. Sept jetons qui
-   étaient autrefois à remplir — les deux dégradés de marque et cinq fonds de pilule — sont
-   maintenant DÉRIVÉS par le socle dans `tokens/derives.css` et n'ont plus à l'être. Plus
-   3 jetons MÉTIER, optionnels, en bas du bloc et commentés : ils ne servent qu'aux visuels
-   d'export. Plus 33 jetons de FORME, tous facultatifs, au § 4.
+   COMBIEN : 63 jetons OBLIGATOIRES en `:root`, dont 36 à redéclarer en `.dark` — davantage
+   si votre marque éclaircit ses remplissages en thème sombre. Sept jetons qui étaient
+   autrefois à remplir — les deux dégradés de marque et cinq fonds de pilule — sont maintenant
+   DÉRIVÉS par le socle dans `tokens/derives.css` et n'ont plus à l'être. Plus 33 jetons de
+   FORME, tous facultatifs, au § 4. `node check-contract.mjs` recompte les trois.
 
    CE QUE VOUS N'AVEZ TOUJOURS PAS À FOURNIR, même au § 4 : les espacements (--space-*), les
    paliers typographiques, les interlignes et interlettrages, les durées, les ombres neutres
@@ -203,7 +202,7 @@
   --reseau-claude:; --reseau-claude-fg:;
 }
 
-/* Les 36 jetons dont la valeur DÉPEND DU THÈME. Les 26 autres n'en dépendent pas et ne
+/* Les 36 jetons dont la valeur DÉPEND DU THÈME. Les 27 autres n'en dépendent pas et ne
    se répètent pas ici.
 
    PIÈGE À CONNAÎTRE — la substitution figée. Un jeton dont la valeur contient var(Y) est
@@ -246,7 +245,7 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
    4 · FACULTATIF — LA FORME
    ═══════════════════════════════════════════════════════════════════════════════
-   Trente-six réglages qui portent de l'identité sans porter de couleur : la hauteur d'une
+   Trente-trois réglages qui portent de l'identité sans porter de couleur : la hauteur d'une
    navbar, la largeur d'un tiroir, l'arrondi d'une barre d'onglets, la taille d'une case à
    cocher — et la taille du titre de page. Le socle les DÉCLARE tous, dans `tokens/scales.css`
    (les mesures) et `tokens/typography.css` (le palier) — ce sont les défauts, et ils sont
@@ -307,7 +306,7 @@
   /* --icon-control-lg:3rem; */         /* socle : 48 */
 
   /* ---------- 4.3 · DIMENSIONS DE COMPOSANTS ----------
-     Vingt mesures, une par décision de forme. Elles n'ont AUCUN effet les unes sur les
+     Dix-neuf mesures, une par décision de forme. Elles n'ont AUCUN effet les unes sur les
      autres : changer --navbar-h ne bouge pas le tiroir.
      Ce qui n'est PAS ici, et n'y sera pas : les espacements internes d'un composant — le
      gap entre une icône et son libellé, le padding d'une cellule. Ce sont des mesures de
@@ -328,12 +327,10 @@
   /* Surfaces flottantes */
   /* --modal-w:23.75rem; */             /* socle : 380. Sans effet sous 64rem, où la modale
                                            devient une feuille en pleine largeur. */
-  /* --modal-w-lg:32.5rem; */           /* socle : 520 — la modale à formulaire (size="lg") */
+  /* --modal-w-lg:30rem; */             /* socle : 480 — la modale size="lg" */
   /* --modal-close:2rem; */             /* socle : 32 — le carré du bouton de fermeture */
   /* --dropdown-w:14.375rem; */         /* socle : 230 */
   /* --dropdown-item-h:2.75rem; */      /* socle : 44 — le rail d'un item de menu */
-  /* --toast-w-min:17.5rem; */          /* socle : 280 */
-  /* --toast-w-max:26rem; */            /* socle : 416 */
 
   /* Formulaires et données */
   /* --choice-box:1.25rem; */           /* socle : 20 — la case à cocher, carrée */

@@ -109,8 +109,8 @@ contrat où l'on règle l'écart entre une icône et son libellé est un contrat
 remplit.
 
 Un jeton ajouté à la marque par défaut sans être ajouté au gabarit fait naître le contrat
-incomplet : le client remplit consciencieusement et livre une variable qui n'existe pas. La
-CI le refuse. Symétriquement, un jeton proposé au § FACULTATIF que le socle ne déclare pas
+incomplet : le client remplit consciencieusement et livre une variable qui n'existe pas.
+`check-contract.mjs` le refuse. Symétriquement, un jeton proposé au § FACULTATIF que le socle ne déclare pas
 est un bouton qui ne branche rien : `check-contract.mjs` refuse les deux.
 
 ---
@@ -124,7 +124,7 @@ choix réversible : un pan isolé dans une extension optionnelle ne coûte qu'un
 d'import à ceux qui s'en servent.
 
 **Ce qu'on supprime vraiment** : ce dont on peut prouver que personne ne s'en sert — un
-`grep` vert dans chaque consommateur (shell, hub, mcp-ui, site). Si le site emploie les
+`grep` vert dans chaque consommateur (hub, mcp-ui, site). Si le site emploie les
 CLASSES d'un motif sans son composant React, le composant part et les classes restent.
 Chaque retrait est inscrit dans la liste `RETIRES` de `check-catalogue.mjs` (et, pour une
 classe, dans `RETIREES` de `check-classes.mjs`) : un portage qui le réintroduirait fait
@@ -146,7 +146,7 @@ L'ordre, sans exception :
 1. `package.json` → `version`
 2. `README.md` → la ligne `npm i …#vX.Y.Z`
 3. `CHANGELOG.md` → la section de la version, avec ses **⚠ ruptures**
-4. **les gardes, premier passage** — les DOUZE autres, plus `npm run demo:build` et
+4. **les gardes, premier passage** — les TREIZE autres, plus `npm run demo:build` et
    `npm run build` (qui joue `check-classes.mjs` au passage). Voir ci-dessous :
    `check-version.mjs` ne peut pas passer à cette étape
 5. le commit unique du lot
@@ -166,7 +166,7 @@ Ce n'est pas une entorse à signaler à chaque lot, c'est la séquence :
 
 | Quand | Quoi | Attendu |
 |---|---|---|
-| avant le tag (4) | les douze autres gardes + `npm run demo:build` + `npm run build` | tous verts |
+| avant le tag (4) | les treize autres gardes + `npm run demo:build` + `npm run build` | tous verts |
 | avant le tag (4) | `check-version.mjs` | **rouge**, et c'est correct : le tag n'existe pas encore |
 | après le tag (7) | `npm run lint` en entier | **les quatorze verts** |
 | puis (8) | `git push --follow-tags` | — |
@@ -176,12 +176,12 @@ laisse les onze suivants non joués. Le premier passage se fait donc garde par g
 acceptant de relancer. **La règle qui compte est la dernière ligne : rien ne part sans les
 quatorze verts, tag posé.**
 
-⚠️ Le **quatorzième** garde du dépôt, `check-classes.mjs`, n'est pas dans `lint` — et c'est
+⚠️ Le **quinzième** garde du dépôt, `check-classes.mjs`, n'est pas dans `lint` — et c'est
 voulu : `lint` doit rester lançable sans construire la vitrine. Il est dans `npm run build`,
-donc joué à l'étape 4, et par la CI. Ne conclus jamais de la lecture du seul script `lint`
-qu'un garde ne tourne pas.
+donc joué à l'étape 4. Ne conclus jamais de la lecture du seul script `lint` qu'un garde ne
+tourne pas. Le dépôt n'a pas de CI : ces passages se lancent à la main, à chaque version.
 
-**C'est un job de CI bloquant, pas une checklist.** `check-version.mjs` compare les trois —
+**C'est un garde bloquant, pas une checklist.** `check-version.mjs` compare les trois —
 version, README, existence du tag — et fait tomber le build s'ils divergent : une procédure
 seulement écrite ne suffit pas.
 
