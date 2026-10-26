@@ -241,8 +241,10 @@
    carré d'icône — on promeut au deuxième appelant, jamais avant. */
 .ds-icon-btn--accent{border:none;background:var(--accent);color:var(--primary)}
 .ds-icon-btn--accent:hover:not(:disabled),.ds-icon-btn--accent.is-hover{background:color-mix(in srgb,var(--primary) 10%,var(--accent))}
-/* Le bouton-icône ENFONCÉ (aria-pressed) est un élément sélectionné : la convention, filet --primary en plus. v0.1.5 */
-.ds-icon-btn.is-active,.ds-icon-btn--secondary[aria-pressed="true"]{border-color:var(--primary);background:var(--accent);color:var(--primary)}
+/* Le bouton-icône ENFONCÉ (aria-pressed) est un élément sélectionné : plaque --accent, filet --primary (v0.1.5).
+   Son icône prend le jumeau lisible --primary-readable, plus foncé en clair, plus clair en sombre : la
+   maquette (le choix liste / calendrier de Mes contenus), décision de Julien du 26/10/2026 (0.11.1). */
+.ds-icon-btn.is-active,.ds-icon-btn--secondary[aria-pressed="true"]{border-color:var(--primary);background:var(--accent);color:var(--primary-readable)}
 .ds-icon-btn:focus-visible,.ds-icon-btn.is-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 35%,transparent)}
 .ds-icon-btn:disabled,.ds-icon-btn.is-disabled{opacity:.5;cursor:not-allowed;transform:none}
 

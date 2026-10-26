@@ -152,7 +152,8 @@
    Ce qui atténue, et vaut pour les huit : l'état n'est jamais porté par la couleur seule — la
    plaque --accent (ou --card sur une carte), l'ombre de l'onglet et de la page courante, la coche
    d'un item de menu, l'attribut ARIA (aria-current, aria-selected, aria-checked) ; le libellé est
-   court, en 15-16 px et 500-600 ; les ICÔNES de la convention tiennent leur 3:1 (3,00 mesuré).
+   court, en 15-16 px et 500-600 ; les ICÔNES de la convention tiennent leur 3:1 (3,00 mesuré), et
+   celle du bouton-icône enfoncé prend --primary-readable (0.11.1, la maquette).
    --primary-readable reste le jeton de tout texte de marque qui n'est pas un état actif : liens,
    badge accent, bandeau info. Repli si la décision est revue : --primary-readable, 5,16 / 5,85. */
 /* @a11y-assume: .ds-navlink.is-active

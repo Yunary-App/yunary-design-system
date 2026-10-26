@@ -76,7 +76,7 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 | `.ds-badge--accent` | 12 / 700 | 4,5 | 5,16 | 5,85 |
 | `.ds-banner--info` | 15 / 400 | 4,5 | 5,16 | 5,85 |
 | `.ds-pastille--brand-solid — glyphe sur --brand-to` | icône | 3 | 3,80 | 3,80 |
-| `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 3,00 | 3,94 |
+| `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 5,16 | 5,85 |
 | `.ds-error` | 13 / 500 | 4,5 | 6,62 | 6,07 |
 | `.ds-dropdown__item--danger` | 15 / 400 | 4,5 | 6,84 | 5,73 |
 | `.ds-icon-btn--danger-soft sur --card — glyphe` | icône | 3 | 5,47 | 6,59 |
@@ -259,9 +259,9 @@ barre de navigation. Le seuil des graphiques, pas celui du texte.
 text-primary`, le corail et non le brique du jumeau lisible. L'état n'est jamais porté par la couleur seule : la plaque `--accent` (ou
 `--card`), l'ombre `--shadow-sm` de l'onglet et de la page courante, la coche d'un item de menu,
 et l'attribut ARIA (`aria-current`, `aria-selected`, `aria-checked`) — un lecteur d'écran n'a
-pas besoin de la couleur. Les libellés sont courts, en 15-16 px et 500-600 ; les **icônes** de la
-convention (bouton-icône accent, bouton-icône enfoncé) tiennent leur 3:1 à 3,00 et restent
-conformes. `--primary-readable` reste le jeton de tout texte de marque qui n'est pas un état
+pas besoin de la couleur. Les libellés sont courts, en 15-16 px et 500-600 ; l'**icône** du
+bouton-icône accent tient son 3:1 à 3,00 et reste conforme ; le bouton-icône enfoncé pose
+`--primary-readable` (5,16 / 5,85) depuis 0.11.1, comme la maquette. `--primary-readable` reste le jeton de tout texte de marque qui n'est pas un état
 actif. Le repli, si la décision est revue : `--primary-readable`, 5,16 / 5,85.
 
 ---

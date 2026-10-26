@@ -128,7 +128,9 @@ export function Modal({
           <div className="ds-modal__foot ds-modal__foot--center">
             {footer || (
               <>
-                <Button variant="secondary" onClick={onClose}>Fermer</Button>
+                {/* Posé sur la fenêtre, jamais de sa couleur : la surface carte, comme tout bouton
+                    secondaire d'une fenêtre (0.11.1). */}
+                <Button variant="secondary" surface="card" onClick={onClose}>Fermer</Button>
                 {r.status === 'error' && r.onRetry ? (
                   <Button variant={iconVariant === 'danger' ? 'danger' : 'primary'} onClick={r.onRetry}>
                     Réessayer

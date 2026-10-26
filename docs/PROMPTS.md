@@ -107,6 +107,8 @@ navigation dans du texte (un `<a>` suffit).
   `patterns.css` ne déduit pas la surface, indispensable le jour où il le fait : une
   déduction ne prévoit qu'un bouton posé SUR une carte, jamais sur un panneau imbriqué
   dedans. Sans effet sur `ghost`, `primary`, `danger` et `danger-soft`.
+- **Un bouton ne prend jamais la couleur de sa surface.** Posé dans une fenêtre (`Modal`), un
+  bouton secondaire prend `surface="card"`, comme le « Fermer » du résultat de `Modal` (0.11.1).
 - **`variant="danger-soft"`** : l'action destructrice SECONDAIRE — retirer une photo, se
   déconnecter. La recette de l'`IconButton` du même nom : fond `--pill-danger-bg`, texte
   `--pill-danger-fg` (≥ 4,5:1 sur les deux porteuses), sans bordure ; le survol tire la plaque
@@ -154,6 +156,9 @@ qu'il fait le dit.
 - L'icône ne se dimensionne pas au site d'appel : le créneau s'en charge (sm 1rem ·
   md 1.125rem) — voir la section Icon.
 - Carré sur son propre rail (`--icon-control-*`), rayon `--radius-md`, jamais un pill.
+- **Enfoncé** (`aria-pressed`, un choix de vue comme liste / calendrier) : plaque `--accent`, filet
+  `--primary`, icône `--primary-readable`, plus lisible que le corail (0.11.1, la maquette).
+  `<IconButton label="Vue liste" variant="secondary" aria-pressed={vue === 'liste'}><Icon name="list" /></IconButton>`
 - États rendus : repos, hover, pressé (`aria-pressed` = actif), focus-visible, désactivé.
 
 ---
@@ -1230,6 +1235,9 @@ d'actions (c'est `.ds-dropdown`, voir « Classes sans composant »).
   retire la croix en gardant Échap et le clic-voile ; `dismissable={false}` fait
   l'inverse — la croix devient le seul geste de fermeture, pour une modale à saisie
   qu'un clic à côté ne doit pas jeter. Les deux à `true` par défaut.
+- **Le pied du résultat** : « Fermer » en secondaire sur la surface carte (`surface="card"`, 0.11.1),
+  plus « Réessayer » si `onRetry`. Un `footer` passé le remplace : ses boutons secondaires prennent
+  aussi `surface="card"`.
 - Un champ dans une modale : voir le spécimen « Avec un champ contrôlé » de la vitrine —
   le piège de focus tient la frappe.
 - États rendus : les trois phases, avec et sans icône, succès et erreur, feuille basse

@@ -176,8 +176,9 @@ cours d'une frise (`.ds-frise`, maquette Onboarding Web). Identique dans les deu
 **La sélection — UNE convention, partout, en CORAIL :** plaque `--accent` + texte
 `--primary` (`#e85d2f`), **même graisse** que les voisins, icône et coche en `currentColor` —
 l'entrée de Sidebar, l'onglet actif (sur une carte : surface `--card`, même texte), la page
-courante, l'item de menu coché, l'option de select, le lien de barre, le bouton-icône accent
-ou enfoncé. Jamais « noir gras ». Décision Julien, 11/09/2026 : `bg-accent text-primary`, et
+courante, l'item de menu coché, l'option de select, le lien de barre, le bouton-icône accent.
+Le bouton-icône enfoncé (`aria-pressed`, le choix liste / calendrier) garde la plaque et le filet
+`--primary`, mais son icône prend `--primary-readable`, plus lisible : la maquette, 26/10/2026. Jamais « noir gras ». Décision Julien, 11/09/2026 : `bg-accent text-primary`, et
 **l'écart de contraste est assumé** — 3,00 sur `--accent`, le seuil des graphiques, pas celui
 du texte — sept blocs `@a11y-assume` dans
 `brand-yunary.css`, § 3.6 de `docs/accessibilite.md`. `--primary-readable` reste le jeton des
@@ -270,6 +271,7 @@ Instagram, TikTok, YouTube, Claude) : leurs couleurs vivent dans le fichier de m
 | 2026-08-31 | Marque exportée sous `./brand-yunary.css` dans package.json | sous-chemin stable de chaque surface |
 | 2026-09-11 | Élément sélectionné en corail (`--primary` sur `--accent`), écart de contraste assumé | décision de marque Julien |
 | 2026-09-11 | Titre de page à 36 px, `Card gap` sur l'échelle `--space-*` sans palier 20 | décisions Julien |
+| 2026-10-26 | 0.11.1 : le « Fermer » du résultat de `Modal` sur la surface carte ; l'icône du bouton-icône enfoncé en `--primary-readable` | passe design du hub : un bouton ne prend jamais la couleur de sa surface, et la maquette du choix liste / calendrier pose le jumeau lisible |
 | 2026-10-20 | 0.11.0 : le ménage de l'offre unique — retrait des motifs de l'ancienne offre (prix barré, plaque « Offert », carte « Bientôt », panneau « À activer », interrupteur « Toujours actif », paire de jauges, jauge centrée, barre segmentée enveloppée, grille de tuiles, carte d'outil à colonne prix, prix d'écran), de sept composants React sans consommateur (les classes de la barre de navigation et du pied restent au site), du sous-chemin `chart-geometry`, de `makeCn`, de quatorze glyphes et de l'outillage `rebrand` | une offre unique depuis le 19/10 : le paquet ne porte que ce que les couches emploient (la règle de la 0.2.0) |
 | 2026-10-19 | 0.10.0 : la frise à jalons `.ds-frise` / `Frise` (une pastille, une date, un titre, un montant et un texte facultatifs, un trait ; fait · en cours · à venir ; verticale, horizontale qui redevient verticale sous 64 rem, compacte, sur plaque) ; la pastille du jalon en cours porte le dégradé et la lueur ; sa date est en `--primary-readable` (la maquette l'écrit en `--brand-via` : 2,51 en clair) | maquettes Onboarding Web et Facturation Web de la nouvelle offre |
 | 2026-10-17 | 0.9.0 : jeton `--container-app` (100 rem) et `max-w-app`, la colonne de contenu d'une app ; `shell` reste au site, `wide` aux pages étroites, `read` à la lecture | le hub plafonnait ses pages en `max-w-shell` : le contenu s'arrêtait dès environ 1470 px de fenêtre |

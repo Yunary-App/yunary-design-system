@@ -1,6 +1,6 @@
 {
   "name": "@yunary/ds",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Design system Yunary — jetons, couche Tailwind v4 et primitives React.",
   "license": "UNLICENSED",
   "private": false,

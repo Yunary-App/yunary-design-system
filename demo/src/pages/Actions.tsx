@@ -1,9 +1,23 @@
+import { useState } from 'react';
 import { Button, Icon, IconButton } from '@yunary/ds';
 import { Block, Row, Section } from '../ui';
 
 const VARIANTS = ['primary', 'secondary', 'ghost', 'danger', 'danger-soft'] as const;
 /* `accent` n'existe que sur IconButton — Button attend son deuxième appelant. */
 const ICON_VARIANTS = ['primary', 'secondary', 'ghost', 'danger', 'danger-soft', 'accent'] as const;
+
+/* Le choix liste / calendrier de Mes contenus, cliquable : l'actif est enfoncé. */
+function ChoixVue() {
+  const [vue, setVue] = useState<'liste' | 'calendrier'>('calendrier');
+  return (
+    <Row>
+      <div role="group" aria-label="Vue" className="flex gap-space-2">
+        <IconButton label="Vue liste" variant="secondary" aria-pressed={vue === 'liste'} onClick={() => setVue('liste')}><Icon name="list" /></IconButton>
+        <IconButton label="Vue calendrier" variant="secondary" aria-pressed={vue === 'calendrier'} onClick={() => setVue('calendrier')}><Icon name="calendar" /></IconButton>
+      </div>
+    </Row>
+  );
+}
 
 export function ActionsPage() {
   return (
@@ -82,6 +96,10 @@ export function ActionsPage() {
             <IconButton label="Boutique" variant="accent" as="a" href="#actions"><Icon name="external-link" /></IconButton>
             <IconButton label="Écrire" variant="secondary" as="a" href="#actions"><Icon name="mail" /></IconButton>
           </Row>
+        </Block>
+
+        <Block label="Choix de vue (aria-pressed)" hint="Le choix liste / calendrier de Mes contenus : deux secondaires, l'actif enfoncé. Plaque --accent, filet --primary, icône --primary-readable (0.11.1, la maquette).">
+          <ChoixVue />
         </Block>
 
         <Block label="La corbeille" hint="danger-soft à côté de chaque ligne supprimable ; le danger plein reste l'action destructrice unique d'une vue (la modale de confirmation).">

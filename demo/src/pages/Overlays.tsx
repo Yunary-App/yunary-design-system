@@ -92,7 +92,7 @@ export function OverlaysPage() {
           />
         </Block>
 
-        <Block label="Les trois phases" hint="confirm → loading → result, dans UN seul dialogue. En loading rien ne ferme : Échap, clic dehors et croix sont inertes, le piège de focus tient toujours.">
+        <Block label="Les trois phases" hint="confirm → loading → result, dans UN seul dialogue. En loading rien ne ferme : Échap, clic dehors et croix sont inertes, le piège de focus tient toujours. Le « Fermer » du résultat est un secondaire sur la surface carte, jamais de la couleur de la fenêtre (0.11.1).">
           <div className="flex flex-wrap gap-space-5">
             <Modal inline iconVariant="danger" icon={<Icon name="trash-2" />}
               title="Supprimer ce contenu ?" description="Cette action est définitive."

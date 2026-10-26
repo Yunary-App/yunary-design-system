@@ -14,6 +14,30 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.11.1 — deux corrections de la passe design du hub
+
+Relevées par la passe design du hub le 26/10/2026 ; la maquette fait foi.
+
+- **Le « Fermer » du résultat de `Modal` prend la surface carte** (`surface="card"`). Il était écrit en
+  dur sans surface, donc en `--secondary`, la couleur de la fenêtre qui le porte. Règle de Julien : un
+  bouton ne prend jamais la couleur de sa surface ; dans une fenêtre, un bouton secondaire prend la
+  variante carte, comme les autres boutons d'une fenêtre. Un `footer` passé par l'appelant n'est pas
+  touché.
+- **L'icône du bouton-icône enfoncé passe au jumeau lisible** (`.ds-icon-btn--secondary[aria-pressed="true"]`
+  et `.ds-icon-btn.is-active`) : `--primary-readable` (#b23a1c en clair, #f0916b en sombre) au lieu du
+  corail `--primary`. C'est le choix liste / calendrier de Mes contenus, et c'est ce que pose la maquette
+  (Yunary Programmation Web, Contenus-Calendrier). La plaque `--accent` et le filet `--primary` ne bougent
+  pas. Contraste de l'icône : 5,16 / 5,85 au lieu de 3,00 / 3,94 (`check-contrast.mjs`,
+  `docs/accessibilite.md`). Le bouton-icône `accent` et le reste de la convention de sélection restent en
+  corail.
+
+Aucune rupture : ni API, ni classe, ni jeton ne change. Docs : `PROMPTS.md` (Button, IconButton, Modal),
+`DESIGN.md`, `accessibilite.md`. Vitrine : le choix de vue liste / calendrier dans Actions, la règle du
+« Fermer » dans Overlays.
+
+**Montée** : le hub passe à `#v0.11.1` sans code à changer (vider `node_modules/.vite`). mcp-ui et le
+site n'emploient ni le résultat de `Modal` ni le bouton-icône enfoncé : rien à faire.
+
 ## 0.11.0 — le ménage de l'offre unique
 
 Retraits décidés par Julien le 20/10/2026, après l'audit de ménage. Depuis le 19/10, Yunary n'a qu'une
