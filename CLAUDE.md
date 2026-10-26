@@ -4,5 +4,4 @@ Complète `../../../CLAUDE.md` (racine), qui s'applique intégralement ici. Ne l
 
 ## 🌿 Git
 
-Fin de lot : `git status` → commit dans ce repo → push ; tag seulement quand la version est prête à être consommée.
-Voir `../../../CLAUDE.md` racine, section Git.
+Un lot = une branche `lot/<nom>` et un worktree de ce repo ; la session y commite, sans fusionner dans `main` ni déployer. Branches, worktrees, fusion : `../../../pilotage/CHEF-DE-CHANTIER.md` § Branches et worktrees et `../../../CLAUDE.md` § Git. Tag seulement quand la version est prête à être consommée ; séquence de version → `GOVERNANCE.md`.
