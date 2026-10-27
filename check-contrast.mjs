@@ -162,7 +162,7 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Marque-contenu', '.ds-tabs--on-card .ds-tab[aria-selected]', g('--primary'), g(C), 4.5, '15 / 600');
   add('Marque-contenu', '.ds-page[aria-current]', g('--primary'), g('--accent'), 4.5, '15 / 600');
   add('Marque-contenu', '.ds-dropdown__item[aria-checked]', g('--primary'), g('--accent'), 4.5, '15 / 400');
-  add('Marque-contenu', '.ds-select option:checked', g('--primary'), g('--accent'), 4.5, '15 / 400');
+  add('Marque-contenu', '.ds-dropdown--liste .ds-dropdown__item.is-checked', g('--primary'), g('--accent'), 4.5, '15 / 400');
   /* Les ICÔNES de la convention (seuil 3) : le bouton-icône accent, 3,00 en clair — au seuil, pas
      dessous. Le bouton-icône enfoncé est mesuré plus bas. */
   add('Marque-contenu', '.ds-icon-btn--accent — icône', g('--primary'), g('--accent'), 3, 'icône');

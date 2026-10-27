@@ -175,9 +175,10 @@
 /* @a11y-assume: .ds-dropdown__item[aria-checked]
    L'item coché d'un menu de choix sur --accent (3,00 / 3,94). Même décision. Renfort : la
    plaque, la coche en fin de ligne (currentColor, 3:1), aria-checked. */
-/* @a11y-assume: .ds-select option:checked
-   L'option cochée d'un select natif, là où le navigateur peint ses options (3,00 / 3,94). Même
-   décision ; sur macOS et iOS la liste système ignore la règle. Renfort : l'état natif. */
+/* @a11y-assume: .ds-dropdown--liste .ds-dropdown__item.is-checked
+   L'option choisie de la liste d'un Select sur --accent (3,00 / 3,94), v0.12.0 : la liste Yunary
+   remplace celle du navigateur. Même décision. Renfort : la plaque, la coche en fin de ligne
+   (currentColor, 3:1), aria-selected. */
 
 /* @surface-assume: --secondary / --card — clair
    1,009, et c'est VOULU (kit maître v0.5.0) : une barre latérale, une navbar ou un champ

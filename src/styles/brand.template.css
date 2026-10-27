@@ -330,6 +330,7 @@
   /* --modal-w-lg:30rem; */             /* socle : 480 — la modale size="lg" */
   /* --modal-close:2rem; */             /* socle : 32 — le carré du bouton de fermeture */
   /* --dropdown-w:14.375rem; */         /* socle : 230 */
+  /* --dropdown-list-h:20rem; */     /* socle : 320 — la hauteur d'une liste de Select avant défilement */
   /* --dropdown-item-h:2.75rem; */      /* socle : 44 — le rail d'un item de menu */
 
   /* Formulaires et données */

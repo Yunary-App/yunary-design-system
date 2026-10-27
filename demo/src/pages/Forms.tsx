@@ -58,6 +58,66 @@ const RESEAUX = [
   { value: 'youtube', label: 'YouTube' },
 ];
 
+/* Une longue liste, comme celle des pays de la page de paiement (valeurs ISO, libellés en français). */
+const PAYS = [
+  ['DE', 'Allemagne'], ['AD', 'Andorre'], ['AT', 'Autriche'], ['BE', 'Belgique'], ['BJ', 'Bénin'], ['BG', 'Bulgarie'],
+  ['BF', 'Burkina Faso'], ['CM', 'Cameroun'], ['CA', 'Canada'], ['CY', 'Chypre'], ['CI', 'Côte d\u2019Ivoire'], ['HR', 'Croatie'],
+  ['DK', 'Danemark'], ['ES', 'Espagne'], ['EE', 'Estonie'], ['US', 'États-Unis'], ['FI', 'Finlande'], ['FR', 'France'],
+  ['GA', 'Gabon'], ['GR', 'Grèce'], ['GP', 'Guadeloupe'], ['GF', 'Guyane'], ['HU', 'Hongrie'], ['IE', 'Irlande'],
+  ['IT', 'Italie'], ['LV', 'Lettonie'], ['LT', 'Lituanie'], ['LU', 'Luxembourg'], ['MG', 'Madagascar'], ['ML', 'Mali'],
+  ['MT', 'Malte'], ['MA', 'Maroc'], ['MQ', 'Martinique'], ['MC', 'Monaco'], ['NL', 'Pays-Bas'], ['PL', 'Pologne'],
+  ['PT', 'Portugal'], ['RE', 'La Réunion'], ['RO', 'Roumanie'], ['GB', 'Royaume-Uni'], ['SN', 'Sénégal'], ['SK', 'Slovaquie'],
+  ['SI', 'Slovénie'], ['SE', 'Suède'], ['CH', 'Suisse'], ['CZ', 'Tchéquie'], ['TN', 'Tunisie'],
+].map(([value, label]) => ({ value, label }));
+
+/* LA LISTE OUVERTE, EN CLASSES — le spécimen figé de ce que Select ouvre (le composant la pose dans un
+   portail, `.ds-dropdown--liste`, en position fixe). Classes écrites EN CLAIR pour check-classes.mjs. */
+function ListeOuverte({ actif = 1, choisi = 0 }: { actif?: number; choisi?: number }) {
+  return (
+    <div role="listbox" aria-label="Spécimen de la liste ouverte" className="ds-dropdown">
+      {RESEAUX.map((o, i) => (
+        <div key={o.value} role="option" aria-selected={i === choisi} className={cn('ds-dropdown__item', i === choisi && 'is-checked', i === actif && 'is-hover')}>
+          <span className="ds-dropdown__label">{o.label}</span>
+          {i === choisi ? <span className="ds-dropdown__check" aria-hidden="true"><Icon name="check" size="1rem" /></span> : null}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* Le Select en vrai : contrôlé, son `onChange` reçoit l'événement du <select> natif caché. */
+function SelectEnVrai() {
+  const [reseau, setReseau] = useState('instagram');
+  const [pays, setPays] = useState('FR');
+  return (
+    <Grid cols={2}>
+      <Stack label="contrôlé — e.target.value">
+        <FormField label="Ton réseau" htmlFor="select-vrai" help={`onChange → e.target.value = « ${reseau} »`}>
+          <Select id="select-vrai" options={RESEAUX} value={reseau} onChange={e => setReseau(e.target.value)} />
+        </FormField>
+      </Stack>
+      <Stack label="longue liste, autoComplete=&quot;country&quot; — défile, premières lettres">
+        <form onSubmit={e => e.preventDefault()}>
+          <FormField label="Pays" htmlFor="select-pays" help={`Valeur de formulaire : ${pays}`}>
+            <Select id="select-pays" name="country" autoComplete="country" options={PAYS} value={pays} onChange={e => setPays(e.target.value)} />
+          </FormField>
+        </form>
+      </Stack>
+      <Stack label="dans une carte qui coupe ce qui dépasse (overflow hidden) — la liste passe devant">
+        <div className="overflow-hidden rounded-lg border border-border bg-card p-space-4">
+          <Select aria-label="Visibilité YouTube" surface="card" options={[{ value: 'public', label: 'Publique' }, { value: 'unlisted', label: 'Non répertoriée' }, { value: 'private', label: 'Privée' }]} defaultValue="public" />
+        </div>
+      </Stack>
+      <Stack label="dans un libellé qui l'enveloppe (comme la période de l'Admin)">
+        <label className="flex flex-col gap-space-2">
+          <span className="text-caption font-semibold">Période</span>
+          <Select options={[{ value: '7', label: '7 jours' }, { value: '30', label: '30 jours' }, { value: '90', label: '90 jours' }, { value: '0', label: 'Depuis le lancement' }]} defaultValue="30" />
+        </label>
+      </Stack>
+    </Grid>
+  );
+}
+
 export function FormsPage() {
   const [checked, setChecked] = useState(true);
   const [niveau, setNiveau] = useState('debutant');
@@ -125,15 +185,24 @@ export function FormsPage() {
         </Block>
       </Section>
 
-      <Section title="Select" note="Select natif sur le rail 3rem, avec un chevron Lucide.">
+      <Section title="Select" note="Le champ sur le rail 3rem, avec un chevron Lucide ; il ouvre la liste Yunary (0.12.0), plus celle du navigateur : les classes du menu (.ds-dropdown--liste), l'élément choisi coché, posée par un portail. Clavier du combobox select-only (APG) : ↓ ↑ Entrée Espace ouvrent, ↓ ↑ Début Fin déplacent, Entrée Espace choisissent, Échap ferme, les premières lettres trouvent. Un <select> natif caché garde e.target.value, le formulaire et l'autoremplissage.">
         <Block label="Repos, focus, erreur, désactivé">
           <Stack>
-            <Select options={RESEAUX} defaultValue="instagram" />
-            <Select options={RESEAUX} className="is-focus" defaultValue="tiktok" />
-            <Select options={RESEAUX} invalid defaultValue="instagram" />
-            <Select options={RESEAUX} disabled defaultValue="instagram" />
-            <Select options={RESEAUX} surface="card" defaultValue="youtube" />
+            <Select aria-label="Réseau, repos" options={RESEAUX} defaultValue="instagram" />
+            <Select aria-label="Réseau, focus" options={RESEAUX} className="is-focus" defaultValue="tiktok" />
+            <Select aria-label="Réseau, erreur" options={RESEAUX} invalid defaultValue="instagram" />
+            <Select aria-label="Réseau, désactivé" options={RESEAUX} disabled defaultValue="instagram" />
+            <Select aria-label="Réseau, surface carte" options={RESEAUX} surface="card" defaultValue="youtube" />
           </Stack>
+        </Block>
+        <Block label="En vrai" hint="Clique, ou Tab puis ↓. La liste s'ouvre au-dessus quand la place manque en bas, défile quand elle est longue, se ferme au clic dehors et à Échap, rend le focus au champ.">
+          <SelectEnVrai />
+        </Block>
+        <Block label="La liste ouverte, figée" hint="Le spécimen de ce que le champ ouvre : l'item choisi sur la plaque --accent avec sa coche, l'item actif au clavier (ou survolé) sur --surface-alt. Sur la page comme sur une carte, la liste est sur --popover, jamais la couleur de sa surface.">
+          <Row>
+            <ListeOuverte />
+            <div className="rounded-lg border border-border bg-card p-space-4"><ListeOuverte actif={2} choisi={1} /></div>
+          </Row>
         </Block>
       </Section>
 

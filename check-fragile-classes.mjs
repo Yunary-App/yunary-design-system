@@ -5,8 +5,9 @@
  * LE DÉFAUT QU'IL FERME, ET SES DEUX PANNES, TOUTES DEUX MUETTES. Les classes qui
  * découpent le dégradé de marque dans le texte tiennent par QUATRE DÉCLARATIONS
  * SOLIDAIRES : `background`, `background-clip:text`, `color:transparent`,
- * `width:fit-content`. Elles vivent en `layer(base)` ; les utilitaires Tailwind vivent en
- * `layer(utilities)` et gagnent donc TOUJOURS, quelle que soit la spécificité.
+ * `width:fit-content`. Elles vivent en `layer(components)` (v0.12.0) ; les utilitaires
+ * Tailwind vivent en `layer(utilities)` et gagnent donc TOUJOURS, quelle que soit la
+ * spécificité.
  *
  *     un utilitaire de COULEUR   écrase `color:transparent`     → le dégradé disparaît,
  *                                                                 le mot reste lisible en
@@ -42,6 +43,13 @@
  * ternaire qui pose vraiment un utilitaire sur un nœud fragile passe. Les autres formes
  * (`cn('accent', x && 'w-full')`) sont bien vues en union.
  *
+ * LA SECONDE MOITIÉ, v0.12.0 : UNE SEULE RÈGLE découpe le dégradé dans un texte. Les
+ * déclarations étaient recopiées six fois (le prix, la semaine, la bande, la frise, le
+ * sur-titre, `.accent`) ; elles vivent dans une seule liste de sélecteurs de patterns.css
+ * (§ LE TEXTE EN DÉGRADÉ), qui porte `.accent`. Le garde refuse une deuxième règle à
+ * `background-clip:text` dans les feuilles, et l'écriture du même effet en utilitaires
+ * (`bg-clip-text`) ou en style en ligne (`backgroundClip`) dans le code.
+ *
  * Usage : node check-fragile-classes.mjs [dossier…]     (défaut : src demo/src)
  *         STYLES=<dossier> node check-fragile-classes.mjs src
  */
@@ -68,20 +76,33 @@ function feuilles(dir) {
   return out;
 }
 
-function deriverFragiles(dossier) {
+/** Les règles d'une feuille (commentaires retirés) qui découpent un fond dans leur texte. */
+export function reglesClippees(css, fichier = '') {
+  const out = [];
+  const propre = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const m of propre.matchAll(/([^{}]+)\{([^{}]*)\}/g))
+    if (/(^|[^-])background-clip\s*:\s*text/.test(m[2]) && /(^|;)\s*color\s*:\s*transparent/.test(m[2]))
+      out.push({ fichier, selecteurs: m[1].split(',').map(x => x.trim()).filter(Boolean) });
+  return out;
+}
+
+function deriverFragiles(regles) {
   const fragiles = new Set();
-  for (const f of feuilles(dossier)) {
-    const css = fs.readFileSync(f, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
-    for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-      const selecteur = m[1].trim(), decls = m[2];
-      /* Une classe SEULE : `.accent`. Un sélecteur composé ou descendant décrit un
-         contexte, pas une classe qu'une app pose sur un nœud. */
-      if (!/^\.[a-z][a-z0-9-]*$/i.test(selecteur)) continue;
-      if (/background-clip\s*:\s*text/.test(decls) && /(^|;)\s*color\s*:\s*transparent/.test(decls))
-        fragiles.add(selecteur.slice(1));
-    }
-  }
+  /* Une classe SEULE : `.accent`. Un sélecteur composé ou descendant décrit un contexte, pas
+     une classe qu'une app pose sur un nœud. Depuis la v0.12.0 la règle est une LISTE de
+     sélecteurs : chacun est jugé à part. */
+  for (const r of regles)
+    for (const sel of r.selecteurs)
+      if (/^\.[a-z][a-z0-9-]*$/i.test(sel)) fragiles.add(sel.slice(1));
   return fragiles;
+}
+
+/** L'effet écrit à la main dans du code : en utilitaires Tailwind ou en style en ligne. */
+export function recopiesDansLeCode(src) {
+  const out = [];
+  for (const m of src.matchAll(/\bbg-clip-text\b|\b(?:Webkit)?[bB]ackgroundClip\s*:\s*['"]text['"]|background-clip\s*:\s*text/g))
+    out.push({ ligne: src.slice(0, m.index).split('\n').length, texte: m[0] });
+  return out;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
@@ -163,8 +184,31 @@ const CAS = [
 const DOIT_ETRE_FRAGILE = [A, E];
 const NE_DOIT_PAS = ['chip', 'mono', 'caption', 'display', 'heading', 'page', 'halo'];
 
+/* La seconde moitié se prouve aussi : une feuille à deux règles clippées en compte deux, une
+   règle `-webkit-` seule n'est pas comptée deux fois, et les trois écritures dans le code sont vues. */
+const BG = ['bg-clip', 'text'].join('-');
+const CLIP = ['background', 'clip'].join('-');
+const CAS_REGLES = [
+  [`.a,.b{background:x;-webkit-${CLIP}:text;${CLIP}:text;color:transparent}`, 1],
+  [`.a{background:x;${CLIP}:text;color:transparent} .b .c{background:x;${CLIP}:text;color:transparent}`, 2],
+  [`.a{background:x;${CLIP}:border-box;color:red}`, 0],
+];
+const CAS_CODE = [
+  [`<i className="${BG} text-transparent" />`, 1],
+  [`<i style={{ WebkitBackgroundClip: 'text', backgroundClip: 'text' }} />`, 2],
+  [`<i className="bg-clip-padding" />`, 0],
+];
+
 function seProuver(fragiles) {
   const ratés = [];
+  for (const [css, attendu] of CAS_REGLES) {
+    const n = reglesClippees(css).length;
+    if (n !== attendu) ratés.push(`« ${css} » donne ${n} règle(s) clippée(s), attendu ${attendu}`);
+  }
+  for (const [source, attendu] of CAS_CODE) {
+    const n = recopiesDansLeCode(source).length;
+    if (n !== attendu) ratés.push(`« ${source} » donne ${n} recopie(s), attendu ${attendu}`);
+  }
   for (const c of DOIT_ETRE_FRAGILE)
     if (!fragiles.has(c)) ratés.push(`« .${c} » clippe un dégradé dans son texte : il devrait être DÉRIVÉ fragile`);
   for (const c of NE_DOIT_PAS)
@@ -200,7 +244,8 @@ if (!STYLES) {
   console.error(`\n✗ classes fragiles — dossier de styles introuvable. Pose STYLES=<dossier>.\n`);
   process.exit(1);
 }
-const FRAGILES = deriverFragiles(STYLES);
+const REGLES = feuilles(STYLES).flatMap(f => reglesClippees(fs.readFileSync(f, 'utf8'), f));
+const FRAGILES = deriverFragiles(REGLES);
 if (!FRAGILES.size) {
   console.error(`\n✗ classes fragiles — aucune classe clippée trouvée dans ${STYLES}.\n`
     + `  Une dérivation qui rend un ensemble vide rend le garde toujours vert : il ne\n`
@@ -213,6 +258,25 @@ const cibles = RACINES.flatMap(fichiers);
 if (!cibles.length) {
   console.error(`\n✗ classes fragiles — aucun fichier lu dans : ${RACINES.join(', ')}\n`
     + `  Un scanner qui ne lit rien passe au vert en ne prouvant rien.\n`);
+  process.exit(1);
+}
+
+/* ── une seule règle découpe le dégradé, et le code ne le réécrit pas ──────── */
+const recopies = [];
+if (REGLES.length !== 1 || !REGLES[0].selecteurs.includes('.accent'))
+  for (const r of REGLES) recopies.push(`${r.fichier} — ${r.selecteurs.join(', ')}`);
+for (const f of cibles)
+  for (const { ligne, texte } of recopiesDansLeCode(fs.readFileSync(f, 'utf8')))
+    recopies.push(`${f}:${ligne} — ${texte}`);
+if (recopies.length) {
+  console.error(`\n✗ texte en dégradé — l'effet est réécrit hors de LA règle de ${STYLES}/patterns.css`
+    + ` (§ LE TEXTE EN DÉGRADÉ, qui porte \`.accent\`) :\n`);
+  for (const r of recopies) console.error('    · ' + r);
+  console.error(`
+  Une seule règle découpe le dégradé de marque dans un texte. Un motif qui en a besoin
+  rejoint SA liste de sélecteurs ; un nœud d'app pose \`.accent\` (seul sur son nœud).
+  Jamais \`bg-brand-gradient bg-clip-text text-transparent\` ni un style en ligne.
+`);
   process.exit(1);
 }
 
@@ -237,5 +301,5 @@ if (erreurs.length) {
   process.exit(1);
 }
 console.log(`✓ classes fragiles — ${[...FRAGILES].map(c => `.${c}`).join(' ')} dérivées de ${STYLES},`
-  + ` seules sur leur nœud dans ${cibles.length} fichiers · garde prouvé sur`
-  + ` ${CAS.length + DOIT_ETRE_FRAGILE.length + NE_DOIT_PAS.length} cas`);
+  + ` seules sur leur nœud dans ${cibles.length} fichiers · une seule règle clippée, aucune recopie`
+  + ` · garde prouvé sur ${CAS.length + DOIT_ETRE_FRAGILE.length + NE_DOIT_PAS.length + CAS_REGLES.length + CAS_CODE.length} cas`);

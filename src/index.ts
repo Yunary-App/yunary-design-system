@@ -60,7 +60,7 @@ export { Frise } from './components/data-display/Frise';
 export type { FriseProps, FriseStep, FriseState, FriseTone } from './components/data-display/Frise';
 export type { ChartProps } from './components/data-display/Chart';
 export { chartGeometry, niceStep, CHART_PADDING } from './chart/geometry';
-export type { ChartPoint, ChartGeometry, ChartGeometryInput, ChartPadding, ChartTick } from './chart/geometry';
+export type { ChartPoint, ChartGeometry, ChartGeometryInput, ChartPadding, ChartTick, ChartCurve } from './chart/geometry';
 export type { StatCardProps, StatTrend } from './components/data-display/StatCard';
 
 /* feedback */

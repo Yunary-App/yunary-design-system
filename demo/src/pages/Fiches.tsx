@@ -251,7 +251,7 @@ export function FichesPage() {
         </Block>
       </Section>
 
-      <Section title="États vides, têtes de section, barre de fiche, étapes" note="EmptyState : pastille ronde neutre par défaut, compact ; .ds-card__band (+ __num en dégradé, __band-meta, --muted --bleed) ; .ds-topbar ; .eyebrow--muted ; .ds-etapes (centrées, ou --compact pour « La suite » dans Claude).">
+      <Section title="États vides, têtes de section, barre de fiche, étapes" note="EmptyState : pastille de marque (panneau, carrée, brand, outlined) par défaut, compact ; .ds-card__band (+ __num en dégradé, __band-meta, --muted --bleed) ; .ds-topbar ; .eyebrow--muted ; .ds-etapes (centrées, ou --compact pour « La suite » dans Claude).">
         <Grid cols={2}>
           <Block label="États vides">
             <Stack>

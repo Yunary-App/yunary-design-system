@@ -155,7 +155,7 @@ autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dér
 | `.ds-tabs--on-card .ds-tab[aria-selected]` | 15 / 600 | 4,5 | 3,25 ✗ | 4,12 ✗ |
 | `.ds-page[aria-current]` | 15 / 600 | 4,5 | 3,00 ✗ | 3,94 ✗ |
 | `.ds-dropdown__item[aria-checked]` | 15 / 400 | 4,5 | 3,00 ✗ | 3,94 ✗ |
-| `.ds-select option:checked` | 15 / 400 | 4,5 | 3,00 ✗ | 3,94 ✗ |
+| `.ds-dropdown--liste .ds-dropdown__item.is-checked` | 15 / 400 | 4,5 | 3,00 ✗ | 3,94 ✗ |
 | `.ds-cal__day.is-today` | 14 / 700 | 4,5 | 3,25 ✗ | 4,12 ✗ |
 | `.ds-pastille--brand — icône` | icône | 3 | 2,85 ✗ | 3,58 |
 | `.ds-pastille--brand-solid — glyphe sur --brand-from` | icône | 3 | 2,04 ✗ | 2,04 ✗ |

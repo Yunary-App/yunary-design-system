@@ -2,13 +2,15 @@ import { useCallback, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { HTMLAttributes, JSX, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { chartGeometry, CHART_PADDING } from '../../chart/geometry';
-import type { ChartPoint } from '../../chart/geometry';
+import type { ChartCurve, ChartPoint } from '../../chart/geometry';
 
 /**
  * Le graphique d'évolution — v0.8.0, maquette Admin Web (onglet Évolution), fait maison, sans
- * librairie. Une courbe par graphique : grille, aire, ligne en escalier, point final, graduations en
- * valeurs à gauche et en dates en bas. La géométrie vient de `chartGeometry` (pure, exportée par
- * l'index) ; l'apparence, des classes `.ds-chart*`.
+ * librairie. Une courbe par graphique : grille, aire, ligne, point final, graduations en valeurs à
+ * gauche et en dates en bas. La ligne est en escalier par défaut ; `curve="monotone"` (v0.12.0,
+ * décision D-011) l'arrondit sans jamais dépasser les valeurs réelles (voir `chartGeometry`). La
+ * géométrie vient de `chartGeometry` (pure, exportée par l'index) ; l'apparence, des classes
+ * `.ds-chart*`.
  *
  * LA LARGEUR est celle du conteneur : le composant l'observe (ResizeObserver) et se redessine quand
  * elle change. La hauteur est une taille (`md` 260 / 180, `sm` 150 / 120 sous 64 rem). Il MESURE ses
@@ -45,6 +47,12 @@ export interface ChartProps<T = unknown> extends Omit<HTMLAttributes<HTMLDivElem
   maxXTicks?: number;
   /** Chargement : un squelette aux dimensions finales. */
   loading?: boolean;
+  /**
+   * Le tracé de la ligne (v0.12.0) : `step` (défaut) en escalier ; `monotone` arrondi, qui passe par
+   * chaque point sans bosse au-dessus d'un palier ni passage sous zéro. Aire, point final et
+   * graduations ne changent pas.
+   */
+  curve?: ChartCurve;
 }
 
 interface Taille { w: number; h: number }
@@ -75,7 +83,7 @@ const etiquettesEgales = (a: Etiquettes, b: Etiquettes): boolean =>
 
 export function Chart<T = unknown>({
   points, formatValue, formatAt, label, summary, tone = 'primary', area, size = 'md', integer = false,
-  maxXTicks, loading = false, className = '', ...rest
+  maxXTicks, loading = false, curve = 'step', className = '', ...rest
 }: ChartProps<T>): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const resumeId = useId();
@@ -101,7 +109,7 @@ export function Chart<T = unknown>({
 
   const geo = taille.w > 0 && taille.h > 0 && !loading
     ? chartGeometry({
-      points, width: taille.w, height: taille.h, formatValue, formatAt, integer, maxXTicks,
+      points, width: taille.w, height: taille.h, formatValue, formatAt, integer, maxXTicks, curve,
       padding: {
         /* au moins la colonne de la maquette (40) : deux graphiques empilés gardent leurs tracés alignés */
         left: Math.max(CHART_PADDING.left, Math.ceil(etiq.y) + 10),

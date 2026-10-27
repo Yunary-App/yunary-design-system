@@ -1,5 +1,5 @@
 import { Card } from '@yunary/ds';
-import { Block, Grid, Section, Spec, Swatch } from '../ui';
+import { Block, Grid, Row, Section, Spec, Swatch } from '../ui';
 
 const SURFACES = ['--background', '--foreground', '--card', '--popover', '--secondary', '--muted', '--accent', '--border', '--input'];
 const TEXT = ['--foreground', '--text-secondary', '--text-muted', '--text-inverted', '--muted-foreground'];
@@ -57,8 +57,13 @@ export function Foundations() {
           <Spec token="--text-subheading · h3"><h3>Écris ton hook</h3></Spec>
           <Spec token="--text-heading-sm · h4"><h4>Trois secondes pour accrocher</h4></Spec>
         </Block>
-        <Block label="Mot en dégradé" hint="Un seul mot par titre, jamais deux.">
+        <Block label="Texte en dégradé — .accent" hint="La seule écriture d'un texte en dégradé de marque (v0.12.0) : un mot de titre (un seul par titre, jamais deux), un chiffre, un numéro. Seule sur son nœud : la typographie va sur un span externe. Le sur-titre, le prix --accent, le numéro du jour, de bande et le montant de la frise partagent la même règle.">
           <h2>Ta prochaine vidéo, <span className="accent">analysée</span> en deux minutes</h2>
+          <Row label="un chiffre, typographie sur le span externe">
+            <span className="font-display text-heading-xl font-extrabold leading-none"><span className="accent">84 €</span></span>
+            <span className="font-display text-heading font-extrabold leading-none"><span className="accent">1 248</span></span>
+            <span className="font-display text-subheading font-extrabold leading-none"><span className="accent">03</span></span>
+          </Row>
         </Block>
         <Block label="Corps, contrôles et méta">
           <Spec token="--text-body-lg"><p className="text-body-lg">Analyse tes vidéos, écris tes scripts et programme tes posts, sans quitter Claude.</p></Spec>

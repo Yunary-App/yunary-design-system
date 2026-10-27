@@ -1,6 +1,7 @@
 /* SOCLE — reset + utilitaires de marque. Les RÈGLES sont ici, les VALEURS dans le
    fichier de marque : pas un littéral de couleur, de police ou de lueur dans ce fichier.
-   Utilitaires : .display .heading .eyebrow .chip .accent .mono .halo .page */
+   Utilitaires : .display .heading .eyebrow .chip .mono .halo .page — `.accent` et le dégradé de `.eyebrow`
+   sont dans patterns.css, § LE TEXTE EN DÉGRADÉ (v0.12.0). */
 /* LA COULEUR DE BORDURE PAR DÉFAUT — ÉCART DÉLIBÉRÉ AVEC TAILWIND v4. NE PAS « ALIGNER ».
    Le preflight d'amont pose `border: 0 solid` : sans couleur, donc `currentColor`. C'est
    le bon défaut pour un framework générique, qui ne connaît aucune palette. Ce n'en est
@@ -79,30 +80,16 @@ img{max-width:100%;display:block}
 /* Utilitaires display / titre — --font-display, en CAPITALES uniquement */
 .display{font-family:var(--font-display);font-weight:var(--heading-xl-weight);text-transform:var(--heading-transform);font-size:var(--text-display);letter-spacing:var(--tracking-display);line-height:var(--leading-display)}
 .display-xl{font-family:var(--font-display);font-weight:var(--heading-xl-weight);text-transform:var(--heading-transform);font-size:var(--text-display-xl);letter-spacing:var(--tracking-display);line-height:var(--leading-display)}
-.eyebrow{font-family:var(--font-body);font-size:var(--text-eyebrow);font-weight:var(--weight-bold);text-transform:uppercase;letter-spacing:var(--tracking-eyebrow);line-height:var(--leading-snug);background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+.eyebrow{font-family:var(--font-body);font-size:var(--text-eyebrow);font-weight:var(--weight-bold);text-transform:uppercase;letter-spacing:var(--tracking-eyebrow);line-height:var(--leading-snug)}
 .chip{font-family:var(--font-body);font-size:var(--text-chip);font-weight:var(--weight-bold);text-transform:uppercase;letter-spacing:var(--tracking-chip);line-height:1}
 .mono{font-family:var(--font-mono);font-weight:var(--weight-regular)}
 .caption{font-size:var(--text-caption);font-weight:var(--weight-medium);line-height:var(--leading-normal);color:var(--text-muted)}
 .prose{line-height:var(--leading-prose)}
 
-/* The signature: ONE gradient word per title. Never two.
-   QUATRE DÉCLARATIONS SOLIDAIRES — background, background-clip, color, width. Retirez-en
-   une, l'effet disparaît, et LA PANNE EST MUETTE : le texte reste lisible, l'écran est
-   juste faux. Or cette règle vit en layer(base) et les utilitaires Tailwind en
-   layer(utilities) : posés sur le MÊME nœud, ils gagnent TOUJOURS, quelle que soit la
-   spécificité. Deux cas réels, dans deux apps différentes :
-   · un `text-*` de couleur écrase `color:transparent` → le dégradé disparaît, le mot
-     s'affiche en couleur pleine ;
-   · une largeur (`w-12`…) écrase `width:fit-content` → le dégradé se peint sur toute la
-     boîte puis se découpe aux lettres, qui n'en montrent qu'une tranche — deux nombres
-     de largeurs différentes n'ont plus la même couleur.
-   DANGEREUX : tout utilitaire de couleur, de fond, de background-clip ou de dimension —
-   ce qui touche l'une des quatre déclarations. SANS RISQUE : la typographie (`font-*`,
-   paliers `text-heading`…, `leading-*`), qui n'en touche aucune. LA PARADE, quand une
-   mise en page est nécessaire : un span externe la porte, le span `.accent` n'en porte pas.
-   `.eyebrow`, plus haut, clippe le dégradé avec les mêmes quatre déclarations : même
-   piège, même règle. L'interdit est dans docs/DESIGN.md § 9. */
-.accent{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+/* The signature: ONE gradient word per title. Never two. `.accent`, et le dégradé de `.eyebrow`, vivent
+   depuis la v0.12.0 dans patterns.css, § LE TEXTE EN DÉGRADÉ : la seule règle du système qui découpe le
+   dégradé de marque dans un texte, partagée avec les motifs qui le portent. Les quatre déclarations
+   solidaires et leur piège y sont écrits. */
 /* v0.6.0 — le sur-titre en sourdine (« LA SUITE ») : même casse et même chasse que l'eyebrow, sans le
    dégradé — l'encre discrète. SEUL sur son nœud, à la place de `.eyebrow` (jamais avec : le garde des
    classes fragiles n'admet rien à côté d'`.eyebrow`). */

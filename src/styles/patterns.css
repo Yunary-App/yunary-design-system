@@ -107,6 +107,35 @@
    (--leading-normal) : toutes deux sont plus bas dans le fichier, elles restent maîtres. */
 .ds-input,.ds-tab,.ds-dropdown__item{line-height:normal}
 
+/* ---------- LE TEXTE EN DÉGRADÉ — v0.12.0 ---------- */
+/* LA SEULE RÈGLE DU SYSTÈME QUI DÉCOUPE LE DÉGRADÉ DE MARQUE DANS UN TEXTE. L'utilitaire est `.accent` :
+   un mot signature d'un titre, un chiffre, un numéro, partout où la maquette écrit un texte en
+   dégradé. Les motifs qui le portent par construction (le sur-titre `.eyebrow`, le prix `--accent`,
+   le numéro du jour de la semaine, le numéro d'une bande de fiche, le montant de l'étape en cours
+   d'une frise) sont dans la MÊME liste de sélecteurs : ils ne recopient plus les déclarations.
+   Jusqu'à la 0.11.1, elles étaient écrites six fois ; une seule recopie oubliée suffit à ce
+   qu'un dégradé change de nuance d'un écran à l'autre. `check-fragile-classes.mjs` refuse une
+   seconde règle qui clippe un fond dans du texte, et l'écriture en utilitaires Tailwind
+   (`bg-clip-text`).
+   QUATRE DÉCLARATIONS SOLIDAIRES — background, background-clip, color, width. Retirez-en une,
+   l'effet disparaît, et LA PANNE EST MUETTE : le texte reste lisible, l'écran est juste faux. Les
+   utilitaires Tailwind vivent en layer(utilities) et gagnent TOUJOURS sur cette règle, quelle que
+   soit la spécificité. Deux cas réels, dans deux apps différentes :
+   · un `text-*` de couleur écrase `color:transparent` → le dégradé disparaît, le mot s'affiche en
+     couleur pleine ;
+   · une largeur (`w-12`…) écrase `width:fit-content` → le dégradé se peint sur toute la boîte puis
+     se découpe aux lettres, qui n'en montrent qu'une tranche — deux nombres de largeurs différentes
+     n'ont plus la même couleur.
+   DANGEREUX sur le nœud : tout utilitaire de couleur, de fond, de background-clip ou de dimension.
+   SANS RISQUE : la typographie, qui n'en touche aucune. LA PARADE, quand une mise en page est
+   nécessaire : un span EXTERNE la porte, le span `.accent` ne porte que la classe et le texte.
+   POURQUOI ICI, en layer(components), et non dans tokens/base.css avec les autres utilitaires de
+   texte : les motifs de la liste posent leur propre couleur par défaut (`.ds-frise__amount` est à
+   l'encre) ; en layer(base), la règle perdrait contre eux. Une règle `.ds-*` plus spécifique peut
+   toujours l'éteindre (le jour d'aujourd'hui, la semaine compacte) : c'est voulu. L'interdit est
+   dans docs/DESIGN.md § 9. */
+.accent,.eyebrow,.ds-price--accent .ds-price__amount,.ds-week__num,.ds-card__band .ds-card__num,.ds-frise__step.is-current .ds-frise__amount{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+
 /* ---------- LES CRÉNEAUX D'ICÔNE — v0.3.0 ---------- */
 /* UNE ICÔNE SE DIMENSIONNE SELON LE CRÉNEAU QUI LA PORTE, et le créneau est du CSS.
    Le mécanisme : `.ds-icon` (et `.ds-spinner`) lisent `var(--ds-icon-size, 1.25rem)` ;
@@ -314,14 +343,18 @@
 .ds-input-unit__prefix{position:absolute;left:0.875rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted);font-size:var(--text-control);font-weight:var(--weight-semibold)}
 .ds-input-unit--prefix .ds-input{padding-left:2.25rem}
 .ds-textarea{height:auto;min-height:0;resize:vertical;line-height:var(--leading-normal)}
+/* LA LISTE DÉROULANTE — v0.12.0 (D-010). Le champ fermé est un <button role="combobox"> qui porte
+   `.ds-input` : la même boîte que le <select> d'avant (rail, bordure, remplissage selon la surface,
+   états), le texte à gauche sur une ligne, coupé d'une ellipse, le chevron à droite. Le <select>
+   natif reste DESSOUS, transparent et inerte (`__native`) : il porte la valeur de formulaire et
+   reçoit l'autoremplissage du navigateur. Pas de `display:none` ni de `visibility:hidden` : un
+   navigateur n'autoremplit pas un champ qu'il ne voit pas. La liste ouverte est le menu du socle,
+   `.ds-dropdown--liste`, plus bas. */
 .ds-select{position:relative;display:block}
-.ds-select select{appearance:none;-webkit-appearance:none;padding-right:var(--space-7);cursor:pointer}
+.ds-select__trigger{display:block;appearance:none;-webkit-appearance:none;padding-right:var(--space-7);text-align:left;cursor:pointer}
+.ds-select__value{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ds-select__native{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;opacity:0;pointer-events:none}
 .ds-select__chev{position:absolute;right:var(--space-4);top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted)}
-/* L'option cochée d'un select NATIF suit la convention de l'élément sélectionné (v0.1.4) — là
-   où le navigateur le permet : Firefox et Chrome sur Windows/Linux peignent les options ;
-   macOS et iOS rendent leur liste système et ignorent ces deux déclarations. Rien à
-   rattraper : c'est la liste de la plateforme, jamais un défaut du socle. */
-.ds-select option:checked{background:var(--accent);color:var(--primary)}
 .ds-choice{display:inline-flex;align-items:center;gap:0.5625rem;cursor:pointer;font-size:var(--text-body-sm);color:var(--foreground);line-height:var(--leading-snug);position:relative}
 .ds-choice input{position:absolute;opacity:0;width:0;height:0}
 .ds-choice__box{flex:none;display:inline-flex;align-items:center;justify-content:center;width:var(--choice-box);height:var(--choice-box);border:1.5px solid var(--input);background:var(--background);border-radius:var(--choice-box-radius);color:var(--primary-foreground);transition:background var(--duration-fast) var(--ease-standard),border-color var(--duration-fast) var(--ease-standard),box-shadow var(--duration-fast) var(--ease-standard)}
@@ -781,6 +814,16 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 /* Le hint d'un item — le raccourci, la méta. */
 .ds-dropdown__hint{color:var(--text-muted);font-size:var(--text-caption)}
 .ds-dropdown__sep{height:1px;margin:0.25rem 0.375rem;background:var(--border);border:0}
+/* LA LISTE D'UN SELECT — `--liste`, v0.12.0 : le menu posé par un portail, en `position:fixed`, au
+   rang des popovers. Le composant écrit sa place (sous le champ, ou au-dessus quand la place manque),
+   sa largeur (celle du champ) et une hauteur réduite à la place disponible ; au-delà de
+   `--dropdown-list-h` elle défile, sans entraîner la page. `role="listbox"`, chaque item
+   `role="option"` : l'item choisi porte `.is-checked` (et `aria-selected`), l'item actif au clavier
+   `.is-hover`. Les items ne se tassent pas quand la liste défile. Aucune transition : sa place et sa
+   largeur s'écrivent après sa création, et la neutralisation du mouvement réduit (`0.01ms` sur toutes
+   les propriétés) la ferait glisser une image depuis la largeur du menu. */
+.ds-dropdown--liste{position:fixed;z-index:var(--z-popover);max-height:var(--dropdown-list-h);overflow-y:auto;overscroll-behavior:contain;transition:none}
+.ds-dropdown--liste .ds-dropdown__item{flex-shrink:0}
 
 /* Modal as a bottom sheet under 64rem — the system's ONE breakpoint. Above it: nothing changes.
    Inline panels (specimen cards, no scrim) are untouched: the rules require .ds-scrim. */
@@ -1131,8 +1174,8 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-price--end{align-items:flex-end;text-align:right}
 .ds-price--end .ds-price__line{justify-content:flex-end}
 /* v0.5.0 — `--accent` : le montant en dégradé clippé (« 19 € »), un site d'accent de la charte ;
-   l'écart de contraste est assumé dans la marque. */
-.ds-price--accent .ds-price__amount{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+   l'écart de contraste est assumé dans la marque. Le dégradé vient de la règle du TEXTE EN DÉGRADÉ
+   (en tête de fichier, v0.12.0). */
 /* LES AVANTAGES — v0.5.0 : une liste nue, deux colonnes (gap 10 / 24 ; 10 / 20 en `--compact` et dans un
    écran de Claude) — la maquette du 10/10/2026. Depuis 0.6.1 les deux colonnes tiennent TANT QUE chacune a
    --perks-col-min (144) ; en dessous (une carte d'outil compacte, 390 dans une carte) la liste passe à une
@@ -1306,7 +1349,7 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 /* v0.6.0 — la colonne du jour est sur --accent et son numéro en dégradé clippé (sites 10 de la liste de
    l'accent, la maquette fait foi) ; aujourd'hui, le numéro passe sur une plaque dégradée de 36 px. */
 .ds-week__date{display:flex;flex-direction:column;gap:var(--space-1);padding:var(--space-4);background:var(--accent);border-right:1px solid var(--border)}
-.ds-week__num{font-family:var(--font-display);font-size:var(--text-heading);font-weight:var(--weight-extrabold);line-height:1;font-variant-numeric:tabular-nums;background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+.ds-week__num{font-family:var(--font-display);font-size:var(--text-heading);font-weight:var(--weight-extrabold);line-height:1;font-variant-numeric:tabular-nums}
 /* LA NOTE D'UN ÉLÉMENT — `.ds-week__note`, v0.6.0 : une ligne sous la carte (« TikTok à 20:00 », « Vidéo à
    déposer ») ; `--danger` pour ce qui bloque (« compte à reconnecter »). */
 .ds-week__note{display:flex;align-items:center;gap:0.3125rem;font-size:var(--text-caption);color:var(--text-muted)}
@@ -1429,7 +1472,7 @@ a.ds-row{cursor:pointer}
    poussée à droite. `--muted` : la bande d'un réseau dans le corps d'une section (icône, nom, @handle,
    badge), sur --muted avec ses deux filets ; `--bleed` l'étire d'un bord à l'autre du padding. */
 .ds-card__band{display:flex;flex-wrap:wrap;align-items:center;gap:0.875rem;padding:0.875rem var(--space-5);background:var(--accent);border-bottom:1px solid var(--border)}
-.ds-card__band .ds-card__num{font-family:var(--font-display);font-size:var(--text-heading);font-weight:var(--weight-extrabold);line-height:1;letter-spacing:var(--tracking-display);font-variant-numeric:tabular-nums;background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+.ds-card__band .ds-card__num{font-family:var(--font-display);font-size:var(--text-heading);font-weight:var(--weight-extrabold);line-height:1;letter-spacing:var(--tracking-display);font-variant-numeric:tabular-nums}
 .ds-card__band>.ds-card__title{min-width:0}
 .ds-card__band-meta{font-size:var(--text-caption);color:var(--text-muted);margin-left:auto}
 .ds-card__band-meta+.ds-card__action,.ds-card__band>.ds-btn{margin-left:0}
@@ -1552,7 +1595,7 @@ a.ds-row{cursor:pointer}
 .ds-frise__step.is-current .ds-frise__mark{background:var(--brand-gradient);color:var(--primary-foreground);box-shadow:var(--shadow-glow)}
 .ds-frise__step.is-current .ds-frise__date{color:var(--primary-readable)}
 .ds-frise__step.is-current .ds-frise__line{background:linear-gradient(180deg,var(--primary),var(--border))}
-.ds-frise__step.is-current .ds-frise__amount{font-size:var(--text-heading);line-height:1;width:fit-content;background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ds-frise__step.is-current .ds-frise__amount{font-size:var(--text-heading);line-height:1}
 .ds-frise--sm .ds-frise__step.is-current .ds-frise__amount{font-size:inherit;line-height:inherit}
 @media (min-width:64.0625rem){
 .ds-frise--horizontal{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);column-gap:var(--space-4)}

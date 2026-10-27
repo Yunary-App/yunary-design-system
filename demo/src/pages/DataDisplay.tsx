@@ -53,6 +53,26 @@ function serie(jours: number, kind: 'mrr' | 'cli') {
 }
 const ANNEE = Array.from({ length: 365 }, (_, i) => ({ at: UTC('2025-10-17') + i * JOUR, value: 6 * Math.floor(i / 11) + (i % 23 < 4 ? 8 : 0) }));
 
+/* Les deux tracés côte à côte (v0.12.0) : la même série, en escalier (défaut) et arrondie monotone. */
+function DeuxTraces() {
+  const mrr = serie(90, 'mrr'), cli = serie(90, 'cli');
+  const carte = (curve: 'step' | 'monotone', titre: string) => (
+    <Card gap={3}>
+      <span className="caption text-text-muted">{titre}</span>
+      <Chart points={mrr} formatValue={euros} formatAt={jourCourt} label="Courbe du MRR" curve={curve}
+        summary={`${euros(mrr[mrr.length - 1].value)} aujourd'hui.`} />
+      <Chart points={cli} formatValue={nombre} formatAt={jourCourt} label="Courbe des clients payants" tone="ink" size="sm" integer curve={curve}
+        summary={`${cli[cli.length - 1].value} clients payants aujourd'hui.`} />
+    </Card>
+  );
+  return (
+    <Grid cols={2}>
+      {carte('step', 'curve="step" — l\'escalier, le défaut')}
+      {carte('monotone', 'curve="monotone" — arrondi, sans dépasser les valeurs')}
+    </Grid>
+  );
+}
+
 function CarteEvolution() {
   const [periode, setPeriode] = useState('0');
   const jours = Number(periode);
@@ -80,9 +100,12 @@ function CarteEvolution() {
 export function DataDisplayPage() {
   return (
     <div className="flex flex-col gap-space-7">
-      <Section title="Graphique d'évolution — Chart" note="Chart (0.8.0, maquette Admin Web, onglet Évolution), sans librairie : grille, aire, ligne en escalier, point final, graduations en valeurs et en dates (--text-axis, 12). La géométrie vient de chartGeometry (pure, exportée par l'index) ; la largeur est celle du conteneur, la hauteur md 260 / 180 ou sm 150 / 120 sous 64 rem. tone=primary (aire, trait 2,5) ou ink (trait 2). Le format et le résumé lu par un lecteur d'écran viennent de l'app. L'assemblage de la carte (titres, période) reste à l'app.">
+      <Section title="Graphique d'évolution — Chart" note="Chart (0.8.0, maquette Admin Web, onglet Évolution), sans librairie : grille, aire, ligne en escalier (ou arrondie monotone, curve=monotone, 0.12.0), point final, graduations en valeurs et en dates (--text-axis, 12). La géométrie vient de chartGeometry (pure, exportée par l'index) ; la largeur est celle du conteneur, la hauteur md 260 / 180 ou sm 150 / 120 sous 64 rem. tone=primary (aire, trait 2,5) ou ink (trait 2). Le format et le résumé lu par un lecteur d'écran viennent de l'app. L'assemblage de la carte (titres, période) reste à l'app.">
         <Block label="La carte Évolution de la maquette, assemblée par l'app" hint="Change la période : 30 jours, 90 jours, depuis le lancement.">
           <CarteEvolution />
+        </Block>
+        <Block label="Deux tracés — escalier et arrondi monotone" hint="curve=&quot;monotone&quot; (0.12.0) : la courbe passe par chaque point, ne fait jamais de bosse au-dessus ou au-dessous d'un palier et ne descend jamais sous zéro. Aire, point final et graduations ne changent pas. L'escalier reste le défaut.">
+          <DeuxTraces />
         </Block>
         <Block label="Cas limites">
           <Grid cols={2}>

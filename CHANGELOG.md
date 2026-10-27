@@ -14,6 +14,76 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.12.0 — l'état vide, la liste déroulante, la courbe arrondie, le texte en dégradé
+
+Lot L-002 (retouches après L-001), décisions D-009, D-010, D-011 et D-013 de Julien, le 27/10/2026.
+
+- **`EmptyState` : l'icône dans la pastille des maquettes** (D-009). La pastille par défaut passe de
+  `panneau · round · neutral` (un rond gris, depuis la 0.6.0) à `panneau · carrée · brand · outlined` :
+  c'est ce que rend le bundle qui dessine les maquettes du hub (`resources/screens/_ds/…/_ds_bundle.js`),
+  vérifié propriété par propriété en clair et en sombre (pastille, cadre pointillé, fond, rayon,
+  espacements, titre, texte : aucun écart). Le cadre ne bougeait pas. Un état vide qui passe sa propre
+  tuile (`tile`) ne change pas. Le commentaire du composant (« la maquette fait foi : round · neutral »)
+  est corrigé.
+- **`Select` : la liste Yunary au lieu de celle du navigateur** (D-010). Le champ fermé est rendu au pixel
+  près comme avant (28 captures sur 28, quatre états, deux surfaces, 390 et 1440, clair et sombre), mais
+  c'est désormais un `<button role="combobox">` qui ouvre une liste dessinée avec les classes du menu :
+  `.ds-dropdown--liste` (nouvelle), `__item`, `__check`, l'option choisie cochée sur `--accent`, l'option
+  active sur `--surface-alt`, sur `--popover` quelle que soit la surface. Clavier du combobox select-only
+  du W3C APG (↓ ↑ Entrée Espace, Début Fin Page ↑ ↓, Alt + ↑, Tab, Échap, premières lettres sans accents).
+  La liste passe par un portail (le `<body>`, ou le voile d'une `Modal` pour rester devant elle) : une
+  carte ou un tableau en `overflow:hidden` ne la coupe plus ; elle s'ouvre au-dessus quand la place manque
+  en bas, défile au-delà de `--dropdown-list-h` (nouveau jeton, 20 rem, au § FACULTATIF), ne sort jamais
+  de l'écran, suit le champ, se ferme au clic dehors ; dans une `Modal`, Échap ferme la liste et pas la
+  fenêtre. **Un `<select>` natif caché** et synchronisé reste dans le champ : c'est lui qui émet
+  `onChange` (le même `ChangeEvent<HTMLSelectElement>`, `e.target.value`), lui que vise la ref, lui qui
+  porte `name`, `required`, `form` et l'autoremplissage (`autoComplete="country"` : vérifié avec un vrai
+  autoremplissage de Chrome, le pays rempli fait suivre le champ). Il est transparent, sans
+  `display:none` (qu'un navigateur n'autoremplit pas), hors tabulation, masqué aux lecteurs d'écran.
+  Le piège de focus de `Modal` (`useModalSurface`) ne compte plus un élément en `tabindex="-1"` comme un
+  bord. La règle `.ds-select option:checked` part avec la liste du navigateur ; la paire de contraste
+  devient `.ds-dropdown--liste .ds-dropdown__item.is-checked` (même plaque, même écart assumé).
+  Garde : `tests/select.test.mjs` (7 tests, mode strict).
+- **`Chart` : la courbe arrondie monotone en option** (D-011). `curve="monotone"` : une interpolation
+  cubique monotone (pentes de Steffen, celles de `curveMonotoneX` de d3) qui passe par chaque point, ne
+  fait jamais de bosse au-dessus ou au-dessous d'un palier et ne descend jamais sous zéro ; un palier
+  reste un trait droit, fusionné. `curve="step"`, l'escalier, reste le défaut : aucun usage ne change.
+  Aire, point final et graduations ne changent pas. `chartGeometry` prend la même option ; le type
+  `ChartCurve` est exporté. Garde : 10 tests de plus dans `tests/chart-geometry.test.mjs` (chaque point,
+  aucune bosse sur chaque segment échantillonné, jamais sous zéro, défaut inchangé).
+- **Une seule règle de texte en dégradé : `.accent`** (D-013). Les déclarations du dégradé clippé
+  (`background`, `background-clip:text`, `color:transparent`, `width:fit-content`) étaient recopiées six
+  fois : `.accent`, `.eyebrow`, le prix `--accent`, le numéro du jour de la semaine, le numéro d'une bande
+  de fiche, le montant de l'étape en cours d'une frise. Elles vivent dans une seule liste de sélecteurs
+  (`patterns.css`, § LE TEXTE EN DÉGRADÉ), en `layer(components)` : `.accent` et le dégradé de
+  `.eyebrow` quittent `tokens/base.css` (la typographie d'`.eyebrow` y reste). Rendu identique au pixel :
+  872 captures avant / après de chaque nœud touché, 11 pages de la vitrine, 390 et 1440, clair et sombre.
+  `check-fragile-classes.mjs` refuse désormais une seconde règle clippée et l'effet réécrit dans le code
+  (`bg-clip-text`, `backgroundClip` en ligne). Un texte en dégradé s'écrit `.accent`, seul sur son nœud,
+  la typographie sur un span externe.
+- **Les scripts git du DS** : `scripts/worktree-nouveau.sh`, `scripts/worktree-fin.sh` et
+  `scripts/verrou.sh`, ceux du hub généralisés (worktrees `apps/packages/ds-worktrees/<nom>`, branche
+  `lot/<nom>`, verrou dans le dossier git commun). Documentés dans `CLAUDE.md`.
+
+**⚠ Ruptures** — aucune pour les appels du hub (même API du `Select`, même événement), mais trois choses
+changent sous elles :
+
+- Le champ du `Select` est un `<button>` : `id`, `aria-*`, `className`, `style` et les gestionnaires
+  `onFocus`, `onBlur`, `onClick`, `onKeyDown`, `onKeyUp`, `onMouseDown` vont au bouton (avec son
+  événement). `onChange`, `onInput`, `onInvalid`, `name`, `autoComplete`, `required`, `form`, `value`,
+  `defaultValue` et la ref vont au `<select>` caché. `multiple` et `size` ne sont plus pris.
+- `.accent` et `.eyebrow` (son dégradé) passent de `layer(base)` à `layer(components)` : un utilitaire
+  Tailwind gagne toujours sur eux, comme avant ; une règle `.ds-*` plus spécifique posée sur le même
+  nœud aussi.
+- `EmptyState` sans `tile` change d'aspect partout où il est employé (c'est la décision).
+
+**Montée** : le hub passe à `#v0.12.0` (vider `node_modules/.vite`). Aucun appel du `Select` ne change.
+`Chiffre` (Admin) devient un span externe pour la typographie et un `<span className="accent">` à
+l'intérieur (ou `accent` seul sur un nœud sans autre classe). Les deux graphiques de l'onglet Évolution
+prennent `curve="monotone"`. L'état vide de Mes règles, qui passait la même pastille par `tile`, peut
+revenir à `icon`. mcp-ui (classes seules, son propre `EmptyState`, aucune liste déroulante) et le site
+(copie figée des styles) : rien à faire.
+
 ## 0.11.1 — deux corrections de la passe design du hub
 
 Relevées par la passe design du hub le 26/10/2026 ; la maquette fait foi.

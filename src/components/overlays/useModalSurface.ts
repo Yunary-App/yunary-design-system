@@ -1,8 +1,11 @@
 import { useEffect, useRef } from 'react';
 import type { RefObject } from 'react';
 
-const FOCUSABLE =
-  'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+/* Un élément sorti de l'ordre de tabulation (`tabindex="-1"`) n'est pas un bord du piège : le <select>
+   natif caché d'un Select (v0.12.0) en est un, et Tab doit boucler sur ce que la personne atteint. */
+const FOCUSABLE = [
+  'a[href]', 'button:not([disabled])', 'input:not([disabled])', 'select:not([disabled])', 'textarea:not([disabled])', '[tabindex]',
+].map(s => `${s}:not([tabindex="-1"])`).join(',');
 
 export interface ModalSurfaceOptions {
   open?: boolean;

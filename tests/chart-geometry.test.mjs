@@ -171,3 +171,125 @@ test('le joli pas', () => {
   assert.equal(niceStep(240, true), 250);
   assert.equal(niceStep(0), 1);
 });
+
+/* ── la courbe monotone (v0.12.0, décision D-011) ── */
+import { pentesMonotones } from '../src/chart/geometry.ts';
+
+/** Les segments d'un tracé « M … C … H … L … » : chacun avec ses deux extrémités et ses points de contrôle. */
+function segments(d) {
+  const jetons = d.match(/[MCHL]|-?[\d.]+/g);
+  const out = [];
+  let x = 0, y = 0;
+  for (let i = 0; i < jetons.length;) {
+    const c = jetons[i++];
+    const nb = () => Number(jetons[i++]);
+    if (c === 'M') { x = nb(); y = nb(); }
+    else if (c === 'H') { const x1 = nb(); out.push({ a: [x, y], b: [x1, y], ctrl: [] }); x = x1; }
+    else if (c === 'L') { const x1 = nb(), y1 = nb(); out.push({ a: [x, y], b: [x1, y1], ctrl: [] }); x = x1; y = y1; }
+    else if (c === 'C') { const c1 = [nb(), nb()], c2 = [nb(), nb()], b = [nb(), nb()]; out.push({ a: [x, y], b, ctrl: [c1, c2] }); [x, y] = b; }
+  }
+  return out;
+}
+const bezier = (s, t) => {
+  const [p0, p1, p2, p3] = [s.a, ...(s.ctrl.length ? s.ctrl : [s.a, s.b]), s.b];
+  const u = 1 - t;
+  return [0, 1].map(k => u * u * u * p0[k] + 3 * u * u * t * p1[k] + 3 * u * t * t * p2[k] + t * t * t * p3[k]);
+};
+
+const CAS_MONOTONES = {
+  maquette: serie('mrr').map(p => p.value),
+  clients: serie('clients').map(p => p.value),
+  'pic puis creux': [0, 0, 14, 20, 20, 6, 6, 30, 2, 0, 0, 9],
+  'zéro, un saut, zéro': [0, 0, 0, 80, 0, 0, 0],
+  'en dents de scie': [5, 40, 5, 40, 5, 40, 5],
+};
+
+for (const [nom, valeurs] of Object.entries(CAS_MONOTONES)) {
+  test(`monotone (${nom}) : passe par chaque point, jamais au-delà de ses deux voisins, jamais sous zéro`, () => {
+    const points = valeurs.map((value, i) => ({ at: LAUNCH + i * DAY, value }));
+    for (const W of [318, 984]) {
+      const g = chartGeometry({ points, width: W, height: 260, formatValue: euros, formatAt: fmtJour, curve: 'monotone' });
+      const n = valeurs.length;
+      const xs = valeurs.map((_, i) => g.plot.left + (i * (g.plot.right - g.plot.left)) / (n - 1));
+      const zero = g.yTicks.find(t => t.label === '0 €').pos;
+      const segs = segments(g.line);
+      /* chaque point du tracé, à 0,1 px (l'arrondi d'écriture) */
+      const sommets = [segs[0].a, ...segs.map(s => s.b)];
+      for (const [i, v] of valeurs.entries()) {
+        const yy = g.plot.top + ((g.plot.bottom - g.plot.top) * (g.domain.max - v)) / (g.domain.max - g.domain.min);
+        const s = sommets.find(p => Math.abs(p[0] - xs[i]) < 0.06);
+        if (!s) { /* un point au milieu d'un palier fusionné : il est sur le trait droit */
+          const seg = segs.find(sg => sg.ctrl.length === 0 && sg.a[0] <= xs[i] && xs[i] <= sg.b[0]);
+          assert.ok(seg, `point ${i} absent du tracé à ${W}`);
+          assert.ok(Math.abs(seg.a[1] - yy) <= 0.06, `palier ${i} hors de sa valeur`);
+          continue;
+        }
+        assert.ok(Math.abs(s[1] - yy) <= 0.06, `point ${i} : ${s[1]} au lieu de ${yy} à ${W}`);
+      }
+      /* entre deux points, la courbe reste entre leurs deux valeurs : ni bosse ni creux */
+      for (const s of segs) {
+        const lo = Math.min(s.a[1], s.b[1]), hi = Math.max(s.a[1], s.b[1]);
+        for (const c of s.ctrl) assert.ok(c[1] >= lo - 1e-9 && c[1] <= hi + 1e-9, `contrôle hors de [${lo}, ${hi}] : ${c[1]}`);
+        for (let t = 0; t <= 1; t += 0.05) {
+          const [bx, by] = bezier(s, t);
+          assert.ok(by >= lo - 1e-9 && by <= hi + 1e-9, `bosse à x=${bx} : ${by} hors de [${lo}, ${hi}]`);
+          assert.ok(by <= zero + 1e-9, `sous zéro à x=${bx}`);
+        }
+      }
+      /* l'aire ferme sous la même ligne, le point final est le dernier point */
+      assert.ok(g.area.startsWith(g.line));
+      assert.match(g.area, new RegExp(`V${zero} H${g.plot.left} Z$`));
+      assert.deepEqual(g.end, { x: g.plot.right, y: sommets.at(-1)[1] });
+    }
+  });
+}
+
+test('monotone : mêmes domaine, graduations et point final que l\'escalier', () => {
+  const points = serie('mrr');
+  const esc = chartGeometry({ points, width: 984, height: 260, formatValue: euros, formatAt: fmtJour });
+  const mon = chartGeometry({ points, width: 984, height: 260, formatValue: euros, formatAt: fmtJour, curve: 'monotone' });
+  assert.deepEqual(mon.domain, esc.domain);
+  assert.deepEqual(mon.yTicks, esc.yTicks);
+  assert.deepEqual(mon.xTicks, esc.xTicks);
+  assert.deepEqual(mon.end, esc.end);
+  assert.equal(mon.grid, esc.grid);
+  assert.notEqual(mon.line, esc.line);
+  assert.match(mon.line, / C/);
+});
+
+test('l\'escalier reste le tracé par défaut', () => {
+  const points = serie('mrr');
+  const defaut = chartGeometry({ points, width: 984, height: 260, formatValue: euros, formatAt: fmtJour });
+  const step = chartGeometry({ points, width: 984, height: 260, formatValue: euros, formatAt: fmtJour, curve: 'step' });
+  assert.equal(defaut.line, step.line);
+  assert.doesNotMatch(defaut.line, /C/);
+});
+
+test('monotone : les paliers sont des traits droits fusionnés, une année reste courte', () => {
+  const points = [];
+  let v = 0;
+  for (let i = 0; i < 365; i++) { if (i % 9 === 0) v += (i % 4) * 6; points.push({ at: LAUNCH + i * DAY, value: v }); }
+  const g = chartGeometry({ points, width: 1300, height: 180, formatValue: euros, formatAt: fmtJour, curve: 'monotone' });
+  const courbes = (g.line.match(/C/g) || []).length;
+  const traits = (g.line.match(/H/g) || []).length;
+  assert.ok(courbes <= 2 * 41, `trop de segments courbes : ${courbes}`);
+  assert.ok(traits <= 41, `paliers non fusionnés : ${traits}`);
+});
+
+test('monotone : un point s\'étale, deux points se joignent d\'un trait, une série plate reste plate', () => {
+  const un = chartGeometry({ points: [{ at: TODAY, value: 72 }], width: 600, height: 260, formatValue: euros, formatAt: fmtJour, curve: 'monotone' });
+  assert.equal(un.line, `M${un.plot.left} ${un.end.y} H${un.plot.right}`);
+  const deux = chartGeometry({ points: [{ at: 0, value: 10 }, { at: 1, value: 30 }], width: 600, height: 260, formatValue: euros, formatAt: String, curve: 'monotone' });
+  assert.match(deux.line, /^M[\d.]+ [\d.]+ L[\d.]+ [\d.]+$/);
+  const plate = chartGeometry({ points: serie('mrr').map(p => ({ ...p, value: 14 })), width: 984, height: 260, formatValue: euros, formatAt: fmtJour, curve: 'monotone' });
+  assert.match(plate.line, /^M[\d.]+ [\d.]+ H[\d.]+$/);
+});
+
+test('les pentes monotones : nulles aux paliers et aux changements de sens, bornées ailleurs', () => {
+  assert.deepEqual(pentesMonotones([0, 0, 0], 1), [0, 0, 0]);
+  const m = pentesMonotones([0, 10, 0, 10], 1);
+  assert.equal(m[1], 0); assert.equal(m[2], 0);
+  const r = pentesMonotones([0, 1, 10, 11], 1);
+  assert.ok(r[1] > 0 && r[1] <= 2 * 1);
+  assert.ok(r[2] > 0 && r[2] <= 2 * 1);
+});

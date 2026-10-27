@@ -90,8 +90,9 @@ sur son propre `src/`.
 
 ## 2 · Les utilitaires de marque perdent contre les composants
 
-**Ce qui casse.** Les huit utilitaires de `tokens/base.css` — `.display`, `.display-xl`,
-`.eyebrow`, `.chip`, `.accent`, `.mono`, `.caption`, `.prose` — vivent en `layer(base)`.
+**Ce qui casse.** Les utilitaires de `tokens/base.css` — `.display`, `.display-xl`,
+`.eyebrow` (sa typographie), `.chip`, `.mono`, `.caption`, `.prose` — vivent en `layer(base)`.
+(`.accent` et le dégradé de `.eyebrow` n'en sont plus depuis la v0.12.0 : voir le piège 3.)
 **Toutes** les règles de `patterns.css` vivent en `layer(components)`. Sur un même nœud, la
 couche des composants gagne **toujours**, quelle que soit la spécificité. (Pas de décompte
 ici volontairement : le fichier grossit, un nombre écrit une fois deviendrait faux sans que
@@ -125,7 +126,10 @@ color: transparent;
 width: fit-content;
 ```
 
-Retirez-en une et l'effet tombe. Or elles vivent en `layer(base)` : **tout** utilitaire
+Retirez-en une et l'effet tombe. Elles sont écrites **une seule fois** dans le système : la
+règle de `patterns.css` § LE TEXTE EN DÉGRADÉ (v0.12.0), une liste de sélecteurs qui porte
+`.accent`, `.eyebrow` et les motifs en dégradé (prix `--accent`, numéro du jour, numéro de
+bande, montant de l'étape en cours). Elle vit en `layer(components)` : **tout** utilitaire
 Tailwind posé sur le même nœud vit en `layer(utilities)` et gagne.
 
 **Pourquoi la panne est muette — deux façons, aucune ne lève d'erreur :**
@@ -149,9 +153,11 @@ l'enfant **hérite** ; l'interne ne porte que la classe et le texte.
 ```
 
 **Le garde.** `node check-fragile-classes.mjs [dossier…]` — il **dérive** l'ensemble des
-classes fragiles du CSS (toute règle à classe unique qui clippe un fond dans son texte
-**et** pose `color: transparent`), il ne le recopie pas. Le jour où une troisième classe
-clippée entre au socle, elle est couverte avant son premier usage.
+classes fragiles du CSS (toute classe seule de la liste d'une règle qui clippe un fond dans
+son texte **et** pose `color: transparent`), il ne le recopie pas. Le jour où une troisième
+classe clippée entre au socle, elle est couverte avant son premier usage. Depuis la v0.12.0,
+il refuse aussi une **seconde** règle clippée dans les feuilles, et l'effet réécrit dans le
+code (`bg-clip-text`, `backgroundClip` en ligne) : un texte en dégradé s'écrit `.accent`.
 
 ---
 
@@ -178,10 +184,11 @@ le palier nommé du socle quand il existe, il porte déjà son interligne et son
 
 ---
 
-## 5 · Il n'y a pas de portail — un flottant vit dans le flux
+## 5 · Un flottant vit dans le flux — sauf la liste du `Select`
 
-**Ce qui casse.** Aucun composant du système ne monte dans un portail (`createPortal` n'est
-utilisé nulle part). Les deux flottants — le menu déroulant
+**Ce qui casse.** Un seul composant du système monte dans un portail : `Select`, depuis la
+v0.12.0 (sa liste, `.ds-dropdown--liste`, en `position: fixed` dans le `<body>` ou le voile
+d'une `Modal`) — elle n'est donc jamais rognée. Les deux autres flottants — le menu déroulant
 (`.ds-dropdown--floating`) et le popover de `DatePicker` (`.ds-datepicker__pop`) — sont en
 `position: absolute` **dans le flux du parent**.
 
@@ -206,31 +213,33 @@ dans le source.
 
 ---
 
-## 6 · `Select` est un `<select>` natif, avec tout ce que ça implique
+## 6 · `Select` ouvre la liste Yunary, mais garde un `<select>` natif
 
-**Ce qui casse.** Le composant habille un `<select>` du navigateur. Ce qui est habillé,
-c'est le **contrôle fermé** — le rail, la surface, le chevron. La **liste ouverte** est
-dessinée par le système d'exploitation : ni `--popover`, ni rayon, ni item composé, ni icône,
-ni séparateur. Sur mobile, c'est une roue ou une feuille système.
-
-Deux conséquences qui surprennent à l'écriture :
+**Ce qui casse.** Depuis la v0.12.0 (décision D-010), le composant n'ouvre plus la liste du
+navigateur : il ouvre une liste dessinée (`.ds-dropdown--liste`, portail, clavier du combobox
+select-only). Mais un `<select>` natif, caché et synchronisé, reste dans le champ, et c'est lui
+qui fait le contrat. Trois conséquences qui surprennent à l'écriture :
 
 - **les options passent par la prop `options`, pas par les enfants.** `SelectProps` fait
-  `Omit<…, 'children'>` : `<Select><option/></Select>` est une erreur de compilation, pas
-  une surprise au rendu ;
-- **`onChange` rend un événement natif**, pas une valeur. `e.target.value`.
+  `Omit<…, 'children'>` : `<Select><option/></Select>` est une erreur de compilation ;
+- **`onChange` rend un événement natif du `<select>` caché**, pas une valeur : `e.target.value`.
+  La ref est ce `<select>` (la valeur, `focus()` qui passe au champ) ;
+- **le champ visible est un `<button role="combobox">`** : `id`, `aria-*`, `className`, `onFocus`,
+  `onBlur`, `onClick`, `onKeyDown` vont à lui, avec l'événement du bouton. Un `<label htmlFor>`
+  le nomme parce qu'un bouton est labellisable.
 
-**Pourquoi ce n'est pas un défaut.** C'est un arbitrage, et il tient : le natif gagne au
-clavier et au tactile, et il ne coûte aucun code d'accessibilité. **Ne pas le remplacer par
-un menu custom.** Le piège n'est pas le choix, c'est de découvrir en cours d'écran qu'on ne
-peut pas styler la liste.
+**Pourquoi un `<select>` caché.** Le formulaire (`name`, `required`) et l'autoremplissage du
+navigateur (`autoComplete="country"` de la page de paiement) passent par lui, sans une ligne de
+plus chez l'appelant. Il est transparent mais pas en `display:none` : un navigateur n'autoremplit
+pas un champ qu'il ne voit pas. Ne pas le « nettoyer ».
 
 **La parade.** Quand la liste doit vraiment être composée — icône par item, description,
-séparateurs —, ce n'est plus un `Select` : c'est un menu `.ds-dropdown` déclenché par un
-bouton, et l'app en porte le balisage, l'état et l'ARIA. Voir alors le piège 5 : ce menu-là
-est un flottant.
+séparateurs, options désactivées —, ce n'est plus un `Select` : c'est un menu `.ds-dropdown`
+déclenché par un bouton, et l'app en porte le balisage, l'état et l'ARIA. Voir alors le piège 5 :
+ce menu-là est un flottant.
 
-**Le garde.** Le type, et c'est le bon niveau : l'erreur des enfants est de compilation.
+**Le garde.** Le type pour les enfants ; `tests/select.test.mjs` pour l'événement, la ref, le
+clavier et le `<select>` caché.
 
 ---
 

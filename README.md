@@ -56,7 +56,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yunary-App/yunary-design-system#v0.11.1
+npm i github:Yunary-App/yunary-design-system#v0.12.0
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :
@@ -259,7 +259,9 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 > ```
 
 `tokens/base.css` fournit aussi des classes prêtes à l'emploi : `.display` `.display-xl` `.eyebrow`
-`.chip` `.accent` `.mono` `.caption` `.prose` `.halo` `.page` `.ds-logo`.
+`.chip` `.mono` `.caption` `.prose` `.halo` `.page` `.ds-logo`. **Le texte en dégradé de marque
+s'écrit `.accent`** (un mot de titre, un chiffre, un numéro ; seul sur son nœud) : c'est la seule
+règle du système qui découpe le dégradé dans un texte (`patterns.css`, v0.12.0).
 
 ---
 
@@ -269,7 +271,7 @@ de Tailwind, sur laquelle reposent les composants shadcn de ton app.
 |---|---|
 | `icons` | `Icon` — 48 glyphes Lucide (les autres tracés passent par `glyph`) ; la taille vient du **créneau** (`--ds-icon-size`, repli `1.25rem`), `size` reste la surcharge au site d'appel |
 | `actions` | `Button` · `IconButton` — 5 variantes, `danger-soft` compris (6 pour `IconButton`, `accent` compris), 4 tailles pour `Button` (`xs` = « Copier »), jamais un pill |
-| `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` · `Checkbox` · `Switch` (libellé avant la piste) · `FormField` (action à droite du libellé) · `Calendar` · `DatePicker` · `Dropzone` (dépôt d'un fichier) |
+| `forms` | `Input` (unité, icône de fin, lecture seule) · `Textarea` · `Select` (liste Yunary, `<select>` natif caché pour le formulaire et l'autoremplissage) · `Checkbox` · `Switch` (libellé avant la piste) · `FormField` (action à droite du libellé) · `Calendar` · `DatePicker` · `Dropzone` (dépôt d'un fichier) |
 | `data-display` | `Card` (+ en-tête à slots, badge collé au titre, pied, palier `xl`, plaque, coque d'écran de Claude) · `Pastille` (de la coche à l'écran) · `Badge` (2 rembourrages, ton dégradé, tête, croix de retrait) · `Separator` · `Frise` (la frise à jalons : pastille, date, titre, montant, texte, trait ; fait · en cours · à venir ; verticale ou horizontale, compacte, sur plaque) · `Chart` (le graphique d'évolution, fait maison : grille, aire, escalier, point final, graduations ; géométrie pure `chartGeometry`) · `StatCard` (la carte de chiffre : libellé, valeur, variation en trois sens, chargement) · `Table` (+ `THead` `TBody` `Tr` `Th` `Td`) — `framed` · `columns` · `striped` · `hoverable`, composables ; `Th sort` + `onSort` : l'en-tête triable, contrôlé |
 | `feedback` | `Banner` (+ encart dans une carte, pastille à la place de l'icône) · `EmptyState` · `Skeleton` · `Spinner` · `Progress` |
 | `overlays` | `Modal` (3 phases + feuille basse sous 64 rem, sous-titre, 480 / 560 / 600) |

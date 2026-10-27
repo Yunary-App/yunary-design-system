@@ -51,8 +51,8 @@ reprise en aveugle est une valeur recopiée.
   ne pourrait viser. D'où `.ds-label__required` (l'astérisque de `FormField`) et
   `.ds-dropdown__hint` (le raccourci d'un item de menu).
 
-**⚠️ Les utilitaires de marque perdent contre les composants.** Les huit de
-`tokens/base.css` — `.display`, `.display-xl`, `.eyebrow`, `.chip`, `.accent`, `.mono`,
+**⚠️ Les utilitaires de marque perdent contre les composants.** Ceux de
+`tokens/base.css` — `.display`, `.display-xl`, `.eyebrow` (sa typographie), `.chip`, `.mono`,
 `.caption`, `.prose` — vivent en `layer(base)` ; les redéclarations de `patterns.css`
 vivent en `layer(components)` et gagnent toujours sur le même nœud, quelle que soit la
 spécificité. `.mono` posé sur un nœud qu'une règle `.ds-*` typographie ne rend rien, en
@@ -61,9 +61,12 @@ lit `--font-mono` et vit en `layer(utilities)`, il gagne. On ne déplace pas la 
 
 **⚠️ Deux classes CSS pièges, avant tout écran : `.accent` et `.eyebrow`.** Elles peignent
 le dégradé de marque dans le texte par quatre déclarations solidaires (`background`,
-`background-clip: text`, `color: transparent`, `width: fit-content`) en `layer(base)` — un
-utilitaire posé sur le même nœud vit en `layer(utilities)` et gagne toujours, sans rien
-casser à l'écran. **Dangereux** : couleur, fond, `background-clip`, dimension (`text-*` de
+`background-clip: text`, `color: transparent`, `width: fit-content`), écrites UNE fois dans
+`patterns.css` (§ LE TEXTE EN DÉGRADÉ, v0.12.0, `layer(components)`) — un utilitaire posé
+sur le même nœud vit en `layer(utilities)` et gagne toujours, sans rien casser à l'écran.
+**Un texte en dégradé s'écrit `.accent`**, seul sur son nœud : un mot de titre, un chiffre,
+un numéro. Jamais `bg-brand-gradient bg-clip-text text-transparent` (le garde des classes
+fragiles le refuse). **Dangereux** : couleur, fond, `background-clip`, dimension (`text-*` de
 couleur, `bg-*`, `w-*`…) — le dégradé meurt en silence. **Sans risque** : la typographie
 (`font-*`, paliers `text-heading`…, `leading-*`). La mise en page va sur un span externe.
 
@@ -484,9 +487,14 @@ En classes (mcp-ui) :
 ## Chart
 
 Le graphique d'évolution (v0.8.0, maquette Admin Web, onglet Évolution ; l'écran Métriques de mcp-ui),
-fait maison, sans librairie. **Une courbe par graphique** : la grille, l'aire, la ligne en ESCALIER
-(une valeur tient jusqu'au point suivant, puis la ligne monte à la verticale), le point final, les
-graduations en valeurs à gauche et en dates en bas. Trois couches : la géométrie pure
+fait maison, sans librairie. **Une courbe par graphique** : la grille, l'aire, la ligne, le point
+final, les graduations en valeurs à gauche et en dates en bas. **Deux tracés** (`curve`) :
+- `step` (le défaut) : l'ESCALIER — une valeur tient jusqu'au point suivant, puis la ligne monte à
+  la verticale ;
+- `monotone` (v0.12.0) : une courbe ARRONDIE qui passe par chaque point sans jamais dépasser les
+  valeurs réelles — aucune bosse au-dessus d'un palier, aucun creux en dessous, jamais sous zéro
+  (interpolation cubique monotone, pentes de Steffen comme `curveMonotoneX` de d3). Un palier reste
+  un trait droit. Aire, point final et graduations ne changent pas. Trois couches : la géométrie pure
 `chartGeometry` (ni React ni DOM, exportée par l'index), les classes
 `.ds-chart*` (l'apparence, sur les jetons) et ce composant.
 
@@ -504,7 +512,8 @@ graduations en valeurs à gauche et en dates en bas. Trois couches : la géomét
   démontage et rien n'est écrit après. Le garde : `tests/chart-strict.test.mjs`.
 - Cas limites : un seul point (la valeur s'étale sur le tracé, le point final à droite, une date), une
   série toute à zéro (graduations 0 et 1, la ligne sur le zéro), des valeurs constantes (une marche
-  plate), une année jour par jour (les marches nulles ne sont pas écrites). Pas d'infobulle ni de survol.
+  plate), une année jour par jour (les marches nulles et les paliers ne sont pas écrits un par un),
+  deux points en `monotone` (un trait droit). Pas d'infobulle ni de survol.
 
 **Ne pas l'utiliser** pour un chiffre seul et sa variation (c'est `StatCard`) ni pour une part (c'est
 `Progress`).
@@ -514,6 +523,8 @@ graduations en valeurs à gauche et en dates en bas. Trois couches : la géomét
   summary="72 € aujourd'hui, +72 € sur 30 jours." />
 <Chart points={clients} formatValue={String} formatAt={jourCourt} label="Courbe des clients payants"
   summary="7 clients payants aujourd'hui." tone="ink" size="sm" integer />
+<Chart points={mrr} formatValue={v => `${v} €`} formatAt={jourCourt} label="Courbe du MRR"
+  summary="72 € aujourd'hui, +72 € sur 30 jours." curve="monotone" />
 <Chart points={[]} formatValue={String} formatAt={String} label="Courbe du MRR" summary="Chargement." loading />
 ```
 
@@ -710,8 +721,9 @@ l'app la compose) ni pour une erreur de champ (c'est `FormField error`).
 
 ## EmptyState
 
-Emplacement vide en pointillés : une pastille RONDE et NEUTRE (`panneau · round · neutral`, v0.6.0 —
-la maquette fait foi), titre H4 en face display, une description courte, et **le prochain geste**.
+Emplacement vide en pointillés : l'icône dans la pastille de marque (`panneau · carrée · brand ·
+outlined`, v0.12.0 — le rendu des maquettes), titre H4 en face display, une description courte, et
+**le prochain geste**.
 Toujours donner au lecteur la suite.
 
 **Ne pas l'utiliser** pour une erreur de page (c'est `Banner` ou `Modal` result) ni pour un
@@ -727,7 +739,7 @@ c'est sa forme `compact`, à pastille pleine.
 ```
 
 - Props : `icon` (glyphe nu — la Pastille par défaut l'enveloppe) · `tile` (la tuile
-  complète, quand `panneau round neutral` ne convient pas ; `icon` est alors
+  complète, quand `panneau brand outlined` ne convient pas ; `icon` est alors
   ignoré) · `title` (requis) · `description` · `action` · `plain` · `compact`.
 - **`plain`** : sans cadre pointillé ni fond — l'état vide remplit déjà une section bordée
   (« Textes pas encore écrits » dans une carte).
@@ -982,19 +994,45 @@ bordure (v0.6.0, la maquette fait foi). Jamais un pill. `forwardRef` sur l'`<inp
 
 ## Select
 
-Select **natif** sur le rail 3rem, avec un chevron Lucide. Même silhouette qu'Input et
-Button md. `forwardRef` sur le `<select>` natif.
-
-**Ne pas** le remplacer par un menu custom : le natif gagne au clavier et au tactile.
+La liste déroulante (v0.12.0, décision D-010). Le champ fermé est celui d'avant : le rail 3rem,
+le chevron Lucide, la silhouette d'Input et de Button md, rendu au pixel près. Il n'ouvre plus la
+liste du navigateur : il ouvre **la liste Yunary**, les classes du menu (`.ds-dropdown--liste`,
+`__item`, `__check`) — l'option choisie sur la plaque `--accent` avec sa coche, l'option active
+sur `--surface-alt`, toujours sur `--popover` (jamais la couleur de sa surface, page ou carte).
 
 ```tsx
-<Select options={[{ value: 'instagram', label: 'Instagram' }, { value: 'tiktok', label: 'TikTok' }]} defaultValue="instagram" />
+<FormField label="Pays" htmlFor="pays">
+  <Select id="pays" autoComplete="country" options={pays} value={pays} onChange={e => setPays(e.target.value)} />
+</FormField>
+<Select aria-label="Visibilité" surface="card" options={visibilites} value={v} onChange={e => setV(e.target.value)} />
 <Select options={[{ value: 'a', label: 'A' }]} invalid />
 ```
 
-- Props : `options` (`{value, label}[]`) · `invalid` · `surface` (`page·card`) + attributs
-  natifs.
-- États rendus : repos, focus, invalide, désactivé — sur les deux surfaces.
+- Props : `options` (`{value, label}[]`) · `value` / `defaultValue` · `onChange` · `invalid` ·
+  `surface` (`page·card`) · `disabled` · `id` · `name` · `autoComplete` · `required` · `form` ·
+  `aria-*` · `className` · `style` · la ref. **La même API qu'avant** : aucun appel ne change.
+- **`onChange` reçoit le même événement qu'avant**, `ChangeEvent<HTMLSelectElement>` :
+  `e.target.value`. Un `<select>` natif caché, synchronisé, vit dans le champ : un choix pose sa
+  valeur puis émet un vrai `change`. Il porte la valeur de formulaire (`name`, `required`, `form`)
+  et **l'autoremplissage du navigateur** (`autoComplete="country"` : vérifié avec Chrome, le pays
+  rempli fait suivre le champ). **La ref** est ce `<select>` ; un focus qui l'atteint passe au champ.
+- **Le champ** est un `<button role="combobox">` : `id`, `aria-*`, `className`, `style`, `onFocus`,
+  `onBlur`, `onClick`, `onKeyDown` vont à lui (les gestionnaires reçoivent l'événement du bouton).
+  Un `<label htmlFor>` (FormField) ou un `<label>` qui l'enveloppe le nomme.
+- **Clavier** (combobox select-only, W3C APG) : ↓ ↑ Entrée Espace ouvrent, Début / Fin ouvrent sur
+  la première / la dernière ; dans la liste ↓ ↑ Début Fin Page ↑ ↓ déplacent (`aria-activedescendant`),
+  Entrée Espace et Alt + ↑ choisissent, Tab choisit et passe au suivant, Échap ferme sans changer.
+  Les premières lettres trouvent une option (accents et casse ignorés ; la même lettre répétée
+  passe à la suivante) et ouvrent la liste fermée. Le focus reste au champ, et y revient.
+- **La place** : un portail (le `<body>`, ou le voile d'une `Modal` pour rester devant elle) ; une
+  carte ou un tableau en `overflow:hidden` ne la coupe jamais. Sous le champ à 6 px, à sa largeur ;
+  au-dessus quand la place manque en bas ; plafonnée à `--dropdown-list-h` (320) puis elle défile,
+  l'option choisie au centre à l'ouverture ; jamais hors de l'écran, à 390 compris. Elle suit le
+  champ quand la page défile, se ferme au clic dehors, et prend le thème d'un ancêtre `.dark`. Dans
+  une `Modal`, Échap ferme la liste, pas la fenêtre.
+- Liste simple seulement : `multiple` et `size` ne sont pas pris. Pas d'option désactivée ni de
+  séparateur (`SelectOption` n'en a pas).
+- États rendus : repos, focus, invalide, désactivé — sur les deux surfaces ; la liste ouverte.
 
 ## Switch
 
@@ -1487,6 +1525,10 @@ ligne. Les deux se mélangent dans un même menu.
 - Sans `--floating`, le panneau est rendu dans le flux (spécimen).
 - Le comportement (ouverture, fermeture au clic extérieur et à Échap, navigation au clavier)
   est à la charge de l'app.
+- `--liste` (v0.12.0) : la liste qu'ouvre `Select` — posée par un portail en `position:fixed`,
+  plafonnée à `--dropdown-list-h` puis défilante, `role="listbox"` et des items `role="option"`
+  (`.is-checked` + `aria-selected` pour l'option choisie, `.is-hover` pour l'option active au
+  clavier). Elle s'écrit par `Select`, pas à la main.
 
 **La barre de navigation et le pied du site — `.ds-navbar`, `.ds-footer`** (0.11.0 : les composants
 `Navbar` et `Footer` sont retirés, sans consommateur React ; le site écrit ces classes en HTML).

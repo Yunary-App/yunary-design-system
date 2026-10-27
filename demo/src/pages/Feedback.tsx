@@ -20,7 +20,7 @@ export function FeedbackPage() {
         </Block>
       </Section>
 
-      <Section title="EmptyState" note="Nommer le vide et donner l'étape suivante. Bordure pointillée, tuile d'icône en lavis de dégradé.">
+      <Section title="EmptyState" note="Nommer le vide et donner l'étape suivante. Bordure pointillée, l'icône dans la pastille de marque des maquettes (panneau, carrée, brand, outlined — v0.12.0).">
         <Grid cols={2}>
           <Block label="Complet">
             <EmptyState

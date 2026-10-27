@@ -161,6 +161,9 @@
   --tabs-h-sm:2.25rem;            /* 36 — .ds-tabs--sm (v0.6.0 : la maquette la dessine à 36) */
   --modal-close:2rem;             /* 32 — .ds-modal__close, carré */
   --dropdown-w:14.375rem;         /* 230 — .ds-dropdown */
+  --dropdown-list-h:20rem;        /* 320 — .ds-dropdown--liste, la hauteur d'une liste de Select au-delà
+                                     de laquelle elle défile : six items et demi, le dernier coupé
+                                     dit qu'il y a une suite (v0.12.0). */
   --dropdown-item-h:2.75rem;      /* 44 — .ds-dropdown__item : le rail d'un item de menu, au seuil
                                      tactile, comme --sidenav-h. */
   --cal-day:2.25rem;              /* 36 — LA COLONNE du calendrier : la case du jour, l'en-tête

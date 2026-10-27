@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { Button, FormField, Icon, Input, Modal, cn } from '@yunary/ds';
+import { Button, FormField, Icon, Input, Modal, Select, cn } from '@yunary/ds';
 import { Block, Row, Section } from '../ui';
 
 /* Une ligne d'appoint — une COMPOSITION d'app (fond --background, radius md, body-sm), pas un
@@ -151,6 +151,9 @@ export function OverlaysPage() {
           >
             <FormField label="Lien de la vidéo" htmlFor="demo-video" help="Instagram ou TikTok, une vidéo publique.">
               <Input id="demo-video" type="url" placeholder="Colle le lien d'une vidéo Instagram ou TikTok" />
+            </FormField>
+            <FormField label="Réseau" htmlFor="demo-video-reseau" help="Un Select dans une fenêtre : sa liste passe devant, Échap la ferme sans fermer la fenêtre.">
+              <Select id="demo-video-reseau" options={[{ value: 'instagram', label: 'Instagram' }, { value: 'tiktok', label: 'TikTok' }]} defaultValue="instagram" />
             </FormField>
             <LigneAppoint />
           </Modal>
