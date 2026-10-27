@@ -29,7 +29,9 @@ Lot L-002 (retouches après L-001), décisions D-009, D-010, D-011 et D-013 de J
   près comme avant (28 captures sur 28, quatre états, deux surfaces, 390 et 1440, clair et sombre), mais
   c'est désormais un `<button role="combobox">` qui ouvre une liste dessinée avec les classes du menu :
   `.ds-dropdown--liste` (nouvelle), `__item`, `__check`, l'option choisie cochée sur `--accent`, l'option
-  active sur `--surface-alt`, sur `--popover` quelle que soit la surface. Clavier du combobox select-only
+  active (clavier ou survol) sur `--surface-alt` et cerclée de l'anneau de focus du système (`outline`
+  2 px `--ring`, à l'intérieur ; seulement dans une liste `role="listbox"`, les menus ne changent pas),
+  sur `--popover` quelle que soit la surface. Clavier du combobox select-only
   du W3C APG (↓ ↑ Entrée Espace, Début Fin Page ↑ ↓, Alt + ↑, Tab, Échap, premières lettres sans accents).
   La liste passe par un portail (le `<body>`, ou le voile d'une `Modal` pour rester devant elle) : une
   carte ou un tableau en `overflow:hidden` ne la coupe plus ; elle s'ouvre au-dessus quand la place manque

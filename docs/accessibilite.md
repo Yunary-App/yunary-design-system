@@ -223,6 +223,11 @@ plus halo de 3 px sur les champs, `outline` 2 px avec offset ailleurs. En sombre
 `--brand-from` et tient **8,16**. Le repli existe si l'écart déplaît un jour : `--brand-to`
 `#e84c3d`, qui mesure 3,40.
 
+Le même anneau marque l'option active de la liste d'un `Select` (v0.12.0), posé à l'intérieur de
+l'option sur `--popover` : **2,60** en clair (un peu au-dessus de la paire mesurée), **6,63** en
+sombre. Il ne porte pas seul l'état : l'option active a aussi sa plaque `--surface-alt` et
+`aria-activedescendant` la désigne au lecteur d'écran.
+
 ### 3.4 · Les trois marqueurs en `--primary` — `2,85` et `3,25` · 3 paires
 
 **L'écart.** `.ds-pastille--brand` pose le glyphe en `--primary` sur `--pill-coral-bg`

@@ -824,6 +824,14 @@ span.ds-banner__icon{display:inline-flex;flex:none}
    les propriétés) la ferait glisser une image depuis la largeur du menu. */
 .ds-dropdown--liste{position:fixed;z-index:var(--z-popover);max-height:var(--dropdown-list-h);overflow-y:auto;overscroll-behavior:contain;transition:none}
 .ds-dropdown--liste .ds-dropdown__item{flex-shrink:0}
+/* L'OPTION ACTIVE D'UNE LISTE — v0.12.0 : le repère de la personne au clavier (APG) et sous la souris.
+   La plaque de survol du menu (`--surface-alt`) ne suffit pas : presque invisible sur `--popover` en
+   sombre, de la même teinte que la plaque de l'option choisie en clair. Elle porte donc en plus
+   L'ANNEAU DE FOCUS DU SYSTÈME, le même que partout (`outline` 2 px `--ring`), posé à l'intérieur
+   (offset -2 px) pour que la liste qui défile ne le rogne pas. L'option choisie garde sa plaque
+   `--accent`, son texte de marque et sa coche ; active et choisie, elle porte les deux. Seulement
+   dans une liste (`role="listbox"`) : les menus `role="menu"` gardent leur survol. */
+.ds-dropdown[role="listbox"] .ds-dropdown__item.is-hover{outline:2px solid var(--ring);outline-offset:-2px}
 
 /* Modal as a bottom sheet under 64rem — the system's ONE breakpoint. Above it: nothing changes.
    Inline panels (specimen cards, no scrim) are untouched: the rules require .ds-scrim. */

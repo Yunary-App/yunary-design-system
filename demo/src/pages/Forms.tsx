@@ -198,7 +198,7 @@ export function FormsPage() {
         <Block label="En vrai" hint="Clique, ou Tab puis ↓. La liste s'ouvre au-dessus quand la place manque en bas, défile quand elle est longue, se ferme au clic dehors et à Échap, rend le focus au champ.">
           <SelectEnVrai />
         </Block>
-        <Block label="La liste ouverte, figée" hint="Le spécimen de ce que le champ ouvre : l'item choisi sur la plaque --accent avec sa coche, l'item actif au clavier (ou survolé) sur --surface-alt. Sur la page comme sur une carte, la liste est sur --popover, jamais la couleur de sa surface.">
+        <Block label="La liste ouverte, figée" hint="Le spécimen de ce que le champ ouvre : l'item choisi sur la plaque --accent avec sa coche, l'item actif au clavier (ou survolé) sur --surface-alt, cerclé de l'anneau de focus (--ring, 2 px, à l'intérieur). Sur la page comme sur une carte, la liste est sur --popover, jamais la couleur de sa surface.">
           <Row>
             <ListeOuverte />
             <div className="rounded-lg border border-border bg-card p-space-4"><ListeOuverte actif={2} choisi={1} /></div>

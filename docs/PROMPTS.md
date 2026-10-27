@@ -997,8 +997,10 @@ bordure (v0.6.0, la maquette fait foi). Jamais un pill. `forwardRef` sur l'`<inp
 La liste déroulante (v0.12.0, décision D-010). Le champ fermé est celui d'avant : le rail 3rem,
 le chevron Lucide, la silhouette d'Input et de Button md, rendu au pixel près. Il n'ouvre plus la
 liste du navigateur : il ouvre **la liste Yunary**, les classes du menu (`.ds-dropdown--liste`,
-`__item`, `__check`) — l'option choisie sur la plaque `--accent` avec sa coche, l'option active
-sur `--surface-alt`, toujours sur `--popover` (jamais la couleur de sa surface, page ou carte).
+`__item`, `__check`) — l'option choisie sur la plaque `--accent` avec sa coche et son texte de
+marque, l'option active (clavier ou survol) sur `--surface-alt` **cerclée de l'anneau de focus du
+système** (`outline` 2 px `--ring`, à l'intérieur), toujours sur `--popover` (jamais la couleur de
+sa surface, page ou carte).
 
 ```tsx
 <FormField label="Pays" htmlFor="pays">
@@ -1528,7 +1530,9 @@ ligne. Les deux se mélangent dans un même menu.
 - `--liste` (v0.12.0) : la liste qu'ouvre `Select` — posée par un portail en `position:fixed`,
   plafonnée à `--dropdown-list-h` puis défilante, `role="listbox"` et des items `role="option"`
   (`.is-checked` + `aria-selected` pour l'option choisie, `.is-hover` pour l'option active au
-  clavier). Elle s'écrit par `Select`, pas à la main.
+  clavier ou sous la souris : dans une liste `role="listbox"`, elle porte en plus l'anneau de focus,
+  `outline` 2 px `--ring` à l'intérieur ; les menus `role="menu"` n'en ont pas). Elle s'écrit par
+  `Select`, pas à la main.
 
 **La barre de navigation et le pied du site — `.ds-navbar`, `.ds-footer`** (0.11.0 : les composants
 `Navbar` et `Footer` sont retirés, sans consommateur React ; le site écrit ces classes en HTML).
