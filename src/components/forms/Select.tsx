@@ -29,12 +29,13 @@ import { Icon } from '../icons/Icon';
  * hors de l'ordre de tabulation et masqué aux lecteurs d'écran ; un focus qui l'atteint (la ref,
  * une validation) passe au champ. La ref transmise est la sienne, comme avant.
  *
- * LA LISTE passe par un portail (le `<body>`, ou le voile d'une `Modal` pour rester devant elle) :
- * une carte ou un tableau en `overflow:hidden` ne la coupe jamais. Elle s'ouvre sous le champ, au-dessus
- * quand la place manque en bas, défile au-delà de `--dropdown-list-h`, ne sort jamais de l'écran, suit
- * le champ quand la page défile, et se ferme au clic dehors. Elle prend la largeur du champ et le
- * thème sombre d'un ancêtre `.dark`. Sur une carte comme sur la page, elle est sur `--popover`,
- * jamais la couleur de sa surface.
+ * LA LISTE passe par un portail : une carte ou un tableau en `overflow:hidden` ne la coupe jamais. Elle
+ * va dans la FENÊTRE MODALE qui contient le champ, sinon dans le `<body>` (v0.12.1, voir `couche`) : posée
+ * dans le `<body>`, une feuille plein écran d'app à `aria-modal` (rang --z-modal) la cachait. Elle s'ouvre
+ * sous le champ, au-dessus quand la place manque en bas, défile au-delà de `--dropdown-list-h`, ne sort
+ * jamais de l'écran, suit le champ quand la page défile, et se ferme au clic dehors. Elle prend la
+ * largeur du champ et le thème sombre d'un ancêtre `.dark`. Sur une carte comme sur la page, elle est
+ * sur `--popover`, jamais la couleur de sa surface.
  */
 export interface SelectOption { value: string; label: string }
 
@@ -59,6 +60,19 @@ function texteDuLibelle(label: HTMLLabelElement | undefined): string | undefined
   };
   lire(label);
   return texte.replace(/\s+/g, ' ').trim() || undefined;
+}
+
+/**
+ * La couche de la liste (v0.12.1) : la fenêtre modale la plus proche du champ, sinon le `<body>`. Une Modal
+ * du DS la reçoit dans son voile (`.ds-scrim`, comme en 0.12.0 : son panneau glisse en transform à
+ * l'ouverture) ; toute autre fenêtre à `aria-modal="true"` (une feuille plein écran d'app) ou un `<dialog>`
+ * ouvert, en elle-même. Dans sa fenêtre, la liste passe au-dessus d'elle quel que soit son rang, et reste
+ * dans ce qu'un lecteur d'écran laisse joindre (`aria-modal` rend le reste inerte).
+ */
+function couche(champ: HTMLElement): HTMLElement {
+  const fenetre = champ.closest<HTMLElement>('.ds-scrim, [aria-modal="true"], dialog[open]');
+  if (!fenetre) return document.body;
+  return (fenetre.matches('.ds-modal') && fenetre.closest<HTMLElement>('.ds-scrim')) || fenetre;
 }
 
 /** L'option dont le libellé commence par `cherche`, à partir de `depart`, en bouclant. */
@@ -112,7 +126,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     if (!champ || disabled || !options.length) return;
     const nomRelie = texteDuLibelle(champ.labels?.[0]);
     setCadre({
-      cible: champ.closest<HTMLElement>('.ds-scrim') ?? document.body,
+      cible: couche(champ),
       sombre: !!champ.closest('.dark'),
       nom: rest['aria-label'] ?? (rest['aria-labelledby'] ? undefined : nomRelie),
     });
@@ -220,8 +234,16 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     const enHaut = naturelle > dessous && dessus > dessous;
     const h = Math.max(0, Math.min(naturelle, enHaut ? dessus : dessous));
     liste.style.maxHeight = `${h}px`;
-    liste.style.left = `${Math.max(marge, Math.min(r.left, vw - marge - largeur))}px`;
-    liste.style.top = `${enHaut ? r.top - ecart - h : r.bottom + ecart}px`;
+    const x = Math.max(marge, Math.min(r.left, vw - marge - largeur)), y = enHaut ? r.top - ecart - h : r.bottom + ecart;
+    liste.style.left = `${x}px`;
+    liste.style.top = `${y}px`;
+    /* Dans une fenêtre transformée ou filtrée (un panneau qui glisse, un voile en backdrop-filter), le repère
+       de `position:fixed` est la fenêtre, plus l'écran : l'écart mesuré se rattrape. */
+    const p = liste.getBoundingClientRect();
+    if (Math.abs(p.left - x) > 0.5 || Math.abs(p.top - y) > 0.5) {
+      liste.style.left = `${2 * x - p.left}px`;
+      liste.style.top = `${2 * y - p.top}px`;
+    }
   }, []);
 
   /* À l'ouverture : le plafond de la feuille (lu avant que la place ne le réduise), la place. */

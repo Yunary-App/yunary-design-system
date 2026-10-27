@@ -14,6 +14,37 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.12.1 — la liste du `Select` au-dessus d'une feuille plein écran d'app
+
+Lot L-002, correctif trouvé par la session Écrans le 27/10/2026.
+
+- **La liste s'ouvre dans la fenêtre modale qui contient son champ.** En 0.12.0 elle allait dans le voile
+  d'une `Modal` du DS, sinon dans le `<body>`, au rang `--z-popover` (40). Au téléphone, la fenêtre de
+  paiement du hub est une feuille plein écran d'app (`role="dialog"`, `aria-modal="true"`, `fixed` au
+  rang `--z-modal`, 70), pas une `Modal` : la liste s'ouvrait derrière elle, invisible, et le tap suivant
+  la refermait. Le portail vise désormais la fenêtre modale la plus proche du champ : le voile `.ds-scrim`
+  d'une `Modal` (comme avant), sinon un élément à `aria-modal="true"` ou un `<dialog>` ouvert, sinon le
+  `<body>`. Choisi plutôt qu'un rang plus haut : dans le `<body>`, aucun rang ne passe sûrement devant une
+  fenêtre d'app (ni devant un `<dialog>` modal, dans la couche du dessus), et `aria-modal` rend le reste
+  de la page inerte pour un lecteur d'écran : la liste doit vivre dans la fenêtre pour rester joignable.
+- **Une fenêtre transformée ne décale pas la liste.** Sous un ancêtre en `transform` ou `filter` (un
+  panneau qui glisse), le repère de `position:fixed` n'est plus l'écran : l'écart est mesuré à chaque
+  placement et rattrapé.
+- Vitrine : Overlays › Modal, « Un Select dans une feuille plein écran d'app (aria-modal) ». Garde :
+  `tests/select.test.mjs` (9 tests : la couche dans cinq cas ; dans une feuille à `aria-modal`, le choix,
+  puis Échap qui ferme la liste sans atteindre l'écouteur de la feuille, puis la feuille).
+
+Recette dans un vrai navigateur : la 0.12.0 reproduit le défaut (liste dans le `<body>`, couverte par la
+feuille) ; la 0.12.1 passe 20 vérifications (390 au toucher et 1440, clair et sombre : liste dans la
+feuille et touchable, tap d'une option, tap dehors, Échap, feuille transformée) et les 35 du `Select`
+(page, carte, liste longue, `Modal`, Échap, clic dehors) sans changement.
+
+**⚠ Ruptures** : aucune.
+
+**Montée** : le hub passe à `#v0.12.1` (vider `node_modules/.vite`). Rien à changer : `FullScreenSheet`
+porte déjà `role="dialog"` et `aria-modal="true"`. Une fenêtre d'app sans `aria-modal`, au-dessus de
+`--z-popover`, cacherait encore la liste : elle doit le porter.
+
 ## 0.12.0 — l'état vide, la liste déroulante, la courbe arrondie, le texte en dégradé
 
 Lot L-002 (retouches après L-001), décisions D-009, D-010, D-011 et D-013 de Julien, le 27/10/2026.

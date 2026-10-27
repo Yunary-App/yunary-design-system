@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { Button, FormField, Icon, Input, Modal, Select, cn } from '@yunary/ds';
+import { Button, FormField, Icon, IconButton, Input, Modal, Select, cn } from '@yunary/ds';
 import { Block, Row, Section } from '../ui';
+import { PAYS } from '../pays';
 
 /* Une ligne d'appoint — une COMPOSITION d'app (fond --background, radius md, body-sm), pas un
    composant du socle : elle est là pour recetter le rythme de la modale. */
@@ -10,6 +11,52 @@ function LigneAppoint() {
     <div className="flex items-center gap-space-3 rounded-md bg-background px-space-4 py-space-3 text-body-sm text-text-secondary">
       <span className="inline-flex text-primary"><Icon name="zap" size="1rem" /></span>
       <span>Cette vidéo utilisera <span className="mono font-semibold text-foreground">1 analyse</span> · il t'en reste <span className="mono font-semibold text-foreground">18</span></span>
+    </div>
+  );
+}
+
+/* UNE FEUILLE PLEIN ÉCRAN D'APP — pas une Modal du DS : role="dialog" + aria-modal="true", fixed inset-0 au
+   rang --z-modal, fond --card, Échap écouté sur le document (la fenêtre de paiement du hub au téléphone,
+   son FullScreenSheet). Le cas de recette du Select (v0.12.1) : sa liste s'ouvre DANS la fenêtre, donc
+   au-dessus d'elle, et Échap ferme la liste avant la fenêtre. */
+function FeuillePleinEcran({ onClose }: { onClose: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [pays, setPays] = useState('FR');
+  useEffect(() => {
+    const debordement = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    ref.current?.focus({ preventScroll: true });
+    const surTouche = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', surTouche);
+    return () => {
+      document.body.style.overflow = debordement;
+      document.removeEventListener('keydown', surTouche);
+    };
+  }, [onClose]);
+  return (
+    <div ref={ref} role="dialog" aria-modal="true" aria-label="Ton paiement" tabIndex={-1}
+      className="fixed inset-0 z-(--z-modal) flex flex-col bg-card text-foreground outline-none">
+      <header className="flex flex-none items-start justify-between gap-space-3 border-b border-border px-space-5 pb-space-4 pt-space-5">
+        <div className="flex min-w-0 flex-1 flex-col gap-space-1">
+          <h2 className="text-heading-sm">Ton paiement</h2>
+          <span className="text-body-sm text-text-muted">Une feuille plein écran d'app, à aria-modal</span>
+        </div>
+        <IconButton variant="ghost" label="Fermer" onClick={onClose} className="-mr-space-2 -mt-space-2">
+          <Icon name="x" size="1.125rem" />
+        </IconButton>
+      </header>
+      <div className="flex min-h-0 flex-1 flex-col gap-space-5 overflow-y-auto px-space-5 pb-space-5 pt-space-4">
+        <FormField label="Nom et prénom" htmlFor="demo-feuille-nom">
+          <Input id="demo-feuille-nom" autoComplete="name" surface="card" placeholder="Léa Martin" />
+        </FormField>
+        <FormField label="Pays" htmlFor="demo-feuille-pays" help="La liste s'ouvre dans la feuille, au-dessus d'elle ; Échap ferme la liste, puis la feuille.">
+          <Select id="demo-feuille-pays" name="country" autoComplete="country" surface="card" options={PAYS}
+            value={pays} onChange={e => setPays(e.target.value)} />
+        </FormField>
+      </div>
+      <footer className="flex flex-none flex-col gap-space-3 border-t border-border bg-card px-space-5 pb-space-5 pt-space-4">
+        <Button onClick={onClose}>Continuer</Button>
+      </footer>
     </div>
   );
 }
@@ -42,6 +89,8 @@ export function OverlaysPage() {
   const [renameOpen, setRenameOpen] = useState(false);
   const [projectName, setProjectName] = useState('');
   const [formOpen, setFormOpen] = useState(false);
+  const [feuilleOpen, setFeuilleOpen] = useState(false);
+  const fermerFeuille = useCallback(() => setFeuilleOpen(false), []);
   const [triOpen, setTriOpen] = useState(false);
   const [tri, setTri] = useState<'recent' | 'ancien' | 'nom'>('recent');
   const TRIS = [
@@ -181,6 +230,13 @@ export function OverlaysPage() {
               <LigneAppoint />
             </Modal>
           </div>
+        </Block>
+
+        <Block label="Un Select dans une feuille plein écran d'app (aria-modal)" hint="Une fenêtre qui n'est pas une Modal du DS : role=&quot;dialog&quot; aria-modal=&quot;true&quot;, fixed inset-0 au rang --z-modal (la fenêtre de paiement du hub sous 64 rem). La liste du Select s'ouvre dans la fenêtre modale qui contient son champ (le voile d'une Modal du DS, sinon la fenêtre à aria-modal, sinon le body) : elle passe au-dessus, reste joignable par un lecteur d'écran, et Échap la ferme avant la fenêtre.">
+          <Row>
+            <Button variant="secondary" icon={<Icon name="lock" />} onClick={() => setFeuilleOpen(true)}>Ouvrir la feuille de paiement</Button>
+          </Row>
+          {feuilleOpen ? <FeuillePleinEcran onClose={fermerFeuille} /> : null}
         </Block>
 
         <Block label="Croix et gestes de fuite découplés" hint="closeButton={false} retire la croix en gardant Échap et le clic-voile ; dismissable={false} fait l'inverse — la croix devient le seul geste de fermeture, pour une saisie qu'un clic à côté ne doit pas jeter. Défauts à true : comportement historique.">

@@ -2,8 +2,9 @@
  * développement, StrictMode, happy-dom (le banc de chart-strict.test.mjs). Ce qui ne doit pas casser
  * chez les appelants : `onChange` reçoit un vrai événement du <select> natif (`e.target.value`), la ref
  * est ce <select>, le formulaire et l'autoremplissage passent par lui ; et le clavier du combobox
- * select-only (W3C APG). La position, le portail devant une Modal et le rendu se recettent dans un
- * vrai navigateur (la vitrine) : happy-dom ne fait pas de mise en page. */
+ * select-only (W3C APG) ; et la couche de la liste (v0.12.1) : la fenêtre modale qui contient le champ.
+ * La position et le rendu se recettent dans un vrai navigateur (la vitrine) : happy-dom ne fait pas de
+ * mise en page. */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -218,4 +219,54 @@ test('surface carte, erreur, classe de l\'appelant : sur le champ, comme avant',
     assert.equal(c.getAttribute('aria-invalid'), 'true');
     assert.equal(c.textContent, 'Instagram', 'sans valeur : la première option, comme un <select> natif');
   } finally { await m.demonter(); }
+});
+
+/* v0.12.1 : au téléphone, la fenêtre de paiement du hub est une feuille plein écran d'app (role="dialog",
+   aria-modal, fixed au rang --z-modal), pas une Modal du DS. Posée dans le <body> (rang --z-popover), la
+   liste s'ouvrait DERRIÈRE elle, invisible, et le tap suivant la refermait. */
+/** Un nom court pour un élément : un échec d'assert.equal sur deux éléments happy-dom les inspecterait en entier. */
+const decrire = el => (el === win.document.body ? 'body' : el ? `${el.tagName.toLowerCase()}${el.className ? `.${el.className.split(' ').join('.')}` : ''}` : 'aucun');
+
+test('la couche : la liste s\'ouvre dans la fenêtre modale qui contient le champ, sinon dans le <body>', async () => {
+  const cas = [
+    ['feuille plein écran d\'app à aria-modal : la feuille', champ => h('div', { role: 'dialog', 'aria-modal': 'true', className: 'feuille' }, h('div', null, champ)), c => c.querySelector('.feuille')],
+    ['Modal du DS : son voile, comme en 0.12.0', champ => h('div', { className: 'ds-scrim' }, h('div', { className: 'ds-modal-wrap' }, h('div', { className: 'ds-modal-slot' }, h('div', { className: 'ds-modal', role: 'dialog', 'aria-modal': 'true' }, champ)))), c => c.querySelector('.ds-scrim')],
+    ['<dialog> ouvert : le dialog', champ => h('dialog', { open: true }, champ), c => c.querySelector('dialog')],
+    ['feuille dans le voile d\'une Modal : la feuille, la plus proche', champ => h('div', { className: 'ds-scrim' }, h('div', { role: 'dialog', 'aria-modal': 'true', className: 'feuille' }, champ)), c => c.querySelector('.feuille')],
+    ['fenêtre sans aria-modal : le <body>', champ => h('div', { role: 'dialog' }, champ), () => win.document.body],
+  ];
+  for (const [nom, envelopper, attendue] of cas) {
+    const m = await monter(envelopper(h(Select, { options: RESEAUX, defaultValue: 'tiktok', 'aria-label': 'Réseau' })));
+    try {
+      await m.clic(m.champ());
+      assert.ok(m.liste(), `${nom} : ouverte`);
+      assert.equal(decrire(m.liste().parentElement), decrire(attendue(m.conteneur)), nom);
+      assert.deepEqual(m.erreurs, []);
+    } finally { await m.demonter(); }
+  }
+});
+
+test('dans une feuille à aria-modal : un clic d\'option choisit, Échap ferme la liste sans atteindre la feuille, puis la feuille', async () => {
+  const feuille = [];
+  const surTouche = e => { if (e.key === 'Escape') feuille.push('Échap'); };
+  win.document.addEventListener('keydown', surTouche);
+  const recus = [];
+  const m = await monter(h('div', { role: 'dialog', 'aria-modal': 'true', className: 'feuille', onPointerDown: () => feuille.push('pointerdown') },
+    h(Controle, { options: PAYS, initiale: 'P5', recus, 'aria-label': 'Pays' })));
+  try {
+    await m.clic(m.champ());
+    assert.equal(decrire(m.liste().parentElement), 'div.feuille');
+    await m.clic(m.liste().querySelectorAll('[role="option"]')[1]);
+    assert.deepEqual(recus.map(r => r.value), ['P1'], 'l\'option touchée est choisie');
+    assert.equal(m.liste(), null);
+    m.champ().focus();
+    await m.touche('ArrowDown');
+    assert.ok(m.liste());
+    await m.touche('Escape');
+    assert.equal(m.liste(), null, 'Échap ferme la liste');
+    assert.ok(!feuille.includes('Échap'), 'Échap n\'atteint pas l\'écouteur de la feuille');
+    await m.touche('Escape');
+    assert.equal(feuille.filter(f => f === 'Échap').length, 1, 'liste fermée : Échap revient à la feuille');
+    assert.deepEqual(m.erreurs, []);
+  } finally { win.document.removeEventListener('keydown', surTouche); await m.demonter(); }
 });

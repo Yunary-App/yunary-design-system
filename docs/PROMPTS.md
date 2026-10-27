@@ -1026,12 +1026,15 @@ sa surface, page ou carte).
   Entrée Espace et Alt + ↑ choisissent, Tab choisit et passe au suivant, Échap ferme sans changer.
   Les premières lettres trouvent une option (accents et casse ignorés ; la même lettre répétée
   passe à la suivante) et ouvrent la liste fermée. Le focus reste au champ, et y revient.
-- **La place** : un portail (le `<body>`, ou le voile d'une `Modal` pour rester devant elle) ; une
-  carte ou un tableau en `overflow:hidden` ne la coupe jamais. Sous le champ à 6 px, à sa largeur ;
+- **La place** : un portail dans la fenêtre modale qui contient le champ (le voile d'une `Modal`, une
+  feuille d'app à `aria-modal="true"`, un `<dialog>` ouvert), sinon dans le `<body>` (v0.12.1) : elle
+  passe devant sa fenêtre quel que soit le rang de celle-ci. Une fenêtre d'app qui passe au-dessus de
+  `--z-popover` doit donc porter `aria-modal="true"`. Une carte ou un tableau en `overflow:hidden` ne la
+  coupe jamais. Sous le champ à 6 px, à sa largeur ;
   au-dessus quand la place manque en bas ; plafonnée à `--dropdown-list-h` (320) puis elle défile,
   l'option choisie au centre à l'ouverture ; jamais hors de l'écran, à 390 compris. Elle suit le
   champ quand la page défile, se ferme au clic dehors, et prend le thème d'un ancêtre `.dark`. Dans
-  une `Modal`, Échap ferme la liste, pas la fenêtre.
+  une fenêtre (une `Modal`, une feuille qui écoute Échap), Échap ferme la liste, pas la fenêtre.
 - Liste simple seulement : `multiple` et `size` ne sont pas pris. Pas d'option désactivée ni de
   séparateur (`SelectOption` n'en a pas).
 - États rendus : repos, focus, invalide, désactivé — sur les deux surfaces ; la liste ouverte.
@@ -1527,7 +1530,8 @@ ligne. Les deux se mélangent dans un même menu.
 - Sans `--floating`, le panneau est rendu dans le flux (spécimen).
 - Le comportement (ouverture, fermeture au clic extérieur et à Échap, navigation au clavier)
   est à la charge de l'app.
-- `--liste` (v0.12.0) : la liste qu'ouvre `Select` — posée par un portail en `position:fixed`,
+- `--liste` (v0.12.0) : la liste qu'ouvre `Select` — posée par un portail en `position:fixed` (dans
+  la fenêtre modale qui contient le champ, sinon le `<body>`),
   plafonnée à `--dropdown-list-h` puis défilante, `role="listbox"` et des items `role="option"`
   (`.is-checked` + `aria-selected` pour l'option choisie, `.is-hover` pour l'option active au
   clavier ou sous la souris : dans une liste `role="listbox"`, elle porte en plus l'anneau de focus,

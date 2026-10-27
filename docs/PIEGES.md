@@ -187,8 +187,8 @@ le palier nommé du socle quand il existe, il porte déjà son interligne et son
 ## 5 · Un flottant vit dans le flux — sauf la liste du `Select`
 
 **Ce qui casse.** Un seul composant du système monte dans un portail : `Select`, depuis la
-v0.12.0 (sa liste, `.ds-dropdown--liste`, en `position: fixed` dans le `<body>` ou le voile
-d'une `Modal`) — elle n'est donc jamais rognée. Les deux autres flottants — le menu déroulant
+v0.12.0 (sa liste, `.ds-dropdown--liste`, en `position: fixed` dans la fenêtre modale qui
+contient le champ, sinon dans le `<body>`) — elle n'est donc jamais rognée. Les deux autres flottants — le menu déroulant
 (`.ds-dropdown--floating`) et le popover de `DatePicker` (`.ds-datepicker__pop`) — sont en
 `position: absolute` **dans le flux du parent**.
 
@@ -210,6 +210,14 @@ sont pas concernées : `.ds-scrim` est en `position: fixed` sur `inset: 0`.
 
 **Le garde.** Aucun : la relation est structurelle, entre deux nœuds que rien ne rapproche
 dans le source.
+
+**Et la liste du `Select` dans une fenêtre d'app.** Elle se pose dans la fenêtre modale la plus
+proche du champ, reconnue au voile `.ds-scrim`, à `aria-modal="true"` ou à un `<dialog>` ouvert
+(v0.12.1). Une fenêtre d'app qui ne porte rien de cela et passe au-dessus de `--z-popover` la
+cache : en 0.12.0, la liste allait dans le `<body>` et s'ouvrait derrière la feuille plein
+écran de paiement du hub (rang `--z-modal`), invisible, refermée au tap suivant. Une fenêtre
+écrite dans une app porte `role="dialog"` et `aria-modal="true"`. Le garde : `tests/select.test.mjs`
+(la couche) et la vitrine (Overlays, la feuille plein écran).
 
 ---
 

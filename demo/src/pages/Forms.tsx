@@ -3,6 +3,7 @@ import type { InputHTMLAttributes, ReactNode } from 'react';
 import { IDENTITY } from '../identity';
 import { Badge, Calendar, Checkbox, DatePicker, FormField, Icon, Input, Select, Switch, Textarea, cn } from '@yunary/ds';
 import { Block, Grid, Row, Section, Stack } from '../ui';
+import { PAYS } from '../pays';
 
 /* Une vignette IMAGE de recette : un SVG en data-URI (aucun fichier, aucune requête), au format
    vertical pour que le `cover` ait quelque chose à rogner. */
@@ -57,18 +58,6 @@ const RESEAUX = [
   { value: 'tiktok', label: 'TikTok' },
   { value: 'youtube', label: 'YouTube' },
 ];
-
-/* Une longue liste, comme celle des pays de la page de paiement (valeurs ISO, libellés en français). */
-const PAYS = [
-  ['DE', 'Allemagne'], ['AD', 'Andorre'], ['AT', 'Autriche'], ['BE', 'Belgique'], ['BJ', 'Bénin'], ['BG', 'Bulgarie'],
-  ['BF', 'Burkina Faso'], ['CM', 'Cameroun'], ['CA', 'Canada'], ['CY', 'Chypre'], ['CI', 'Côte d\u2019Ivoire'], ['HR', 'Croatie'],
-  ['DK', 'Danemark'], ['ES', 'Espagne'], ['EE', 'Estonie'], ['US', 'États-Unis'], ['FI', 'Finlande'], ['FR', 'France'],
-  ['GA', 'Gabon'], ['GR', 'Grèce'], ['GP', 'Guadeloupe'], ['GF', 'Guyane'], ['HU', 'Hongrie'], ['IE', 'Irlande'],
-  ['IT', 'Italie'], ['LV', 'Lettonie'], ['LT', 'Lituanie'], ['LU', 'Luxembourg'], ['MG', 'Madagascar'], ['ML', 'Mali'],
-  ['MT', 'Malte'], ['MA', 'Maroc'], ['MQ', 'Martinique'], ['MC', 'Monaco'], ['NL', 'Pays-Bas'], ['PL', 'Pologne'],
-  ['PT', 'Portugal'], ['RE', 'La Réunion'], ['RO', 'Roumanie'], ['GB', 'Royaume-Uni'], ['SN', 'Sénégal'], ['SK', 'Slovaquie'],
-  ['SI', 'Slovénie'], ['SE', 'Suède'], ['CH', 'Suisse'], ['CZ', 'Tchéquie'], ['TN', 'Tunisie'],
-].map(([value, label]) => ({ value, label }));
 
 /* LA LISTE OUVERTE, EN CLASSES — le spécimen figé de ce que Select ouvre (le composant la pose dans un
    portail, `.ds-dropdown--liste`, en position fixe). Classes écrites EN CLAIR pour check-classes.mjs. */
