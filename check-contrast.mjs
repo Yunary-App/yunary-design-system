@@ -161,8 +161,8 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Marque-contenu', '.ds-tab[aria-selected]', g('--primary'), g('--accent'), 4.5, '15 / 600');
   add('Marque-contenu', '.ds-tabs--on-card .ds-tab[aria-selected]', g('--primary'), g(C), 4.5, '15 / 600');
   add('Marque-contenu', '.ds-page[aria-current]', g('--primary'), g('--accent'), 4.5, '15 / 600');
-  add('Marque-contenu', '.ds-dropdown__item[aria-checked]', g('--primary'), g('--accent'), 4.5, '15 / 400');
-  add('Marque-contenu', '.ds-dropdown--liste .ds-dropdown__item.is-checked', g('--primary'), g('--accent'), 4.5, '15 / 400');
+  add('Marque-contenu', '.ds-dropdown__item[aria-checked]', g('--primary'), g('--accent'), 4.5, '15 / 600');
+  add('Marque-contenu', '.ds-dropdown--liste .ds-dropdown__item.is-checked', g('--primary'), g('--accent'), 4.5, '15 / 600');
   /* Les ICÔNES de la convention (seuil 3) : le bouton-icône accent, 3,00 en clair — au seuil, pas
      dessous. Le bouton-icône enfoncé est mesuré plus bas. */
   add('Marque-contenu', '.ds-icon-btn--accent — icône', g('--primary'), g('--accent'), 3, 'icône');
@@ -181,7 +181,7 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   /* Le bouton-icône enfoncé pose le jumeau lisible (0.11.1, la maquette), pas le corail. */
   add('Marque-contenu', '.ds-icon-btn[aria-pressed] — icône', g('--primary-readable'), g('--accent'), 3, 'icône');
   add('Marque-contenu', '.ds-error', g('--destructive-readable'), g(C), 4.5, '13 / 500');
-  add('Marque-contenu', '.ds-dropdown__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '15 / 400');
+  add('Marque-contenu', '.ds-dropdown__item--danger', g('--destructive-readable'), g('--popover'), 4.5, '15 / 600');
   /* Le danger DOUX du bouton-icône : la paire de la pilule danger, sur les deux porteuses. */
   add('Marque-contenu', '.ds-icon-btn--danger-soft sur --card — glyphe', g('--pill-danger-fg'), on('--pill-danger-bg', C), 3, 'icône');
   add('Marque-contenu', '.ds-icon-btn--danger-soft sur --background — glyphe', g('--pill-danger-fg'), on('--pill-danger-bg', B), 3, 'icône');
@@ -250,6 +250,12 @@ function pairs(theme, { ROOT, DARK }, fichier) {
   add('Pill', '.ds-badge--outline', g('--text-secondary'), g(C), 4.5, '12 / 700');
 
   add('Surface', 'survol — --foreground sur --surface-alt', g('--foreground'), g('--surface-alt'), 4.5, '15 / 600');
+  /* v0.12.2 (D-019) — l'option active d'une liste (et l'item survolé d'un menu) ne se voit que par sa
+     plaque, sans anneau : --surface-alt en clair, --background en sombre (la plaque se creuse,
+     patterns.css), sur --popover. Une plaque qui porte un état contre sa porteuse : seuil 3 (1.4.11). */
+  const plaque = theme === 'dark' ? g('--background') : g('--surface-alt');
+  add('Non-texte', '.ds-dropdown__item.is-hover — plaque sur --popover', plaque, g('--popover'), 3, 'plaque');
+  add('Surface', '.ds-dropdown__item.is-hover — texte sur sa plaque', g('--foreground'), plaque, 4.5, '15 / 600');
 
   add('Marque-aplat', '.ds-btn--primary — label sur --primary à plat', g('--primary-foreground'), g('--primary'), 4.5, '15 / 600');
   add('Marque-aplat', '.ds-btn--primary — label sur --brand-from (pire arrêt)', g('--primary-foreground'), g('--brand-from'), 4.5, '15 / 600');

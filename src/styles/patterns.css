@@ -801,9 +801,16 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-dropdown--floating.ds-dropdown--end{left:auto;right:0}
 .ds-dropdown{width:var(--dropdown-w);padding:0.375rem;background:var(--popover);color:var(--popover-foreground);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:0.125rem;box-sizing:border-box}
 /* L'item est sur le rail de 44 (--dropdown-item-h) et en --text-control, comme une entrée de
-   Sidebar : en body-sm il rendrait 38 px, un cran sous tout ce qui se clique. */
-.ds-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;min-height:var(--dropdown-item-h);padding:0 0.875rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:var(--text-control);text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--duration-fast) var(--ease-standard)}
+   Sidebar : en body-sm il rendrait 38 px, un cran sous tout ce qui se clique. En semi-gras, comme
+   l'onglet (v0.12.2, D-019), texte en encre : tous les items ont la même graisse, l'item coché
+   compris (la convention de l'élément sélectionné). Le hint garde la graisse du texte courant. */
+.ds-dropdown__item{display:flex;align-items:center;gap:0.625rem;width:100%;min-height:var(--dropdown-item-h);padding:0 0.875rem;border:0;background:transparent;color:var(--foreground);font-family:var(--font-body);font-size:var(--text-control);font-weight:var(--weight-semibold);text-align:left;border-radius:var(--radius-sm);cursor:pointer;transition:background var(--duration-fast) var(--ease-standard)}
 .ds-dropdown__item:hover,.ds-dropdown__item.is-hover,.ds-dropdown__item:focus-visible{background:var(--surface-alt);outline:none}
+/* EN SOMBRE, LA PLAQUE SE CREUSE — v0.12.2 (D-019) : l'item survolé, ou l'option active au clavier, ne se
+   voit que par sa plaque, et --surface-alt est à 1,03 de --popover en sombre (invisible ; 1,12 en clair).
+   Elle passe sur --background (1,23), comme un champ posé dans un popover (la déduction plus haut). L'item
+   coché garde sa plaque --accent. */
+.dark .ds-dropdown__item:is(:hover,.is-hover,:focus-visible):not([aria-checked="true"]):not(.is-checked){background:var(--background)}
 /* L'ITEM COCHÉ — role="menuitemradio" + aria-checked, la convention de l'élément sélectionné
    (plaque --accent, texte --primary, MÊME graisse), coche en fin de ligne en currentColor. Le
    survol garde la plaque : `.is-checked` est écrit après le survol, à spécificité égale. */
@@ -812,7 +819,7 @@ span.ds-banner__icon{display:inline-flex;flex:none}
 .ds-dropdown__check{display:inline-flex;flex:none;margin-left:auto}
 .ds-dropdown__item--danger{color:var(--destructive-readable)}
 /* Le hint d'un item — le raccourci, la méta. */
-.ds-dropdown__hint{color:var(--text-muted);font-size:var(--text-caption)}
+.ds-dropdown__hint{color:var(--text-muted);font-size:var(--text-caption);font-weight:var(--weight-regular)}
 .ds-dropdown__sep{height:1px;margin:0.25rem 0.375rem;background:var(--border);border:0}
 /* LA LISTE D'UN SELECT — `--liste`, v0.12.0 : le menu posé par un portail, en `position:fixed`, au
    rang des popovers. Le composant écrit sa place (sous le champ, ou au-dessus quand la place manque),
@@ -821,17 +828,12 @@ span.ds-banner__icon{display:inline-flex;flex:none}
    `role="option"` : l'item choisi porte `.is-checked` (et `aria-selected`), l'item actif au clavier
    `.is-hover`. Les items ne se tassent pas quand la liste défile. Aucune transition : sa place et sa
    largeur s'écrivent après sa création, et la neutralisation du mouvement réduit (`0.01ms` sur toutes
-   les propriétés) la ferait glisser une image depuis la largeur du menu. */
+   les propriétés) la ferait glisser une image depuis la largeur du menu.
+   L'OPTION ACTIVE (au clavier, APG, et sous la souris) se voit par sa PLAQUE SEULE, comme un onglet :
+   plus d'anneau de focus depuis la v0.12.2 (D-019). La plaque est un écart de contraste assumé
+   (@a11y-assume dans la marque, docs/accessibilite.md). */
 .ds-dropdown--liste{position:fixed;z-index:var(--z-popover);max-height:var(--dropdown-list-h);overflow-y:auto;overscroll-behavior:contain;transition:none}
 .ds-dropdown--liste .ds-dropdown__item{flex-shrink:0}
-/* L'OPTION ACTIVE D'UNE LISTE — v0.12.0 : le repère de la personne au clavier (APG) et sous la souris.
-   La plaque de survol du menu (`--surface-alt`) ne suffit pas : presque invisible sur `--popover` en
-   sombre, de la même teinte que la plaque de l'option choisie en clair. Elle porte donc en plus
-   L'ANNEAU DE FOCUS DU SYSTÈME, le même que partout (`outline` 2 px `--ring`), posé à l'intérieur
-   (offset -2 px) pour que la liste qui défile ne le rogne pas. L'option choisie garde sa plaque
-   `--accent`, son texte de marque et sa coche ; active et choisie, elle porte les deux. Seulement
-   dans une liste (`role="listbox"`) : les menus `role="menu"` gardent leur survol. */
-.ds-dropdown[role="listbox"] .ds-dropdown__item.is-hover{outline:2px solid var(--ring);outline-offset:-2px}
 
 /* Modal as a bottom sheet under 64rem — the system's ONE breakpoint. Above it: nothing changes.
    Inline panels (specimen cards, no scrim) are untouched: the rules require .ds-scrim. */

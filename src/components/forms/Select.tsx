@@ -34,8 +34,10 @@ import { Icon } from '../icons/Icon';
  * dans le `<body>`, une feuille plein écran d'app à `aria-modal` (rang --z-modal) la cachait. Elle s'ouvre
  * sous le champ, au-dessus quand la place manque en bas, défile au-delà de `--dropdown-list-h`, ne sort
  * jamais de l'écran, suit le champ quand la page défile, et se ferme au clic dehors. Elle prend la
- * largeur du champ et le thème sombre d'un ancêtre `.dark`. Sur une carte comme sur la page, elle est
- * sur `--popover`, jamais la couleur de sa surface.
+ * largeur du champ, ou celle de sa plus longue option si elle est plus large (v0.12.2), et le thème
+ * sombre d'un ancêtre `.dark`. Sur une carte comme sur la page, elle est sur `--popover`, jamais la
+ * couleur de sa surface. Ses options sont en semi-gras, l'option active se voit par sa plaque seule,
+ * comme un onglet (v0.12.2, D-019).
  */
 export interface SelectOption { value: string; label: string }
 
@@ -227,7 +229,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     const vw = document.documentElement.clientWidth, vh = window.innerHeight;
     const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     const ecart = 0.375 * rem, marge = 0.5 * rem;
-    const largeur = Math.min(r.width, vw - 2 * marge);
+    /* Au moins la largeur du champ, et celle de sa plus longue option (v0.12.2, D-019 : un champ étroit à
+       390 coupait « Toutes les sources » en deux lignes), sans dépasser l'écran moins ses marges. Arrondie au
+       pixel supérieur : `offsetWidth` arrondit au plus proche, et une fraction de pixel en moins renvoie le
+       dernier mot à la ligne. */
+    liste.style.width = 'max-content';
+    const largeur = Math.min(Math.max(r.width, Math.ceil(liste.getBoundingClientRect().width)), vw - 2 * marge);
     liste.style.width = `${largeur}px`;
     const naturelle = Math.min(liste.scrollHeight + liste.offsetHeight - liste.clientHeight, plafond.current || Infinity);
     const dessous = vh - r.bottom - ecart - marge, dessus = r.top - ecart - marge;

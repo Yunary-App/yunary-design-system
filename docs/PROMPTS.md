@@ -997,10 +997,10 @@ bordure (v0.6.0, la maquette fait foi). Jamais un pill. `forwardRef` sur l'`<inp
 La liste déroulante (v0.12.0, décision D-010). Le champ fermé est celui d'avant : le rail 3rem,
 le chevron Lucide, la silhouette d'Input et de Button md, rendu au pixel près. Il n'ouvre plus la
 liste du navigateur : il ouvre **la liste Yunary**, les classes du menu (`.ds-dropdown--liste`,
-`__item`, `__check`) — l'option choisie sur la plaque `--accent` avec sa coche et son texte de
-marque, l'option active (clavier ou survol) sur `--surface-alt` **cerclée de l'anneau de focus du
-système** (`outline` 2 px `--ring`, à l'intérieur), toujours sur `--popover` (jamais la couleur de
-sa surface, page ou carte).
+`__item`, `__check`) — les options en semi-gras, en encre, comme un onglet ; l'option choisie sur
+la plaque `--accent` avec sa coche et son texte de marque ; l'option active (clavier ou survol) sur
+**sa plaque seule, sans anneau** (v0.12.2, D-019) : `--surface-alt` en clair, `--background` en
+sombre ; toujours sur `--popover` (jamais la couleur de sa surface, page ou carte).
 
 ```tsx
 <FormField label="Pays" htmlFor="pays">
@@ -1030,7 +1030,9 @@ sa surface, page ou carte).
   feuille d'app à `aria-modal="true"`, un `<dialog>` ouvert), sinon dans le `<body>` (v0.12.1) : elle
   passe devant sa fenêtre quel que soit le rang de celle-ci. Une fenêtre d'app qui passe au-dessus de
   `--z-popover` doit donc porter `aria-modal="true"`. Une carte ou un tableau en `overflow:hidden` ne la
-  coupe jamais. Sous le champ à 6 px, à sa largeur ;
+  coupe jamais. Sous le champ à 6 px, à sa largeur, ou à celle de sa plus longue option si elle est
+  plus large (v0.12.2 : à 390, un champ étroit ne coupe plus « Toutes les sources » en deux lignes),
+  sans sortir de l'écran (8 px de marge) ;
   au-dessus quand la place manque en bas ; plafonnée à `--dropdown-list-h` (320) puis elle défile,
   l'option choisie au centre à l'ouverture ; jamais hors de l'écran, à 390 compris. Elle suit le
   champ quand la page défile, se ferme au clic dehors, et prend le thème d'un ancêtre `.dark`. Dans
@@ -1534,9 +1536,12 @@ ligne. Les deux se mélangent dans un même menu.
   la fenêtre modale qui contient le champ, sinon le `<body>`),
   plafonnée à `--dropdown-list-h` puis défilante, `role="listbox"` et des items `role="option"`
   (`.is-checked` + `aria-selected` pour l'option choisie, `.is-hover` pour l'option active au
-  clavier ou sous la souris : dans une liste `role="listbox"`, elle porte en plus l'anneau de focus,
-  `outline` 2 px `--ring` à l'intérieur ; les menus `role="menu"` n'en ont pas). Elle s'écrit par
+  clavier ou sous la souris, sur sa plaque seule, sans anneau depuis la v0.12.2). Elle s'écrit par
   `Select`, pas à la main.
+- Les items, menu et liste, sont en semi-gras (`--weight-semibold`, comme `.ds-tab`, v0.12.2), en
+  encre ; le coché garde la même graisse (la convention de l'élément sélectionné) ; `__hint` reste
+  en graisse courante. L'item survolé est sur `--surface-alt` en clair et se creuse en `--background`
+  en sombre (`--surface-alt` y est à 1,03 de `--popover`, invisible).
 
 **La barre de navigation et le pied du site — `.ds-navbar`, `.ds-footer`** (0.11.0 : les composants
 `Navbar` et `Footer` sont retirés, sans consommateur React ; le site écrit ces classes en HTML).

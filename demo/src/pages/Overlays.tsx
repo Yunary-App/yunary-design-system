@@ -279,7 +279,7 @@ export function OverlaysPage() {
         </Block>
       </Section>
 
-      <Section title="Menu déroulant — classes .ds-dropdown" note="Pas de composant React : le balisage s'écrit dans l'app (role=menu, puis menuitem ou menuitemradio). Panneau rayon lg, --shadow-lg. Les items s'éclairent sur --surface-alt ; l'item coché porte la convention de l'élément sélectionné.">
+      <Section title="Menu déroulant — classes .ds-dropdown" note="Pas de composant React : le balisage s'écrit dans l'app (role=menu, puis menuitem ou menuitemradio). Panneau rayon lg, --shadow-lg. Items en semi-gras, en encre, comme un onglet (0.12.2) ; ils s'éclairent sur --surface-alt, et se creusent en --background en sombre ; l'item coché porte la convention de l'élément sélectionné, à la même graisse ; le hint reste en graisse courante.">
         <Block label="Ancré sous son déclencheur — .ds-dropdown--floating.ds-dropdown--end" hint="Flottant, le panneau se pose juste sous le bouton, dans un parent position:relative (à poser par l'app). --end colle les bords droits — le menu d'un bouton en bout de ligne. Un menu de CHOIX : role=menuitemradio + aria-checked, texte --primary (corail) sur --accent à la même graisse, coche en currentColor en fin de ligne, rail de 44 px.">
           <div className="flex justify-end">
             <span className="relative inline-flex">

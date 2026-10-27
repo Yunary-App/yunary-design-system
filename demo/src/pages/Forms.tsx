@@ -59,6 +59,25 @@ const RESEAUX = [
   { value: 'youtube', label: 'YouTube' },
 ];
 
+const PERIODES = [
+  { value: '7', label: '7 jours' },
+  { value: '30', label: '30 jours' },
+  { value: '90', label: '90 jours' },
+  { value: '0', label: 'Depuis le lancement' },
+];
+const SOURCES = [
+  { value: '', label: 'Toutes les sources' },
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'tiktok', label: 'TikTok' },
+  { value: 'google', label: 'Google' },
+];
+const VISIBILITES = [
+  { value: 'PUBLIC_TO_EVERYONE', label: 'Tout le monde' },
+  { value: 'MUTUAL_FOLLOW_FRIENDS', label: 'Amis' },
+  { value: 'FOLLOWER_OF_CREATOR', label: 'Abonnés' },
+  { value: 'SELF_ONLY', label: 'Moi seulement' },
+];
+
 /* LA LISTE OUVERTE, EN CLASSES — le spécimen figé de ce que Select ouvre (le composant la pose dans un
    portail, `.ds-dropdown--liste`, en position fixe). Classes écrites EN CLAIR pour check-classes.mjs. */
 function ListeOuverte({ actif = 1, choisi = 0 }: { actif?: number; choisi?: number }) {
@@ -100,8 +119,26 @@ function SelectEnVrai() {
       <Stack label="dans un libellé qui l'enveloppe (comme la période de l'Admin)">
         <label className="flex flex-col gap-space-2">
           <span className="text-caption font-semibold">Période</span>
-          <Select options={[{ value: '7', label: '7 jours' }, { value: '30', label: '30 jours' }, { value: '90', label: '90 jours' }, { value: '0', label: 'Depuis le lancement' }]} defaultValue="30" />
+          <Select options={PERIODES} defaultValue="30" />
         </label>
+      </Stack>
+      <Stack label="deux champs étroits côte à côte (l'Admin à 390) — la liste prend la largeur de sa plus longue option, sans sortir de l'écran">
+        <div className="grid grid-cols-2 gap-space-3">
+          <label className="flex min-w-0 flex-col gap-space-2">
+            <span className="text-caption font-semibold">Période</span>
+            <Select options={PERIODES} defaultValue="30" />
+          </label>
+          <label className="flex min-w-0 flex-col gap-space-2">
+            <span className="text-caption font-semibold">Source</span>
+            <Select options={SOURCES} defaultValue="" />
+          </label>
+        </div>
+      </Stack>
+      <Stack label="sur une carte, dans une colonne étroite (la visibilité TikTok)">
+        <div className="grid grid-cols-2 gap-space-3 rounded-lg border border-border bg-card p-space-4">
+          <span className="self-center text-body-sm text-text-secondary">Visibilité</span>
+          <Select aria-label="Visibilité TikTok" surface="card" options={VISIBILITES} defaultValue="SELF_ONLY" />
+        </div>
       </Stack>
     </Grid>
   );
@@ -174,7 +211,7 @@ export function FormsPage() {
         </Block>
       </Section>
 
-      <Section title="Select" note="Le champ sur le rail 3rem, avec un chevron Lucide ; il ouvre la liste Yunary (0.12.0), plus celle du navigateur : les classes du menu (.ds-dropdown--liste), l'élément choisi coché, posée par un portail. Clavier du combobox select-only (APG) : ↓ ↑ Entrée Espace ouvrent, ↓ ↑ Début Fin déplacent, Entrée Espace choisissent, Échap ferme, les premières lettres trouvent. Un <select> natif caché garde e.target.value, le formulaire et l'autoremplissage.">
+      <Section title="Select" note="Le champ sur le rail 3rem, avec un chevron Lucide ; il ouvre la liste Yunary (0.12.0), plus celle du navigateur : les classes du menu (.ds-dropdown--liste), l'élément choisi coché, posée par un portail ; options en semi-gras, l'option active sur sa plaque, sans anneau, comme un onglet (0.12.2). Clavier du combobox select-only (APG) : ↓ ↑ Entrée Espace ouvrent, ↓ ↑ Début Fin déplacent, Entrée Espace choisissent, Échap ferme, les premières lettres trouvent. Un <select> natif caché garde e.target.value, le formulaire et l'autoremplissage.">
         <Block label="Repos, focus, erreur, désactivé">
           <Stack>
             <Select aria-label="Réseau, repos" options={RESEAUX} defaultValue="instagram" />
@@ -187,7 +224,7 @@ export function FormsPage() {
         <Block label="En vrai" hint="Clique, ou Tab puis ↓. La liste s'ouvre au-dessus quand la place manque en bas, défile quand elle est longue, se ferme au clic dehors et à Échap, rend le focus au champ.">
           <SelectEnVrai />
         </Block>
-        <Block label="La liste ouverte, figée" hint="Le spécimen de ce que le champ ouvre : l'item choisi sur la plaque --accent avec sa coche, l'item actif au clavier (ou survolé) sur --surface-alt, cerclé de l'anneau de focus (--ring, 2 px, à l'intérieur). Sur la page comme sur une carte, la liste est sur --popover, jamais la couleur de sa surface.">
+        <Block label="La liste ouverte, figée" hint="Le spécimen de ce que le champ ouvre : l'item choisi sur la plaque --accent avec sa coche, l'item actif au clavier (ou survolé) sur sa plaque --surface-alt seule, sans anneau (0.12.2) ; tous les items en semi-gras, en encre. Sur la page comme sur une carte, la liste est sur --popover, jamais la couleur de sa surface.">
           <Row>
             <ListeOuverte />
             <div className="rounded-lg border border-border bg-card p-space-4"><ListeOuverte actif={2} choisi={1} /></div>

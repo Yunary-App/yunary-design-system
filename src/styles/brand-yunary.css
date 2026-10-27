@@ -179,6 +179,14 @@
    L'option choisie de la liste d'un Select sur --accent (3,00 / 3,94), v0.12.0 : la liste Yunary
    remplace celle du navigateur. Même décision. Renfort : la plaque, la coche en fin de ligne
    (currentColor, 3:1), aria-selected. */
+/* @a11y-assume: .ds-dropdown__item.is-hover — plaque sur --popover
+   L'option active d'une liste (clavier, APG) et l'item survolé d'un menu ne se voient que par leur
+   plaque, comme un onglet : plus d'anneau depuis la v0.12.2 (D-019, Julien, 27/10/2026 : le contour
+   « ne fait pas naturel »). --surface-alt sur --popover en clair (1,12), --background en sombre
+   (1,23 : --surface-alt y faisait 1,03, invisible). Une plaque à 3:1 contre --popover serait un aplat
+   gris moyen dans les deux thèmes. Renfort : un écart de plaque franc dans les deux thèmes, le texte
+   à 14,38 / 14,52 sur sa plaque, aria-activedescendant qui désigne l'option au lecteur d'écran, le focus qui
+   reste sur le champ (son anneau), l'option choisie distincte par son texte corail et sa coche. */
 
 /* @surface-assume: --secondary / --card — clair
    1,009, et c'est VOULU (kit maître v0.5.0) : une barre latérale, une navbar ou un champ

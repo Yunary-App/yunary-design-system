@@ -30,7 +30,7 @@ import '@yunary/ds/brand-yunary.css';  // la marque Yunary
 
 **La marque Yunary**, `src/styles/brand-yunary.css` : encre et crème, dégradé ambre →
 orange → corail, Onest en titrage et DM Sans en texte. Elle porte les 63 jetons obligatoires du
-contrat et déclare ses 34 écarts d'accessibilité assumés, chacun avec sa raison. Le socle, lui, ne porte **aucune couleur** — c'est ce qui permet de la faire évoluer
+contrat et déclare ses 35 écarts d'accessibilité assumés, chacun avec sa raison. Le socle, lui, ne porte **aucune couleur** — c'est ce qui permet de la faire évoluer
 sans toucher aux composants.
 
 > **Ce paquet est bâti sur un gabarit**, dont [`PORTAGE.md`](PORTAGE.md) décrit la procédure.
@@ -56,7 +56,7 @@ sans toucher aux composants.
 Pas de registry : chaque app épingle une version par un tag git.
 
 ```bash
-npm i github:Yunary-App/yunary-design-system#v0.12.1
+npm i github:Yunary-App/yunary-design-system#v0.12.2
 ```
 
 Cinq **peer dependencies**, à la charge de l'app :

@@ -10,9 +10,9 @@
 > translucides — pilules, plaques de marque — sont **composités sur leur surface porteuse**
 > avant mesure : c'est la couleur que l'œil reçoit, pas celle qui est écrite.
 >
-> **108 paires × 2 thèmes. 74 conformes, 34 écarts assumés.** Un écart assumé n'est pas un
+> **110 paires × 2 thèmes. 75 conformes, 35 écarts assumés.** Un écart assumé n'est pas un
 > oubli : c'est une décision écrite, déclarée dans `src/styles/brand-yunary.css` par un bloc
-> `@a11y-assume:` avec sa raison. Le build tombe si une **trente-cinquième** apparaît.
+> `@a11y-assume:` avec sa raison. Le build tombe si une **trente-sixième** apparaît.
 
 ---
 
@@ -78,7 +78,7 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 | `.ds-pastille--brand-solid — glyphe sur --brand-to` | icône | 3 | 3,80 | 3,80 |
 | `.ds-icon-btn[aria-pressed] — icône` | icône | 3 | 5,16 | 5,85 |
 | `.ds-error` | 13 / 500 | 4,5 | 6,62 | 6,07 |
-| `.ds-dropdown__item--danger` | 15 / 400 | 4,5 | 6,84 | 5,73 |
+| `.ds-dropdown__item--danger` | 15 / 600 | 4,5 | 6,84 | 5,73 |
 | `.ds-icon-btn--danger-soft sur --card — glyphe` | icône | 3 | 5,47 | 6,59 |
 | `.ds-icon-btn--danger-soft sur --background — glyphe` | icône | 3 | 5,28 | 7,59 |
 | `.ds-tile cochée — titre sur --accent` | 16 / 600 | 4,5 | 14,38 | 11,95 |
@@ -132,6 +132,7 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 | `.ds-badge--neutral sur --background` | 12 / 700 | 4,5 | 5,00 | 8,78 |
 | `.ds-badge--outline` | 12 / 700 | 4,5 | 10,31 | 9,22 |
 | `survol — --foreground sur --surface-alt` | 15 / 600 | 4,5 | 14,38 | 11,47 |
+| `.ds-dropdown__item.is-hover — texte sur sa plaque` | 15 / 600 | 4,5 | 14,38 | 14,52 |
 | `.ds-choice coché — aplat --primary` | contrôle | 3 | 3,12 | 4,79 |
 | `.ds-switch actif — piste --primary` | contrôle | 3 | 3,12 | 4,79 |
 | `.ds-progress__bar sur son rail` | graphique | 3 | 3,00 | 3,78 |
@@ -143,7 +144,7 @@ la convention d'état actif (§ 3.6) — toutes décidées, aucune par accident.
 
 ## 3. Les écarts assumés
 
-34 paires, en six familles. Chacune est déclarée dans `src/styles/brand-yunary.css` par un
+35 paires, en sept familles. Chacune est déclarée dans `src/styles/brand-yunary.css` par un
 bloc `@a11y-assume:`. Le script porte la mécanique, **la marque porte ses renoncements** : une
 autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dérogation.
 
@@ -154,8 +155,8 @@ autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dér
 | `.ds-tab[aria-selected]` | 15 / 600 | 4,5 | 3,00 ✗ | 3,94 ✗ |
 | `.ds-tabs--on-card .ds-tab[aria-selected]` | 15 / 600 | 4,5 | 3,25 ✗ | 4,12 ✗ |
 | `.ds-page[aria-current]` | 15 / 600 | 4,5 | 3,00 ✗ | 3,94 ✗ |
-| `.ds-dropdown__item[aria-checked]` | 15 / 400 | 4,5 | 3,00 ✗ | 3,94 ✗ |
-| `.ds-dropdown--liste .ds-dropdown__item.is-checked` | 15 / 400 | 4,5 | 3,00 ✗ | 3,94 ✗ |
+| `.ds-dropdown__item[aria-checked]` | 15 / 600 | 4,5 | 3,00 ✗ | 3,94 ✗ |
+| `.ds-dropdown--liste .ds-dropdown__item.is-checked` | 15 / 600 | 4,5 | 3,00 ✗ | 3,94 ✗ |
 | `.ds-cal__day.is-today` | 14 / 700 | 4,5 | 3,25 ✗ | 4,12 ✗ |
 | `.ds-pastille--brand — icône` | icône | 3 | 2,85 ✗ | 3,58 |
 | `.ds-pastille--brand-solid — glyphe sur --brand-from` | icône | 3 | 2,04 ✗ | 2,04 ✗ |
@@ -170,6 +171,7 @@ autre marque née de ce socle repart d'une liste vide et n'hérite d'aucune dér
 | `.ds-price--accent — montant sur --brand-from (pire arrêt)` | 36 / 800 | 3 | 1,91 ✗ | 7,03 |
 | `.ds-frise jalon en cours — glyphe sur --brand-from (pire arrêt)` | icône | 3 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-frise__amount en cours — montant sur --brand-from (pire arrêt)` | 29 / 800 | 3 | 1,91 ✗ | 7,03 |
+| `.ds-dropdown__item.is-hover — plaque sur --popover` | plaque | 3 | 1,12 ✗ | 1,23 ✗ |
 | `.ds-btn--primary — label sur --primary à plat` | 15 / 600 | 4,5 | 3,48 ✗ | 3,48 ✗ |
 | `.ds-btn--primary — label sur --brand-from (pire arrêt)` | 15 / 600 | 4,5 | 2,04 ✗ | 2,04 ✗ |
 | `.ds-btn--primary — label sur --brand-via` | 15 / 600 | 4,5 | 2,68 ✗ | 2,68 ✗ |
@@ -223,10 +225,6 @@ plus halo de 3 px sur les champs, `outline` 2 px avec offset ailleurs. En sombre
 `--brand-from` et tient **8,16**. Le repli existe si l'écart déplaît un jour : `--brand-to`
 `#e84c3d`, qui mesure 3,40.
 
-Le même anneau marque l'option active de la liste d'un `Select` (v0.12.0), posé à l'intérieur de
-l'option sur `--popover` : **2,60** en clair (un peu au-dessus de la paire mesurée), **6,63** en
-sombre. Il ne porte pas seul l'état : l'option active a aussi sa plaque `--surface-alt` et
-`aria-activedescendant` la désigne au lecteur d'écran.
 
 ### 3.4 · Les trois marqueurs en `--primary` — `2,85` et `3,25` · 3 paires
 
@@ -268,6 +266,25 @@ pas besoin de la couleur. Les libellés sont courts, en 15-16 px et 500-600 ; l'
 bouton-icône accent tient son 3:1 à 3,00 et reste conforme ; le bouton-icône enfoncé pose
 `--primary-readable` (5,16 / 5,85) depuis 0.11.1, comme la maquette. `--primary-readable` reste le jeton de tout texte de marque qui n'est pas un état
 actif. Le repli, si la décision est revue : `--primary-readable`, 5,16 / 5,85.
+
+
+### 3.7 · L'option active d'une liste, par sa plaque seule — `1,12` / `1,23` · 1 paire
+
+**L'écart.** L'option active de la liste d'un `Select` (au clavier, motif APG) et l'item survolé
+d'un menu ne se voient que par leur plaque, comme un onglet : depuis la v0.12.2 (D-019), plus
+d'anneau de focus autour d'elles. La plaque est `--surface-alt` sur `--popover` en clair
+(**1,12**) ; en sombre elle se creuse en `--background` (**1,23**), parce que `--surface-alt` n'y
+faisait que **1,03** (invisible). Seuil 3 (1.4.11, une plaque qui porte un état).
+
+**Pourquoi il est assumé.** Retour de Julien du 27/10/2026 : l'anneau de 0.12.0 « n'est pas joli et
+ne fait pas naturel ». Une plaque à 3:1 contre `--popover` serait un aplat gris moyen
+dans les deux thèmes, loin de la plaque d'un onglet. Ce qui le rend tenable : un écart de plaque
+franc dans les deux thèmes (mesuré, pas supposé), le texte de l'option à **14,38** / **14,52** sur
+sa plaque, le focus qui reste
+sur le champ avec son anneau, `aria-activedescendant` qui désigne l'option au lecteur d'écran, et
+l'option choisie distincte par son texte corail et sa coche. Le repli, si la décision est revue :
+l'anneau `--ring` à l'intérieur de l'option (0.12.0 et 0.12.1), 2,60 en clair et 6,63 en sombre sur
+`--popover`.
 
 ---
 

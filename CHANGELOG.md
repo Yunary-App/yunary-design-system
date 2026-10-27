@@ -14,6 +14,40 @@ Une ligne par décision, et c'est le **pourquoi** qui compte.
 
 ---
 
+## 0.12.2 — la liste du `Select` comme la barre d'onglets
+
+Lot L-004, décision D-019 de Julien, le 27/10/2026 : l'anneau de l'option active « n'est pas joli et ne
+fait pas naturel », et le texte de la liste paraissait moins gras qu'ailleurs. La référence est l'onglet
+(`.ds-tab`) : une plaque sans contour, un texte en semi-gras.
+
+- **Plus d'anneau sur l'option active.** La règle de 0.12.0
+  (`.ds-dropdown[role="listbox"] .ds-dropdown__item.is-hover`, `outline` 2 px `--ring`) est retirée.
+  L'option active, au clavier comme sous la souris, se voit par sa plaque seule.
+- **En sombre, la plaque se creuse en `--background`.** La plaque de survol, `--surface-alt`, est à
+  **1,12** de `--popover` en clair (visible, la teinte de l'option choisie, comme l'onglet) mais à
+  **1,03** en sombre : on ne la voyait pas. En sombre, l'item survolé ou actif passe sur `--background`
+  (**1,23**), comme un champ posé dans un popover. L'item coché garde sa plaque `--accent`. Écart de
+  contraste assumé, mesuré par `check-contrast.mjs` (paire `.ds-dropdown__item.is-hover — plaque sur
+  --popover`, seuil 3) et écrit dans la marque (`@a11y-assume`) et dans `docs/accessibilite.md` § 3.7.
+- **Les items en semi-gras** (`--weight-semibold`, comme l'onglet), en encre ; l'item coché à la même
+  graisse que ses voisins (la convention de l'élément sélectionné) ; le hint d'un item de menu reste en
+  graisse courante. Les menus `role="menu"` partagent les classes : ils suivent (graisse et plaque).
+- **La liste prend au moins la largeur de sa plus longue option**, jamais moins que celle du champ, sans
+  sortir de l'écran (8 px de marge). À 390, deux champs côte à côte (l'Admin) coupaient « Toutes les
+  sources », « Depuis le lancement » ou « Moi seulement » en deux lignes. La largeur se mesure sur la
+  liste en `max-content`, arrondie au pixel supérieur (une fraction de pixel en moins renvoyait le
+  dernier mot à la ligne).
+- Ne bougent pas : le champ fermé, le portail dans la fenêtre modale du champ (0.12.1), le clavier APG,
+  le `<select>` natif caché, l'API.
+- Vitrine : Formulaires › Select, deux champs étroits côte à côte (Période, Source) et une colonne
+  étroite sur une carte (Visibilité, « Tout le monde ») ; notes de la liste et du menu à jour.
+
+**⚠ Ruptures** : aucune. Les items de menu (classes `.ds-dropdown__item`) passent en semi-gras : une app
+qui les écrit à la main les voit changer (aucune dans le projet : le hub ne les écrit que par `Select`,
+le site a sa copie figée des styles).
+
+**Montée** : le hub passe à `#v0.12.2` (vider `node_modules/.vite`). Rien à changer dans les appels.
+
 ## 0.12.1 — la liste du `Select` au-dessus d'une feuille plein écran d'app
 
 Lot L-002, correctif trouvé par la session Écrans le 27/10/2026.
